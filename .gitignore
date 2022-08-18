@@ -13,3 +13,7 @@ __generated__
 
 # Environment
 .env
+
+# TernJS port file
+.tern-port
+.DS_Store

@@ -1,1 +1,1 @@
-export const App = (): JSX.Element => <div>Hi bro!</div>;
+export const App = (): JSX.Element => <div>Start RSLang project</div>;
