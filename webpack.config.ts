@@ -87,6 +87,10 @@ const config: Configuration = {
         ],
       },
       {
+        test: /\.css$/i,
+        use: ['postcss-loader'],
+      },
+      {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
         loader: '@svgr/webpack',
