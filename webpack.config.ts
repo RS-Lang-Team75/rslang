@@ -66,8 +66,8 @@ const config: Configuration = {
         ],
       },
       {
-        test: /\.(css)$/,
-        exclude: /assets\/stylesheets|node_modules/,
+        test: /\.(css|pcss)$/,
+        exclude: /node_modules/,
         use: [
           isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           {
@@ -78,10 +78,17 @@ const config: Configuration = {
               sourceMap: true,
             },
           },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
       },
       {
         test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
         loader: '@svgr/webpack',
       },
     ],
