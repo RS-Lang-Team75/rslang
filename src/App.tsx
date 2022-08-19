@@ -1,1 +1,14 @@
-export const App = (): JSX.Element => <div>Start RSLang project</div>;
+import { Route, Routes } from 'react-router-dom';
+
+import { Navigation } from './components/Navigation';
+import { MainPage } from './pages/MainPage';
+
+export const App = (): JSX.Element =>  (
+  <>
+    <Navigation/>
+    <Routes>
+      <Route path='/' element={<MainPage/>} />
+    </Routes>
+  </>
+
+);
