@@ -89,10 +89,7 @@
     "postcss-preset-env": "^7.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
     "tailwindcss": "^3.1.8",
-=======
->>>>>>> 07e5d055212e44543c7ed231dcfee73053ff50e6
     "react-router-dom": "^6.3.0"
   }
 }

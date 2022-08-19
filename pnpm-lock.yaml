@@ -43,10 +43,7 @@ specifiers:
   npm-run-all: ^4.1.5
   postcss: ^8.4.16
   postcss-loader: ^7.0.1
-<<<<<<< HEAD
   postcss-preset-env: ^7.8.0
-=======
->>>>>>> 07e5d055212e44543c7ed231dcfee73053ff50e6
   prettier: ^2.7.1
   react: ^18.2.0
   react-dom: ^18.2.0
@@ -71,10 +68,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
-<<<<<<< HEAD
   tailwindcss: 3.1.8_57znarxsqwmnneadci5z5fd5gu
-=======
->>>>>>> 07e5d055212e44543c7ed231dcfee73053ff50e6
 
 devDependencies:
   '@babel/core': 7.18.10
@@ -6874,11 +6868,7 @@ packages:
       resolve: 1.22.1
     transitivePeerDependencies:
       - ts-node
-<<<<<<< HEAD
     dev: false
-=======
-    dev: true
->>>>>>> 07e5d055212e44543c7ed231dcfee73053ff50e6
 
   /tapable/0.1.10:
     resolution: {integrity: sha512-jX8Et4hHg57mug1/079yitEKWGB3LCwoxByLsNim89LABq8NqgiX+6iYVOsq0vX8uJHkU+DZ5fnq95f800bEsQ==}
