@@ -4,9 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { StrictMode } from 'react';
 
 import { App } from '@/App';
-// import '@/styles/index.pcss';
 
-import './index.css';
+import '@/styles/index.pcss';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
