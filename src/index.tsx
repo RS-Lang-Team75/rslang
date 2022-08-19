@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { App } from '@/App';
 
 import './index.css';
+import './main.css';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
