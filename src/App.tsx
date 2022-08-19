@@ -1,11 +1,14 @@
-<<<<<<< HEAD
-export const App = (): JSX.Element => <div>Start RSLang project</div>;
-=======
-import './test.pcss';
+import { Route, Routes } from 'react-router-dom';
 
-export const App = (): JSX.Element => (
-  <div className='test'>
-    Testasdas
-  </div>
+import { Navigation } from './components/Navigation';
+import { MainPage } from './pages/MainPage';
+
+export const App = (): JSX.Element =>  (
+  <>
+    <Navigation/>
+    <Routes>
+      <Route path='/' element={<MainPage/>} />
+    </Routes>
+  </>
+
 );
->>>>>>> 2905755b9d358b3fbb2591d2aab2602957f17049
