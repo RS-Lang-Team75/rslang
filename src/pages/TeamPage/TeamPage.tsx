@@ -2,6 +2,9 @@ import React from 'react';
 
 export function TeamPage (){
   return(
-    <h1>TeamPage</h1>
+    <main>
+      <h1>TeamPage</h1>
+    </main>
+
   );
 }

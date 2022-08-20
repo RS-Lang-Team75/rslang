@@ -2,6 +2,9 @@ import React from 'react';
 
 export function VideoPage (){
   return(
-    <h1>VideoPage</h1>
+    <main>
+      <h1>VideoPage</h1>
+    </main>
+
   );
 }
