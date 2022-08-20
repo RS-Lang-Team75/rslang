@@ -5,14 +5,14 @@ import RSSvg from '../../assets/images/rs_school_js.svg';
 
 import './Footer.pcss';
 
-export function Footer () {
+export function Footer (): JSX.Element {
   return (
     <footer className="footer">
       <div className='wrapperFooter'>
         <div className="date"><span>2022</span></div>
         <div className="git-link">
           <a href="https://github.com/a-selyugin">
-            <img src={GitPNG as string} alt="GitHub link" />
+            <img src={GitPNG} alt="GitHub link" />
 
           </a>
           <a href="https://github.com/a-selyugin">
@@ -21,7 +21,7 @@ export function Footer () {
         </div>
         <div className="git-link">
           <a href="https://github.com/pashkovichma">
-            <img src={GitPNG as string}  alt="GitHub link" />
+            <img src={GitPNG}  alt="GitHub link" />
 
           </a>
           <a href="https://github.com/pashkovichma">
@@ -30,7 +30,7 @@ export function Footer () {
         </div>
         <div className="git-link">
           <a href="https://github.com/Hopechka?tab=stars">
-            <img src={GitPNG as string} alt="GitHub link" />
+            <img src={GitPNG} alt="GitHub link" />
 
           </a>
           <a href="https://github.com/Hopechka?tab=stars">
