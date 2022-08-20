@@ -1,11 +1,15 @@
 .headerNav {
-  @apply container mx-auto h-[60px] flex justify-between px-5 bg-sky-800 items-center text-white sticky top-0 rounded-b-md;
+  @apply container mx-auto h-[60px] bg-sky-800  text-white sticky top-0 rounded-b-md;
 
-  & .navLogo {
-    @apply mr-2 text-3xl font-bold;
+  & .wrapperNav {
+    @apply max-w-7xl mx-auto h-full flex justify-between items-center px-5;
 
-    & .rsLetters {
-      @apply text-sky-200;
+    & .navLogo {
+      @apply mr-2 text-3xl font-bold;
+
+      & .rsLetters {
+        @apply text-sky-200;
+      }
     }
   }
 }
