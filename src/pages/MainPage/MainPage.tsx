@@ -3,11 +3,11 @@ import React from 'react';
 export function MainPage (){
 
   return(
-    <div className='container mx-auto max-w-2xl pt-5' >
+    <main className='container mx-auto max-w-7xl pt-5 flex items-center ' >
       <h1 className="text-3xl font-bold underline">
       RSLang
       </h1>
 
-    </div>
+    </main>
   );
 }

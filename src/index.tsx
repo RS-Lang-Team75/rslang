@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { App } from '@/App';
 
 import '@/styles/index.pcss';
+import '@/styles/main.pcss';
 
 const container = document.getElementById('app');
 const root = createRoot(container!);
