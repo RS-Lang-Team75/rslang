@@ -19,7 +19,6 @@ specifiers:
   autoprefixer: ^10.4.8
   babel-loader: ^8.2.5
   babel-plugin-module-resolver: ^4.1.0
-  classnames: ^2.3.1
   copy-webpack-plugin: ^11.0.0
   cross-env: ^7.0.3
   css-loader: ^6.7.1
@@ -43,6 +42,7 @@ specifiers:
   npm-run-all: ^4.1.5
   postcss: ^8.4.16
   postcss-loader: ^7.0.1
+  postcss-nesting: ^10.1.10
   postcss-preset-env: ^7.8.0
   prettier: ^2.7.1
   react: ^18.2.0
@@ -63,7 +63,6 @@ specifiers:
 
 dependencies:
   autoprefixer: 10.4.8_postcss@8.4.16
-  classnames: 2.3.1
   postcss-preset-env: 7.8.0_postcss@8.4.16
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -111,6 +110,7 @@ devDependencies:
   npm-run-all: 4.1.5
   postcss: 8.4.16
   postcss-loader: 7.0.1_qjv4cptcpse3y5hrjkrbb7drda
+  postcss-nesting: 10.1.10_postcss@8.4.16
   prettier: 2.7.1
   style-loader: 3.3.1_webpack@5.74.0
   svgo: 2.8.0
@@ -1557,7 +1557,6 @@ packages:
     dependencies:
       postcss: 8.4.16
       postcss-selector-parser: 6.0.10
-    dev: false
 
   /@discoveryjs/json-ext/0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -2863,10 +2862,6 @@ packages:
     resolution: {integrity: sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==}
     engines: {node: '>=6.0'}
     dev: true
-
-  /classnames/2.3.1:
-    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-    dev: false
 
   /clean-css/5.3.1:
     resolution: {integrity: sha512-lCr8OHhiWCTw4v8POJovCoh4T7I9U11yVsPjMWWnnMmp9ZowCxyad1Pathle/9HjaDp+fdQKjO9fQydE6RHTZg==}
@@ -5830,7 +5825,6 @@ packages:
       '@csstools/selector-specificity': 2.0.2_pnx64jze6bptzcedy5bidi3zdi
       postcss: 8.4.16
       postcss-selector-parser: 6.0.10
-    dev: false
 
   /postcss-opacity-percentage/1.1.2:
     resolution: {integrity: sha512-lyUfF7miG+yewZ8EAk9XUBIlrHyUE6fijnesuz+Mj5zrIHIEw6KcIZSOk/elVMqzLvREmXB83Zi/5QpNRYd47w==}
