@@ -11,72 +11,74 @@ export function Navigation (): JSX.Element {
   return(
     <nav
       className="headerNav">
-      <span>
-        <Link to='/' className="navLogo">
-          <span className = "rsLetters" >RS</span> Lang</Link>
-      </span>
-      <div className="desktopMenu">
-        {[
-          ['Учебник', '/book'],
-          ['Словарь', '/dictionary'],
-          ['Игры', '/games'],
-          ['Статистика', '/statistic'],
-          ['Команда', '/team'],
-          ['Видео', '/video'],
-        ].map(([title, url]) => (
-          <Link key = {title} to={url} className="navLink">{title}</Link>
-        ))}
-      </div>
-
-      <section className="mobileMenu">
-        <div
-          className="humbuggerIcon"
-          onClick={() => setIsNavOpen((prev => !prev))}
-          onKeyPress={() => setIsNavOpen((prev => !prev))}
-          role='menu'
-        >
-          {!isNavOpen && <span className="line" />}
-          {!isNavOpen && <span className="line" />}
-          {!isNavOpen && <span className="line" />}
-
+      <div className='wrapperNav'>
+        <span>
+          <Link to='/' className="navLogo">
+            <span className = "rsLetters" >RS</span> Lang</Link>
+        </span>
+        <div className="desktopMenu">
+          {[
+            ['Учебник', '/book'],
+            ['Словарь', '/dictionary'],
+            ['Игры', '/games'],
+            ['Статистика', '/statistic'],
+            ['Команда', '/team'],
+            ['Видео', '/video'],
+          ].map(([title, url]) => (
+            <Link key = {title} to={url} className="navLink">{title}</Link>
+          ))}
         </div>
 
-        <div className={isNavOpen ? 'showMenuNav' : 'hideMenuNav'}>
+        <section className="mobileMenu">
           <div
-            className="crossIcon"
-            onClick={() => setIsNavOpen(false)}
-            onKeyPress={() => setIsNavOpen(false)}
+            className="humbuggerIcon"
+            onClick={() => setIsNavOpen((prev => !prev))}
+            onKeyPress={() => setIsNavOpen((prev => !prev))}
             role='menu'
           >
-            <svg
-              className="h-8 w-8 text-sky-200"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            {!isNavOpen && <span className="line" />}
+            {!isNavOpen && <span className="line" />}
+            {!isNavOpen && <span className="line" />}
+
+          </div>
+
+          <div className={isNavOpen ? 'showMenuNav' : 'hideMenuNav'}>
+            <div
+              className="crossIcon"
+              onClick={() => setIsNavOpen(false)}
+              onKeyPress={() => setIsNavOpen(false)}
+              role='menu'
             >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+              <svg
+                className="h-8 w-8 text-sky-200"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </div>
+            <div className="menuMobileOpen">
+              <Button text = "LOGIN" classBtn="mobileMenuBtn bg-sky-400"/>
+              {[
+                ['Учебник', '/book'],
+                ['Словарь', '/dictionary'],
+                ['Игры', '/games'],
+                ['Статистика', '/statistic'],
+                ['Команда', '/team'],
+                ['Видео', '/video'],
+              ].map(([title, url]) => (
+                <Link key = {title} to={url} className="mobileMenuBtn">{title}</Link>
+              ))}
+            </div>
           </div>
-          <div className="menuMobileOpen">
-            <Button text = "LOGIN" classBtn="mobileMenuBtn bg-sky-400"/>
-            {[
-              ['Учебник', '/book'],
-              ['Словарь', '/dictionary'],
-              ['Игры', '/games'],
-              ['Статистика', '/statistic'],
-              ['Команда', '/team'],
-              ['Видео', '/video'],
-            ].map(([title, url]) => (
-              <Link key = {title} to={url} className="mobileMenuBtn">{title}</Link>
-            ))}
-          </div>
-        </div>
-      </section>
-      <Button text = "LOGIN" classBtn="loginBtn"/>
+        </section>
+        <Button text = "LOGIN" classBtn="loginBtn"/>
+      </div>
     </nav>
   );
 }
