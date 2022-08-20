@@ -42,28 +42,8 @@ const config: Configuration = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              name: isProduction ? '[contenthash].[ext]' : '[name].[ext]',
-              outputPath: 'static/images',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: 'static/fonts',
-            },
-          },
-        ],
+        test: /\.(png|jpg|jpeg|gif|webp|woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
       },
       {
         test: /\.(css|pcss)$/,
@@ -73,7 +53,6 @@ const config: Configuration = {
           {
             loader: 'css-loader',
             options: {
-              url: false,
               importLoaders: 1,
               sourceMap: true,
             },
