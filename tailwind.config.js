@@ -14,6 +14,7 @@ module.exports = {
         '2xl': { max: '1336px' },
         '3xl': { max: '1576px' },
       },
+
     },
   },
   plugins: [],

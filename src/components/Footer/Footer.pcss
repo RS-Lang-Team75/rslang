@@ -12,10 +12,15 @@
 }
 .git-link {
   @apply flex items-center justify-between gap-x-1;
-}
-.git-link a {
-  text-decoration: none;
-}
-.git-link img {
-  @apply w-10;
+
+  & a {
+    @apply cursor-pointer;
+    &:hover {
+      @apply text-sky-400;
+    }
+  }
+
+  & img {
+    @apply w-10 cursor-pointer;
+  }
 }
