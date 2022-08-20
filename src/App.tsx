@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
+import { Footer } from './components/Footer/Footer';
 import { Navigation } from './components/Navigation/Navigation';
 import { BookPage } from './pages/BookPage/BookPage';
 import { DictionaryPage } from './pages/DictionaryPage/DictionaryPage';
@@ -10,7 +11,7 @@ import { TeamPage } from './pages/TeamPage/TeamPage';
 import { VideoPage } from './pages/VideoPage/VideoPage';
 
 export const App = (): JSX.Element =>  (
-  <>
+  <div className='wrapper'>
     <Navigation/>
     <Routes>
       <Route path='/' element={<MainPage/>} />
@@ -21,6 +22,7 @@ export const App = (): JSX.Element =>  (
       <Route path='/team' element={<TeamPage/>} />
       <Route path='/video' element={<VideoPage/>} />
     </Routes>
-  </>
+    <Footer/>
+  </div>
 
 );
