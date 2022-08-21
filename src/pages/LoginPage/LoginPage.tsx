@@ -7,6 +7,7 @@ import UserIcon from '../../assets/icons/user-icon.svg';
 import './LoginPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
+import createUser from '@/utils/queryUtils';
 
 export function LoginPage (){
 
@@ -19,7 +20,7 @@ export function LoginPage (){
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(details);
+    createUser(details);
   };
 
   return(
