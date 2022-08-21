@@ -43,10 +43,12 @@ specifiers:
   npm-run-all: ^4.1.5
   postcss: ^8.4.16
   postcss-loader: ^7.0.1
+  postcss-nesting: ^10.1.10
   postcss-preset-env: ^7.8.0
   prettier: ^2.7.1
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-router-dom: ^6.3.0
   style-loader: ^3.3.1
   svgo: ^2.8.0
   svgo-loader: ^3.0.1
@@ -66,6 +68,7 @@ dependencies:
   postcss-preset-env: 7.8.0_postcss@8.4.16
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
   tailwindcss: 3.1.8_57znarxsqwmnneadci5z5fd5gu
 
 devDependencies:
@@ -109,6 +112,7 @@ devDependencies:
   npm-run-all: 4.1.5
   postcss: 8.4.16
   postcss-loader: 7.0.1_qjv4cptcpse3y5hrjkrbb7drda
+  postcss-nesting: 10.1.10_postcss@8.4.16
   prettier: 2.7.1
   style-loader: 3.3.1_webpack@5.74.0
   svgo: 2.8.0
@@ -1359,7 +1363,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.9
-    dev: true
 
   /@babel/template/7.18.10:
     resolution: {integrity: sha512-TI+rCtooWHr3QJ27kJxfjutghu44DLnasDMwpDqCXVTal9RLp3RSYNh4NdBrRP2cQAoG9A8juOQl6P6oZG4JxA==}
@@ -1556,7 +1559,6 @@ packages:
     dependencies:
       postcss: 8.4.16
       postcss-selector-parser: 6.0.10
-    dev: false
 
   /@discoveryjs/json-ext/0.5.7:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -4341,7 +4343,6 @@ packages:
     resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
     dependencies:
       '@babel/runtime': 7.18.9
-    dev: true
 
   /hosted-git-info/2.8.9:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
@@ -5830,7 +5831,6 @@ packages:
       '@csstools/selector-specificity': 2.0.2_pnx64jze6bptzcedy5bidi3zdi
       postcss: 8.4.16
       postcss-selector-parser: 6.0.10
-    dev: false
 
   /postcss-opacity-percentage/1.1.2:
     resolution: {integrity: sha512-lyUfF7miG+yewZ8EAk9XUBIlrHyUE6fijnesuz+Mj5zrIHIEw6KcIZSOk/elVMqzLvREmXB83Zi/5QpNRYd47w==}
@@ -6068,6 +6068,27 @@ packages:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: true
 
+  /react-router-dom/6.3.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-uaJj7LKytRxZNQV8+RbzJWnJ8K2nPsOOEuX7aQstlMZKQT0164C+X2w6bnkqU3sjtLvpd5ojrezAyfZ1+0sStw==}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      history: 5.3.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.3.0_react@18.2.0
+    dev: false
+
+  /react-router/6.3.0_react@18.2.0:
+    resolution: {integrity: sha512-7Wh1DzVQ+tlFjkeo+ujvjSqSJmkt1+8JO+T5xklPlgrh70y7ogx75ODRW0ThWhY7S+6yEDks8TYrtQe/aoboBQ==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      history: 5.3.0
+      react: 18.2.0
+    dev: false
+
   /react/18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
@@ -6136,7 +6157,6 @@ packages:
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
-    dev: true
 
   /regenerator-transform/0.15.0:
     resolution: {integrity: sha512-LsrGtPmbYg19bcPHwdtmXwbW+TqNvtY4riE3P83foeHRroMbH6/2ddFBfab3t7kbzc7v7p4wbkIecHImqt0QNg==}
