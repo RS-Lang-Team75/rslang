@@ -77,7 +77,9 @@ export function Navigation (): JSX.Element {
             </div>
           </div>
         </section>
-        <Button text = "LOGIN" classBtn="loginBtn"/>
+        <Link key = "login-btn" to = "/login">
+          <Button text = "LOGIN" classBtn="loginBtn" />
+        </Link>
       </div>
     </nav>
   );
