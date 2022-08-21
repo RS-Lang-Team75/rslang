@@ -1,1 +1,30 @@
+.card {
+  @apply max-w-sm rounded overflow-hidden shadow-lg flex flex-col items-center justify-between text-center;
 
+  & .wrapperImg {
+    @apply max-w-xs max-h-80  box-border p-4;
+    & .cardImg {
+      @apply w-full rounded-full;
+    }
+  }
+  & .cardBody {
+    @apply px-6 py-4;
+
+    & .cardMemberName {
+      @apply font-bold  text-sky-600 text-xl;
+    }
+    & .cardMemberRole {
+      @apply font-medium text-gray-400  mb-2;
+    }
+    & .cardText {
+      @apply text-sky-900 text-base;
+    }
+  }
+  & .cardFooter {
+    @apply p-2 flex justify-center;
+
+    & .link {
+      @apply inline-block mx-2 mb-2;
+    }
+  }
+}
