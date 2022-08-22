@@ -5,7 +5,6 @@ import React, { MutableRefObject, useRef, useState } from 'react';
 import './Carousel.pcss';
 import ArrowLeft from '../../assets/images/left-arrow.png';
 import ArrowRight from '../../assets/images/right-arrow.png';
-// import { Button } from '../Button/Button';
 
 interface ImgLink {
   [key: string]: {
@@ -77,11 +76,11 @@ export function Carousel (): JSX.Element  {
   }
 
   return (
-    <div className='flex justify-center items-center mb-10 mt-4'>
+    <div className='carousel'>
 
-      <div className='w-full overflow-hidden'>
+      <div className='carouselContainer'>
 
-        <ul className='whitespace-nowrap inline-block shadow-lg'>
+        <ul className='slider'>
           {sliderList.map((slide, i) => (
             <li
               key={slide.id}
@@ -89,7 +88,7 @@ export function Carousel (): JSX.Element  {
                 selectedRef :
                 null
               }
-              className = 'w-full whitespace-nowrap inline-block relative'
+              className = 'slide'
             >
               <img
                 className ='sliderImg'
@@ -101,10 +100,7 @@ export function Carousel (): JSX.Element  {
           ))}
         </ul>
       </div>
-      {/* <Button
-        text=''
-        onClick={()=>buttonPrev()}
-        classBtn='btnPrev'/> */}
+
       <div
         className ='sliderArrowRight'
         onClick={()=>buttonNext()}
@@ -116,11 +112,6 @@ export function Carousel (): JSX.Element  {
         />
       </div>
 
-      {/* <Button
-        text=''
-        onClick={()=>buttonNext()}
-        classBtn='btnNext'/>
-    */}
       <div
         className ='sliderArrowLeft'
         onClick={()=>buttonPrev()}
@@ -135,48 +126,3 @@ export function Carousel (): JSX.Element  {
   );
 
 }
-
-// return (
-//   <div className='w-full'>
-//     <Button
-//       text='Prev'
-//       onClick={()=>buttonPrev()}
-//       classBtn='carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0'/>
-
-//     <Button
-//       text='Next'
-//       onClick={()=>buttonNext()}
-//       classBtn='carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0'/>
-
-//     <div className="p-12 flex justify-center w-full md:w-1/2 items-center">
-
-//       <div className='relative w-full'>
-//         <div className='carousel'>
-//           {sliderList.map((slide, i) => (
-//             <div
-//               key={slide.id}
-//               ref={index === i ?
-//                 selectedRef :
-//                 null
-//               }
-//               className= 'w-full flex-shrink-0'
-
-//             >
-//               <img
-//                 className='w-full object-contain'
-//                 src={slide.imageUrl}
-//                 alt={`slide #${  slide.id}`}
-//               />
-//               <div className="carousel-caption hidden md:block absolute text-center z-40 bottom-1/4">
-//                 <h5 className="text-xl">First slide label</h5>
-//                 <p>Some representative placeholder content for the first slide.</p>
-//               </div>
-//             </div>
-
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   </div>
-
-// );
