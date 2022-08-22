@@ -7,7 +7,7 @@ import UserIcon from '../../assets/icons/user-icon.svg';
 import './LoginPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
-import createUser from '@/utils/queryUtils';
+import { createUser, signIn } from '@/utils/queryUtils';
 
 export function LoginPage (){
 
@@ -18,9 +18,13 @@ export function LoginPage (){
     password: '',
   });
 
-  const submitHandler = (e: FormEvent) => {
+  const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-    createUser(details);
+    if (isLoginMode) {
+      console.log(await signIn(details));
+    } else {
+      console.log(await createUser(details));
+    }
   };
 
   return(
@@ -84,7 +88,7 @@ export function LoginPage (){
         <Button
           text={isLoginMode ? 'Login' : 'Create user'}
           classBtn="form__login-btn"
-          onClick={submitHandler}
+          onClick={() => submitHandler}
         />
         <div className="form__sign-container">
           <Button
