@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 
 import './Button.pcss';
 
@@ -7,7 +7,7 @@ interface ButtonProps{
   classBtn : string;
   disabled?:boolean;
   children?:React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Button = ({
