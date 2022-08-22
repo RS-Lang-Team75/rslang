@@ -1,3 +1,5 @@
+import { useSelector, useDispatch } from 'react-redux';
+
 import React, { FormEvent, useState } from 'react';
 
 import EmailIcon from '../../assets/icons/email-icon.svg';
@@ -5,9 +7,12 @@ import LockIcon from '../../assets/icons/lock-icon.svg';
 import UserIcon from '../../assets/icons/user-icon.svg';
 
 import './LoginPage.pcss';
+
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
-import { createUser, signIn } from '@/utils/queryUtils';
+import { createUser, signIn } from '@/utils/queries/userQueries';
+import { saveName, saveToken, saveUserId } from '@/utils/slices/userSlice';
+import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
 
@@ -18,10 +23,16 @@ export function LoginPage (){
     password: '',
   });
 
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     if (isLoginMode) {
-      console.log(await signIn(details));
+      const response = await signIn(details);
+      dispatch(saveName(response.name));
+      dispatch(saveToken(response.token));
+      dispatch(saveUserId(response.userId));
     } else {
       console.log(await createUser(details));
     }
@@ -31,7 +42,7 @@ export function LoginPage (){
     <main className="login">
 
       <form className="form">
-        <h2 className="form__header">Hello Again!</h2>
+        <h2 className="form__header">Hello Again{user.name && `, ${user.name}`}! </h2>
         <p className="form__sub-header">Welcome Back</p>
 
         {!isLoginMode &&
@@ -88,7 +99,11 @@ export function LoginPage (){
         <Button
           text={isLoginMode ? 'Login' : 'Create user'}
           classBtn="form__login-btn"
-          onClick={() => submitHandler}
+          onClick={e => {
+            // eslint-disable-next-line no-void
+            void submitHandler(e);
+          }
+          }
         />
         <div className="form__sign-container">
           <Button
