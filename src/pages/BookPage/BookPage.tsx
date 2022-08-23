@@ -1,35 +1,23 @@
-import axios, { AxiosError } from 'axios';
-
-import React, { useEffect, useState } from 'react';
-
 import { CardWord } from '@/components/CardWord/CardWord';
-import { IWord } from '@/types/types';
+import { SideBar } from '@/components/SideBar/SideBar';
+import { useWords } from '@/utils/words';
 
 export function BookPage (){
-  const [words, setWords] = useState<IWord[]>([]);
+  const { words,getWords } = useWords();
 
-  async function fetchWord () {
-    try {
-      const response = await axios.get<IWord[]>('https://rslang-team75.herokuapp.com/words?page=1');
-      setWords(response.data);
-
-    } catch (e:unknown) {
-      const error = e as AxiosError;
-      console.log(error);
-    }
-
-  }
-
-  useEffect(()=>{
-    fetchWord(); // TODO: ошибка должна уйти, когда перенесем это в отдельную папку
-  },[]);
+  function handleChange (value:number){
+    getWords(value,0);
+  };
 
   return(
     <main >
-      <h2 className="text-center font-serif  uppercase text-4xl xl:text-5xl">Book Page</h2>
+      <div className='flex justify-between mx-5 gap-5 md:flex-col'>
 
-      {words.map(word=> <CardWord word={word} key = {word.id}/>)}
-
+        <SideBar onChange={handleChange}/>
+        <div>
+          {words.map(word=> <CardWord word={word} key = {word.id}/>)}
+        </div>
+      </div>
     </main>
 
   );

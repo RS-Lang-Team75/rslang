@@ -16,13 +16,17 @@ interface CardWordProps {
 export function CardWord ({ word }:CardWordProps) : JSX.Element{
   const [activeBtn, setActiveBtn] = useState(false);
   // TODO: состояния будет менять, когда появится зарегистрированный пользователь
+
+  const sectionsBgColor = ['gray','sky','green','yellow','orange','red' ,'purple' ];
+  const cardIndicate = ['cardHeader', `border-l-${sectionsBgColor[word.group]}-500`];
+
   return (
     <div className='cardWords'>
-      <div className="imgInCard"
+      <div className= {activeBtn ? 'imgInCardAutorisate' : 'imgInCard'}
         style={{ backgroundImage: `url(https://rslang-team75.herokuapp.com/${word.image})` }}
         title={word.word} />
       <div className='cardContent'>
-        <div className='cardHeader'>
+        <div className={cardIndicate.join(' ')}>
           <div className='cardWordPart'>
             <div className='cardWord'>
               <div className='cardWordOnEnglish'>{word.word}</div>
