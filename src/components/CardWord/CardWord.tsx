@@ -19,14 +19,14 @@ export function CardWord ({ word }:CardWordProps) : JSX.Element{
   // TODO: состояния будет менять, когда появится зарегистрированный пользователь
   const user = useSelector((state: RootState) => state.user);
 
-  const sectionsBgColor = ['border-l-gray-500',
-    'border-l-sky-500',
-    'border-l-green-500',
-    'border-l-yellow-500',
-    'border-l-orange-500',
-    'border-l-orange-500',
-    'border-l-red-500',
-    'border-l-purple-500' ];
+  const sectionsBgColor = ['border-gray-500',
+    'border-sky-500',
+    'border-green-500',
+    'border-yellow-500',
+    'border-orange-500',
+    'border-orange-500',
+    'border-red-500',
+    'border-purple-500' ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
 
   return (
