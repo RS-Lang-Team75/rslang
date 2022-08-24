@@ -1,6 +1,7 @@
 import parse from 'html-react-parser';
+import { useSelector } from 'react-redux';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import './CardWord.pcss';
 
@@ -8,21 +9,22 @@ import { Button } from '../Button/Button';
 import { SoundButton } from '../Button/SoundButton';
 
 import { IWord } from '@/types/types';
+import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
   word:IWord;
 }
 
 export function CardWord ({ word }:CardWordProps) : JSX.Element{
-  const [activeBtn, setActiveBtn] = useState(false);
   // TODO: состояния будет менять, когда появится зарегистрированный пользователь
+  const user = useSelector((state: RootState) => state.user);
 
   const sectionsBgColor = ['gray','sky','green','yellow','orange','red' ,'purple' ];
   const cardIndicate = ['cardHeader', `border-l-${sectionsBgColor[word.group]}-500`];
 
   return (
     <div className='cardWords'>
-      <div className= {activeBtn ? 'imgInCardAutorisate' : 'imgInCard'}
+      <div className= {user.userId ? 'imgInCardAutorisate' : 'imgInCard'}
         style={{ backgroundImage: `url(https://rslang-team75.herokuapp.com/${word.image})` }}
         title={word.word} />
       <div className='cardContent'>
@@ -51,7 +53,7 @@ export function CardWord ({ word }:CardWordProps) : JSX.Element{
           <p className='cardExampleEnglish'>{parse(word.textExample)}</p>
           <p className='cardExampleRussian'>{word.textExampleTranslate}</p>
         </div>
-        { activeBtn &&
+        { user.userId &&
         <div className='cardButton'>
           <Button text="Сложное" classBtn='difficult'/>
           <Button text="Выученное" classBtn='studied'/>
