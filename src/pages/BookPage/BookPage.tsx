@@ -56,7 +56,7 @@ export function BookPage () : JSX.Element{
       <Pagination handlePages={handlePages} page = {page}/>
       <div className='PageMainContent'>
         <SideBar onChange={handleChangeGroup}/>
-        <div>
+        <div className='wordsContainer'>
           {words.map(word=> <CardWord word={word} key = {word.id}/>)}
         </div>
       </div>
