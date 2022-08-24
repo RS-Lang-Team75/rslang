@@ -48,6 +48,13 @@ export function LoginPage (){
     }
   };
 
+  const logout = (e: FormEvent): void => {
+    e.preventDefault();
+    dispatch(saveName(''));
+    dispatch(saveToken(''));
+    dispatch(saveUserId(''));
+  };
+
   return(
     <main className="login">
 
@@ -55,71 +62,82 @@ export function LoginPage (){
         <h2 className="form__header">Hello Again{user.name && `, ${user.name}`}! </h2>
         <p className="form__sub-header">Welcome Back</p>
 
-        {!isLoginMode &&
-        <div className="form__normal">
-          <UserIcon />
-          <input
-            id="name"
-            onChange={e => setDetails({ ...details, name: e.target.value })}
-            value={details.name}
-            className="form__input"
-            type="text"
-            name="name"
-            placeholder="User Name"
-          />
-        </div>
-        }
-
-        <div className="form__normal">
-          <EmailIcon />
-          <input id="email"
-            value={details.email}
-            onChange={e => setDetails({ ...details, email: e.target.value })}
-            className="form__input"
-            type="email"
-            name="email"
-            placeholder="Email Address"
-          />
-        </div>
-
-        <div className={isLoginMode ? 'form__last' : 'form__normal'}>
-          <LockIcon />
-          <input className="form__input"
-            value={details.password}
-            onChange={e => setDetails({ ...details, password: e.target.value })}
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-          />
-        </div>
-        {/* TODO make password confirmation */}
-        {/* {!isLoginMode &&
-        <div className="form__last">
-          <LockIcon />
-          <input className="form__input"
-            type="password"
-            name="password"
-            id="password-confirm"
-            placeholder="Confirm password"
-          />
-        </div>
-        } */}
-
-        <Button
-          text={isLoginMode ? 'Login' : 'Create user'}
-          classBtn="form__login-btn"
-          onClick={e => {
-            submitHandler(e).catch(err => console.log(err));
+        {!user.name &&
+        <div>
+          {!isLoginMode &&
+          <div className="form__normal">
+            <UserIcon />
+            <input
+              id="name"
+              onChange={e => setDetails({ ...details, name: e.target.value })}
+              value={details.name}
+              className="form__input"
+              type="text"
+              name="name"
+              placeholder="User Name"
+            />
+          </div>
           }
-          }
-        />
-        <div className="form__sign-container">
+          <div className="form__normal">
+            <EmailIcon />
+            <input id="email"
+              value={details.email}
+              onChange={e => setDetails({ ...details, email: e.target.value })}
+              className="form__input"
+              type="email"
+              name="email"
+              placeholder="Email Address"
+            />
+          </div>
+          <div className={isLoginMode ? 'form__last' : 'form__normal'}>
+            <LockIcon />
+            <input className="form__input"
+              value={details.password}
+              onChange={e => setDetails({ ...details, password: e.target.value })}
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+            />
+          </div>
+          {/* TODO make password confirmation */}
+          {/* {!isLoginMode &&
+          <div className="form__last">
+            <LockIcon />
+            <input className="form__input"
+              type="password"
+              name="password"
+              id="password-confirm"
+              placeholder="Confirm password"
+            />
+          </div>
+          } */}
+
           <Button
-            text={isLoginMode ? 'Sign Up?' : 'Already have an account?'}
-            onClick={() => setIsLoginMode(m => !m)}
-            classBtn='form__sign-up-btn'/>
-        </div>
+            text={isLoginMode ? 'Login' : 'Create user'}
+            classBtn="form__login-btn"
+            onClick={e => {
+              submitHandler(e).catch(err => console.log(err));
+            }
+            }
+          />
+          <div className="form__sign-container">
+            <Button
+              text={isLoginMode ? 'Sign Up?' : 'Already have an account?'}
+              onClick={() => {
+                setIsLoginMode(m => !m);
+                clearForm();
+              }}
+              classBtn='form__sign-up-btn'/>
+          </div>
+        </div>}
+
+        {user.name &&
+        <Button
+          text='Logout'
+          classBtn="form__login-btn"
+          onClick={logout}
+        />}
       </form>
     </main>
   );
