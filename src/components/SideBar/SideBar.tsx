@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, MouseEvent, KeyboardEvent } from 'react';
 import 'flowbite';
 
 import './SideBar.pcss';
@@ -7,7 +7,7 @@ import MenuSvg from '../../assets/svg/menu-bars.svg';
 interface SideBarProps {
   onChange:(g:number)=>void;
 }
-
+// TODO refactor switch with object
 export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [firstSectionActive, setFirstSectionActive] = useState('');
@@ -36,7 +36,7 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
     'sixthSection':'bg-red-100' ,
     'seventhSection':'bg-purple-100' };
 
-  function sectionChoose ({ currentTarget }: React.MouseEvent|React.KeyboardEvent){
+  function sectionChoose ({ currentTarget }: MouseEvent | KeyboardEvent){
     setFirstSectionActive('');
     setSecondSectionActive('');
     setThirdSectionActive('');
