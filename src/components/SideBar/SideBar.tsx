@@ -2,7 +2,7 @@ import React, { useState, MouseEvent, KeyboardEvent } from 'react';
 import 'flowbite';
 
 import './SideBar.pcss';
-import MenuSvg from '../../assets/svg/menu-bars.svg';
+import MenuSvg from '@/assets/icons/menu-bars.svg';
 
 interface SideBarProps {
   onChange:(g:number)=>void;

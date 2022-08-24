@@ -1,7 +1,7 @@
 import './Button.pcss';
 // import { useState } from 'react';
 
-import AudioSvg from '../../assets/svg/audio.svg';
+import AudioSvg from '@/assets/icons/audio.svg';
 
 interface SoundButtonProps{
   soundUrl: string;
