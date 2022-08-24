@@ -6,16 +6,17 @@ import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IWord } from '@/types/types';
-// import { useWords } from '@/utils/words';
 
 import './BookPage.pcss';
 
 export function BookPage () : JSX.Element{
-  // const { words, getWords,changePage } = useWords();
+
+  const savedPage = Number(localStorage.getItem('currentPage'));
+  const savedGroup = Number(localStorage.getItem('currentGroup'));
 
   const [words, setWords] = useState<IWord[]>([]);
-  const [page, setPage] = useState(0);
-  const [group, setGroup] = useState(0);
+  const [page, setPage] = useState(savedPage || 0);
+  const [group, setGroup] = useState(savedGroup || 0);
 
   async function fetchWord (p = 0,g = 0 ) {
 
@@ -39,13 +40,15 @@ export function BookPage () : JSX.Element{
   const PAGE_ONE = 0;
 
   const  handleChangeGroup = (value:number)=>{
-    setPage(p=>(p*0) + PAGE_ONE);
+    setPage(PAGE_ONE);
     setGroup(value);
-    // getWords(PAGE_ONE, value);
+    localStorage.setItem('currentGroup', value.toString());
+    localStorage.setItem('currentPage', PAGE_ONE.toString());
   };
 
   const handlePages = (value:number) => {
     setPage(value);
+    localStorage.setItem('currentPage', value.toString());
   };
 
   return(

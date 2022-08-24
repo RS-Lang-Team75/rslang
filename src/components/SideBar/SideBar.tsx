@@ -10,21 +10,8 @@ interface SideBarProps {
 // TODO refactor switch with object
 export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [firstSectionActive, setFirstSectionActive] = useState('');
-  const [secondSectionActive, setSecondSectionActive] = useState('');
-  const [thirdSectionActive, setThirdSectionActive] = useState('');
-  const [fourthSectionActive, setFourthSectionActive] = useState('');
-  const [fifthSectionActive, setFifthSectionActive] = useState('');
-  const [sixthSectionActive, setSixthSectionActive] = useState('');
-  const [seventhSectionActive, setSeventhSectionActive] = useState('');
 
-  const firstSection = ['bookSection firstSection', firstSectionActive];
-  const secondSection = ['bookSection secondSection', secondSectionActive];
-  const thirdSection = ['bookSection thirdSection', thirdSectionActive];
-  const fourthSection = ['bookSection fourthSection', fourthSectionActive];
-  const fifthSection = ['bookSection fifthSection', fifthSectionActive];
-  const sixthSection = ['bookSection sixthSection', sixthSectionActive];
-  const seventhSection = ['bookSection seventhSection', seventhSectionActive];
+  const savedGroup = Number(localStorage.getItem('currentGroup'));
 
   const sections = ['firstSection','secondSection', 'thirdSection', 'fourthSection',
     'fifthSection', 'sixthSection' , 'seventhSection'];
@@ -35,6 +22,22 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
     'fifthSection':'bg-orange-100',
     'sixthSection':'bg-red-100' ,
     'seventhSection':'bg-purple-100' };
+
+  const [firstSectionActive, setFirstSectionActive] = useState('' || (savedGroup === 0 && sectionsBgColor.firstSection));
+  const [secondSectionActive, setSecondSectionActive] = useState('' || (savedGroup === 1 && sectionsBgColor.secondSection));
+  const [thirdSectionActive, setThirdSectionActive] = useState('' || savedGroup === 2 && sectionsBgColor.thirdSection);
+  const [fourthSectionActive, setFourthSectionActive] = useState('' || savedGroup === 3 && sectionsBgColor.fourthSection);
+  const [fifthSectionActive, setFifthSectionActive] = useState('' || savedGroup === 4 && sectionsBgColor.fifthSection);
+  const [sixthSectionActive, setSixthSectionActive] = useState('' || savedGroup === 5 && sectionsBgColor.sixthSection);
+  const [seventhSectionActive, setSeventhSectionActive] = useState('' || savedGroup === 6 && sectionsBgColor.seventhSection);
+
+  const firstSection = ['bookSection firstSection', firstSectionActive];
+  const secondSection = ['bookSection secondSection', secondSectionActive];
+  const thirdSection = ['bookSection thirdSection', thirdSectionActive];
+  const fourthSection = ['bookSection fourthSection', fourthSectionActive];
+  const fifthSection = ['bookSection fifthSection', fifthSectionActive];
+  const sixthSection = ['bookSection sixthSection', sixthSectionActive];
+  const seventhSection = ['bookSection seventhSection', seventhSectionActive];
 
   function sectionChoose ({ currentTarget }: MouseEvent | KeyboardEvent){
     setFirstSectionActive('');
