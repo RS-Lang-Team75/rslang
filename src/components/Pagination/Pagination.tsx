@@ -1,7 +1,5 @@
 import React, {  useRef } from 'react';
 
-import PageFirstPNG from '../../assets/svg/page-first.png';
-import PageLastSvg from '../../assets/svg/page-last.svg';
 import { Button } from '../Button/Button';
 
 import './Pagination.pcss';
@@ -49,11 +47,11 @@ export function Pagination ({ handlePages, page }:PaginationProps) : JSX.Element
   return (
     <div className='pagination'>
       <Button
-        classBtn='firstBtn'
+        classBtn='prevBtn'
         text = ""
         disabled={!hasPrev}
         onClick={()=>handleClickFirst()}>
-        <img className='w-5 h-5' src={PageFirstPNG}  alt="arrow first" />
+        <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 18V6h2v12Zm11 0-6-6 6-6 1.4 1.4-4.6 4.6 4.6 4.6Z" clipRule="evenodd"/></svg>
       </Button>
       <Button
         classBtn='prevBtn'
@@ -72,11 +70,11 @@ export function Pagination ({ handlePages, page }:PaginationProps) : JSX.Element
         <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" /></svg>
       </Button>
       <Button
-        classBtn='lastBtn'
+        classBtn='nextBtn'
         text = ""
         disabled={!hasNext}
         onClick={()=>handleClickLast()}>
-        <i className='w-5 h-5 '><PageLastSvg/></i>
+        <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="m7 18-1.4-1.4 4.6-4.6-4.6-4.6L7 6l6 6Zm9 0V6h2v12Z" clipRule="evenodd"/></svg>
       </Button>
     </div>
 
