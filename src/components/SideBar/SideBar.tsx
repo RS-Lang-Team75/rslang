@@ -5,7 +5,7 @@ import './SideBar.pcss';
 import MenuSvg from '../../assets/svg/menu-bars.svg';
 
 interface SideBarProps {
-  onChange:(n:number)=>void;
+  onChange:(g:number)=>void;
 }
 
 export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
