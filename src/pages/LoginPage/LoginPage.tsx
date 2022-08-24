@@ -23,6 +23,14 @@ export function LoginPage (){
     password: '',
   });
 
+  const clearForm = ():void => {
+    setDetails({
+      name: '',
+      email: '',
+      password: '',
+    });
+  };
+
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
@@ -34,7 +42,9 @@ export function LoginPage (){
       dispatch(saveToken(response.token));
       dispatch(saveUserId(response.userId));
     } else {
-      console.log(await createUser(details));
+      await createUser(details);
+      clearForm();
+      setIsLoginMode(true);
     }
   };
 
@@ -83,8 +93,8 @@ export function LoginPage (){
             placeholder="Password"
           />
         </div>
-
-        {!isLoginMode &&
+        {/* TODO make password confirmation */}
+        {/* {!isLoginMode &&
         <div className="form__last">
           <LockIcon />
           <input className="form__input"
@@ -94,14 +104,13 @@ export function LoginPage (){
             placeholder="Confirm password"
           />
         </div>
-        }
+        } */}
 
         <Button
           text={isLoginMode ? 'Login' : 'Create user'}
           classBtn="form__login-btn"
           onClick={e => {
-            // eslint-disable-next-line no-void
-            void submitHandler(e);
+            submitHandler(e).catch(err => console.log(err));
           }
           }
         />
