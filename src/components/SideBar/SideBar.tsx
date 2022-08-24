@@ -91,86 +91,87 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
         <MenuSvg/>
 
       </div>
-      <aside className={isSideBarOpen ? 'showMenuSideBar' : 'hideMenuSideBar'} aria-label="Sidebar" >
-        <div className="menuSideBar">
-          <ul className="space-y-2" role="menu">
-            <li >
-              <div className={firstSection .join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 1</span>
-              </div>
-            </li>
-            <li>
-              <div className={secondSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 2</span>
-              </div>
-            </li>
-            <li>
-              <div className={thirdSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 3</span>
-              </div>
-            </li>
-            <li>
-              <div className={fourthSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 4</span>
-              </div>
-            </li>
-            <li>
-              <div className={fifthSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 5</span>
-              </div>
-            </li>
-            <li>
-              <div className={sixthSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 6</span>
-              </div>
-            </li>
-            <li>
-              <div className={seventhSection.join(' ')}
-                onClick = {sectionChoose}
-                onKeyPress={sectionChoose}
-                role="menuitem"
-                tabIndex={0}>
-                <span className="ml-3">Раздел 7</span>
-              </div>
-            </li>
-            {/* <li>
-              <a href="#" className="bookSection seventhSection">
-                <span className="ml-3">Игра &quot;Аудиовызов&quot;</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="bookSection seventhSection">
-                <span className="ml-3">Игра &quot;Спринт&quot;</span>
-              </a>
-            </li> */}
-
-          </ul>
-        </div>
-      </aside>
+      <div className="sideBarContainer">
+        <aside className={isSideBarOpen ? 'showMenuSideBar' : 'hideMenuSideBar'} aria-label="Sidebar" >
+          <div className="menuSideBar">
+            <ul className="space-y-2" role="menu">
+              <li >
+                <div className={firstSection .join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 1</span>
+                </div>
+              </li>
+              <li>
+                <div className={secondSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 2</span>
+                </div>
+              </li>
+              <li>
+                <div className={thirdSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 3</span>
+                </div>
+              </li>
+              <li>
+                <div className={fourthSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 4</span>
+                </div>
+              </li>
+              <li>
+                <div className={fifthSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 5</span>
+                </div>
+              </li>
+              <li>
+                <div className={sixthSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 6</span>
+                </div>
+              </li>
+              <li>
+                <div className={seventhSection.join(' ')}
+                  onClick = {sectionChoose}
+                  onKeyPress={sectionChoose}
+                  role="menuitem"
+                  tabIndex={0}>
+                  <span className="ml-3">Раздел 7</span>
+                </div>
+              </li>
+              {/* <li>
+                <a href="#" className="bookSection seventhSection">
+                  <span className="ml-3">Игра &quot;Аудиовызов&quot;</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" className="bookSection seventhSection">
+                  <span className="ml-3">Игра &quot;Спринт&quot;</span>
+                </a>
+              </li> */}
+            </ul>
+          </div>
+        </aside>
+      </div>
     </>
   );
 }

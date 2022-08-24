@@ -2,9 +2,13 @@
   outline: 1px solid red;
 } */
 
+.sideBarContainer{
+  @apply relative;
+}
+
 .showMenuSideBar {
   @apply w-64 mt-4
-  md:absolute top-10 left-0 z-40;
+  md:absolute top-0 left-0 z-40 md:w-full  md:shadow-lg md:border-2 md:rounded-lg;
 }
 .hideMenuSideBar {
   @apply w-64 mt-4
@@ -12,7 +16,7 @@
 }
 .menuIcon {
   @apply hidden
-  md:block mt-2;
+  mt-2 md:flex md:justify-center;
 }
 
 .menuSideBar {
