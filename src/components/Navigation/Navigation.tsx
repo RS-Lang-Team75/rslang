@@ -63,8 +63,8 @@ export function Navigation (): JSX.Element {
               </svg>
             </div>
             <div className="menuMobileOpen">
-              <Button text = "LOGIN" classBtn="mobileMenuBtn bg-sky-400"/>
               {[
+                ['LOGIN', '/login'],
                 ['Учебник', '/book'],
                 ['Словарь', '/dictionary'],
                 ['Игры', '/games'],
@@ -72,13 +72,13 @@ export function Navigation (): JSX.Element {
                 ['Команда', '/team'],
                 ['Видео', '/video'],
               ].map(([title, url]) => (
-                <Link key = {title} to={url} className="mobileMenuBtn">{title}</Link>
+                <Link key = {title} to={url} className="mobileMenuBtn" onClick={() => setIsNavOpen(false)} >{title}</Link>
               ))}
             </div>
           </div>
         </section>
         <Link key = "login-btn" to = "/login">
-          <Button text = "LOGIN" classBtn="loginBtn" />
+          <Button text = "LOGIN" classBtn="loginBtn"  />
         </Link>
       </div>
     </nav>
