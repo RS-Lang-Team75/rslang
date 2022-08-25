@@ -11,7 +11,13 @@ export interface UserState {
   name: string;
 }
 
-const initialState: UserState = {
+const storedUser: UserState = JSON.parse(localStorage.getItem('client-info') as string) as UserState;
+
+const saveLocal = (state: UserState) => {
+  localStorage.setItem('client-info', JSON.stringify(state));
+};
+
+const initialState: UserState = storedUser || {
   message: '',
   token: '',
   refreshToken: '',
@@ -25,15 +31,19 @@ export const userSlice = createSlice({
   reducers: {
     saveToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
+      saveLocal(state);
     },
     saveRefreshToken: (state, action: PayloadAction<string>) => {
       state.refreshToken = action.payload;
+      saveLocal(state);
     },
     saveName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
+      saveLocal(state);
     },
     saveUserId: (state, action: PayloadAction<string>) => {
       state.userId = action.payload;
+      saveLocal(state);
     },
   },
 });

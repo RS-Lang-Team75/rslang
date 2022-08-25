@@ -11,7 +11,7 @@ import './LoginPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
-import { saveName, saveToken, saveUserId } from '@/utils/slices/userSlice';
+import { saveName, saveRefreshToken, saveToken, saveUserId } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
@@ -41,6 +41,7 @@ export function LoginPage (){
       dispatch(saveName(response.name));
       dispatch(saveToken(response.token));
       dispatch(saveUserId(response.userId));
+      dispatch(saveRefreshToken(response.refreshToken));
     } else {
       await createUser(details);
       clearForm();
@@ -53,6 +54,8 @@ export function LoginPage (){
     dispatch(saveName(''));
     dispatch(saveToken(''));
     dispatch(saveUserId(''));
+    dispatch(saveRefreshToken(''));
+    localStorage.clear();
   };
 
   return(

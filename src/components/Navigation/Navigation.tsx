@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import React, { useState } from 'react';
@@ -6,8 +7,12 @@ import React, { useState } from 'react';
 import './Navigation.pcss';
 import { Button } from '../Button/Button';
 
+import { RootState } from '@/utils/store/store';
+
 export function Navigation (): JSX.Element {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
+
   return(
     <nav
       className="headerNav">
@@ -77,8 +82,13 @@ export function Navigation (): JSX.Element {
             </div>
           </div>
         </section>
+        {user.name &&
+        <p>
+          {`Hey, ${user.name}!`}
+        </p>
+        }
         <Link key = "login-btn" to = "/login">
-          <Button text = "LOGIN" classBtn="loginBtn"  />
+          <Button text = {!user.name ? 'Login' : 'Logout'} classBtn="loginBtn" />
         </Link>
       </div>
     </nav>
