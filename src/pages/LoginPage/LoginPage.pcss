@@ -12,8 +12,20 @@
       @apply text-sm font-normal text-gray-600 mb-4;
     }
 
-    & .form__normal {
-      @apply  flex items-center border-2 mb-4 py-2 px-3 rounded-2xl;
+    & .form__input-container {
+      @apply flex items-center border-2 py-2 px-3 rounded-2xl;
+    }
+
+    & .form__input-container_invalid {
+      @apply border-red-400;
+    }
+
+    & .form__error {
+      @apply h-5;
+
+      & .form__error-message {
+        @apply pl-4 m-0 text-xs text-red-400;
+      }
     }
 
     & .icon {
@@ -21,15 +33,15 @@
     }
 
     & .form__input {
-    @apply  pl-2 w-full outline-none border-none;
+    @apply pl-2 w-full outline-none border-none;
     }
 
     & .form__last {
-      @apply  flex items-center border-2 mb-8 py-2 px-3 rounded-2xl;
+      @apply  flex items-center border-2 py-2 px-3 rounded-2xl;
     }
 
     & .form__login-btn {
-      @apply block w-full bg-sky-600 mt-5 py-2 rounded-2xl hover:bg-sky-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2;
+      @apply block w-full bg-sky-600 mt-3 py-2 rounded-2xl hover:bg-sky-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2;
     }
 
     & .form__sign-container {

@@ -22,6 +22,10 @@ export function LoginPage (){
     email: '',
     password: '',
   });
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(true);
+  const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
+  const passwordMinLength = 8;
+  const [isNameValid, setIsNameValid] = useState<boolean>(true);
 
   const clearForm = ():void => {
     setDetails({
@@ -34,18 +38,45 @@ export function LoginPage (){
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
+  const validateName = (): void => {
+    if (details.name.length > 0) {
+      setIsNameValid(true);
+    } else {
+      setIsNameValid(false);
+    }
+  };
+
+  const validateEmail = (): void => {
+    const emailRegExp = /\S+@\S+\.\S+/;
+    if (emailRegExp.test(details.email)) {
+      setIsEmailValid(true);
+    } else {
+      setIsEmailValid(false);
+    }
+  };
+
+  const validatePassword = (): void => {
+    if (details.password.length >= passwordMinLength) {
+      setIsPasswordValid(true);
+    } else {
+      setIsPasswordValid(false);
+    }
+  };
+
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-    if (isLoginMode) {
-      const response = await signIn(details);
-      dispatch(saveName(response.name));
-      dispatch(saveToken(response.token));
-      dispatch(saveUserId(response.userId));
-      dispatch(saveRefreshToken(response.refreshToken));
-    } else {
-      await createUser(details);
-      clearForm();
-      setIsLoginMode(true);
+    if (isEmailValid && isPasswordValid) {
+      if (isLoginMode) {
+        const response = await signIn(details);
+        dispatch(saveName(response.name));
+        dispatch(saveToken(response.token));
+        dispatch(saveUserId(response.userId));
+        dispatch(saveRefreshToken(response.refreshToken));
+      } else if (isNameValid) {
+        await createUser(details);
+        clearForm();
+        setIsLoginMode(true);
+      }
     }
   };
 
@@ -62,62 +93,81 @@ export function LoginPage (){
     <main className="login">
 
       <form className="form">
-        <h2 className="form__header">Hello Again{user.name && `, ${user.name}`}! </h2>
-        <p className="form__sub-header">Welcome Back</p>
-
+        {isLoginMode ?
+          <>
+            <h2 className="form__header">Привет{user.name && `, ${user.name}`}! </h2>
+            <p className="form__sub-header">Рады, что ты с нами!</p>
+          </> :
+          <>
+            <h2 className="form__header">Давай знакомиться! </h2>
+            <p className="form__sub-header" />
+          </>
+        }
         {!user.name &&
         <div>
           {!isLoginMode &&
-          <div className="form__normal">
-            <UserIcon />
-            <input
-              id="name"
-              onChange={e => setDetails({ ...details, name: e.target.value })}
-              value={details.name}
-              className="form__input"
-              type="text"
-              name="name"
-              placeholder="User Name"
-            />
-          </div>
+          <>
+            <div className={`form__input-container ${!isNameValid ? 'form__input-container_invalid' : ''}`}>
+              <UserIcon />
+              <input
+                id="name"
+                onChange={e => setDetails({ ...details, name: e.target.value })}
+                onBlur={validateName}
+                onFocus={() => setIsNameValid(true)}
+                value={details.name}
+                className="form__input"
+                type="text"
+                name="name"
+                placeholder="Имя"
+              />
+            </div>
+            <div className='form__error'>
+              {!isNameValid && <p className='form__error-message'>
+              Имя не должно быть пустым
+              </p>}
+            </div>
+          </>
           }
-          <div className="form__normal">
+          <div className={`form__input-container ${!isEmailValid ? 'form__input-container_invalid' : ''}`}>
             <EmailIcon />
             <input id="email"
               value={details.email}
-              onChange={e => setDetails({ ...details, email: e.target.value })}
+              onChange={e => {
+                setDetails({ ...details, email: e.target.value });
+              }}
+              onFocus={() => setIsEmailValid(true)}
+              onBlur={validateEmail}
               className="form__input"
               type="email"
               name="email"
-              placeholder="Email Address"
+              placeholder="Email"
             />
           </div>
-          <div className={isLoginMode ? 'form__last' : 'form__normal'}>
+          <div className='form__error'>
+            {!isEmailValid && <p className='form__error-message'>
+              Пожалуйста, введи корректный e-mail
+            </p>}
+          </div>
+          <div className={`form__input-container ${!isPasswordValid ? 'form__input-container_invalid' : ''}`}>
             <LockIcon />
             <input className="form__input"
               value={details.password}
               onChange={e => setDetails({ ...details, password: e.target.value })}
+              onFocus={() => setIsPasswordValid(true)}
+              onBlur={validatePassword}
               type="password"
               name="password"
               id="password"
-              placeholder="Password"
+              placeholder="Пароль"
             />
           </div>
-          {/* TODO make password confirmation */}
-          {/* {!isLoginMode &&
-          <div className="form__last">
-            <LockIcon />
-            <input className="form__input"
-              type="password"
-              name="password"
-              id="password-confirm"
-              placeholder="Confirm password"
-            />
+          <div className='form__error'>
+            {!isPasswordValid && <p className='form__error-message'>
+              Пароль должен быть не короче 8 символов
+            </p>}
           </div>
-          } */}
-
           <Button
-            text={isLoginMode ? 'Login' : 'Create user'}
+            text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
             classBtn="form__login-btn"
             onClick={e => {
               submitHandler(e).catch(err => console.log(err));
@@ -126,7 +176,7 @@ export function LoginPage (){
           />
           <div className="form__sign-container">
             <Button
-              text={isLoginMode ? 'Sign Up?' : 'Already have an account?'}
+              text={isLoginMode ? 'Создать аккаунт?' : 'Уже есть аккаунт?'}
               onClick={() => {
                 setIsLoginMode(m => !m);
                 clearForm();
@@ -137,7 +187,7 @@ export function LoginPage (){
 
         {user.name &&
         <Button
-          text='Logout'
+          text='Выйти'
           classBtn="form__login-btn"
           onClick={logout}
         />}
