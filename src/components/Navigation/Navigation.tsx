@@ -1,17 +1,29 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import './Navigation.pcss';
 import { Button } from '../Button/Button';
 
+import UserIcon from '@/assets/icons/user-icon.svg';
+import { saveName, saveToken, saveUserId, saveRefreshToken } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function Navigation (): JSX.Element {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  const logout = (e: FormEvent): void => {
+    e.preventDefault();
+    dispatch(saveName(''));
+    dispatch(saveToken(''));
+    dispatch(saveUserId(''));
+    dispatch(saveRefreshToken(''));
+    localStorage.clear();
+  };
 
   return(
     <nav
@@ -82,14 +94,18 @@ export function Navigation (): JSX.Element {
             </div>
           </div>
         </section>
-        {user.name &&
-        <p>
-          {`Hey, ${user.name}!`}
-        </p>
+        {user.name ?
+          <div className="userIconContainer">
+            <div className="userIcon">
+              <UserIcon />
+            </div>
+            <Button text='Выход' classBtn='loginBtn' onClick={logout}/>
+          </div>
+          :
+          <Link key = "login-btn" to = "/login">
+            <Button text='Вход' classBtn="loginBtn" />
+          </Link>
         }
-        <Link key = "login-btn" to = "/login">
-          <Button text = {!user.name ? 'Login' : 'Logout'} classBtn="loginBtn" />
-        </Link>
       </div>
     </nav>
   );
