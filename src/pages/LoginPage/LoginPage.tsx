@@ -26,6 +26,7 @@ export function LoginPage (){
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
   const passwordMinLength = 8;
   const [isNameValid, setIsNameValid] = useState<boolean>(true);
+  const [isLoginFailed, setIsLoginFailed] = useState<boolean>(false);
 
   const clearForm = ():void => {
     setDetails({
@@ -67,15 +68,23 @@ export function LoginPage (){
     e.preventDefault();
     if (isEmailValid && isPasswordValid) {
       if (isLoginMode) {
-        const response = await signIn(details);
-        dispatch(saveName(response.name));
-        dispatch(saveToken(response.token));
-        dispatch(saveUserId(response.userId));
-        dispatch(saveRefreshToken(response.refreshToken));
+        try {
+          const response = await signIn(details);
+          dispatch(saveName(response.name));
+          dispatch(saveToken(response.token));
+          dispatch(saveUserId(response.userId));
+          dispatch(saveRefreshToken(response.refreshToken));
+        } catch {
+          setIsLoginFailed(true);
+        }
       } else if (isNameValid) {
-        await createUser(details);
-        clearForm();
-        setIsLoginMode(true);
+        try {
+          await createUser(details);
+          clearForm();
+          setIsLoginMode(true);
+        } catch {
+          setIsLoginFailed(true);
+        }
       }
     }
   };
@@ -91,7 +100,6 @@ export function LoginPage (){
 
   return(
     <main className="login">
-
       <form className="form">
         {isLoginMode ?
           <>
@@ -107,13 +115,16 @@ export function LoginPage (){
         <div>
           {!isLoginMode &&
           <>
-            <div className={`form__input-container ${!isNameValid ? 'form__input-container_invalid' : ''}`}>
+            <div className={`form__input-container ${(!isNameValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
               <UserIcon />
               <input
                 id="name"
                 onChange={e => setDetails({ ...details, name: e.target.value })}
                 onBlur={validateName}
-                onFocus={() => setIsNameValid(true)}
+                onFocus={() => {
+                  setIsNameValid(true);
+                  setIsLoginFailed(false);
+                }}
                 value={details.name}
                 className="form__input"
                 type="text"
@@ -122,20 +133,21 @@ export function LoginPage (){
               />
             </div>
             <div className='form__error'>
-              {!isNameValid && <p className='form__error-message'>
-              Имя не должно быть пустым
-              </p>}
+              {!isNameValid && <p className='form__error-message'>Имя не должно быть пустым</p>}
             </div>
           </>
           }
-          <div className={`form__input-container ${!isEmailValid ? 'form__input-container_invalid' : ''}`}>
+          <div className={`form__input-container ${(!isEmailValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
             <EmailIcon />
             <input id="email"
               value={details.email}
               onChange={e => {
                 setDetails({ ...details, email: e.target.value });
               }}
-              onFocus={() => setIsEmailValid(true)}
+              onFocus={() => {
+                setIsEmailValid(true);
+                setIsLoginFailed(false);
+              }}
               onBlur={validateEmail}
               className="form__input"
               type="email"
@@ -144,16 +156,17 @@ export function LoginPage (){
             />
           </div>
           <div className='form__error'>
-            {!isEmailValid && <p className='form__error-message'>
-              Пожалуйста, введи корректный e-mail
-            </p>}
+            {!isEmailValid && <p className='form__error-message'>Пожалуйста, введи корректный e-mail</p>}
           </div>
-          <div className={`form__input-container ${!isPasswordValid ? 'form__input-container_invalid' : ''}`}>
+          <div className={`form__input-container ${(!isPasswordValid || isLoginFailed)? 'form__input-container_invalid' : ''}`}>
             <LockIcon />
             <input className="form__input"
               value={details.password}
               onChange={e => setDetails({ ...details, password: e.target.value })}
-              onFocus={() => setIsPasswordValid(true)}
+              onFocus={() => {
+                setIsPasswordValid(true);
+                setIsLoginFailed(false);
+              }}
               onBlur={validatePassword}
               type="password"
               name="password"
@@ -162,17 +175,15 @@ export function LoginPage (){
             />
           </div>
           <div className='form__error'>
-            {!isPasswordValid && <p className='form__error-message'>
-              Пароль должен быть не короче 8 символов
-            </p>}
+            {!isPasswordValid && <p className='form__error-message'>Пароль должен быть не короче 8 символов</p>}
+            {isLoginFailed && <p className='form__error-message'>Что-то пошло не так, проверь введенные данные</p>}
           </div>
           <Button
             text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
             classBtn="form__login-btn"
             onClick={e => {
               submitHandler(e).catch(err => console.log(err));
-            }
-            }
+            }}
           />
           <div className="form__sign-container">
             <Button
