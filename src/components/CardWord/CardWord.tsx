@@ -48,8 +48,9 @@ export function CardWord ({ word }:CardWordProps) : JSX.Element{
           </div>
           <div className='cardAudio'>
             <SoundButton
-              soundUrl={`https://rslang-team75.herokuapp.com/${word.audio}` }
-              classBtn='audioBtn'/>
+              word= {word}
+              classBtn='audioBtn'
+            />
           </div>
         </div>
         <div className='cardMeaning'>

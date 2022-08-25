@@ -1,35 +1,90 @@
-import './Button.pcss';
-// import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { MutableRefObject, useRef, useState } from 'react';
 
 import AudioSvg from '@/assets/icons/audio.svg';
+import StopSvg from '@/assets/icons/stop.svg';
+import { IWord } from '@/types/types';
 
 interface SoundButtonProps{
-  soundUrl: string;
+  word:IWord;
   classBtn : string;
-
 }
 
-export function SoundButton ({ soundUrl,classBtn }:SoundButtonProps) {
-  const audio = new Audio(soundUrl);
-  audio.volume = 0.7;
-  // const [playing, setPlaying]=useState(false); //TODO: возможно понадобится в других задачах
+export function SoundButton ({ word, classBtn }:SoundButtonProps) {
+  const SERVER_URL = 'https://rslang-team75.herokuapp.com';
+  const firstSound = `${SERVER_URL}/${word.audio}`;
+  const secondSound = `${SERVER_URL}/${word.audioMeaning}`;
+  const thirdSound = `${SERVER_URL}/${word.audioExample}`;
+  const allSoundsLinks:string[] = [firstSound,secondSound,thirdSound];
+
+  const playNumRef = useRef(0);
+  const playingRef = useRef(false);
+  const vidRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying]=useState(true);
+
+  // TODO:возможно получится переделать на useState, пока не работает корректно
+  // const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(allSoundsLinks[0]);
+  // const [playNum, setPlayNum] = useState(0);
 
   function playAudio (){
-    audio.play(); // TODO: должна уйти ошибка, когда появится отдельная папка для Fetch
-    // if (playing) {
-    //   audio.pause();
-    // } else {
-    //   audio.play();
-    // }
-    // setPlaying(!playing);
+    const audio = (vidRef as MutableRefObject<HTMLAudioElement>).current;
+    audio.volume = 0.7;
+    if(playingRef.current){
+      audio.src = allSoundsLinks[playNumRef.current];
+      audio.load();
+      audio.play();
+
+    }else{
+      audio.pause();
+      // playingRef.current=true;
+      setPlaying(true);
+    }
+
+  };
+  const playNext = () => {
+    if(playNumRef.current < allSoundsLinks.length - 1){
+      playingRef.current=true;
+      playNumRef.current += 1;
+      // TODO: для useState
+      // setPlaying(true);
+      // setPlayNum(p=>p+1);
+    }else{
+      playNumRef.current = 0;
+      playingRef.current=false;
+      // TODO: для useState
+      // setPlayNum(p=>p*0);
+      // setPlaying(false);
+    }
+
+    // setCurrentlyPlayingSong(allSoundsLinks[playNum]);
+
+    playAudio();
   };
 
+  function activatePlayer (){
+    setPlaying(false);
+    playingRef.current = !playingRef.current;
+    playAudio();
+  }
+
   return (
-    <button
-      type='button'
-      className={classBtn}
-      onClick={playAudio}>
-      <AudioSvg/>
-    </button>
+    <div
+      onClick={activatePlayer}
+      onKeyPress={activatePlayer}
+      role='button'
+      tabIndex={0}
+      aria-label='play'
+    >
+      <audio
+        ref={vidRef}
+        className={classBtn}
+        onEnded={()=>playNext()}
+      >
+        <track src={word.word} kind="captions"/>
+      </audio>
+      {playing && <AudioSvg/>}
+      {!playing && <StopSvg/>}
+    </div>
+
   );
 }
