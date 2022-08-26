@@ -21,6 +21,10 @@
     & .cardHeader {
       @apply flex gap-4 mt-1 sm:flex-col border-l-4 sm:border-4 sm:rounded-md;
 
+      & .cardAudio {
+        @apply md:m-auto md:h-10;
+      }
+
       & .cardWordPart {
         @apply flex flex-col;
 
@@ -55,6 +59,12 @@
     & .difficult,
     .studied {
       @apply block w-full bg-sky-600 mt-5 py-2 rounded-2xl hover:bg-sky-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2;
+    }
+    & .difficultChosen {
+      @apply bg-red-600 hover:bg-red-700;
+    }
+    & .studiedChosen {
+      @apply bg-green-600 hover:bg-green-700;
     }
   }
 }

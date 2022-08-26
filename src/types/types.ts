@@ -13,4 +13,16 @@ export interface IWord{
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  userWord?: IDifficult;
+}
+
+export interface IDifficult{
+  wordId?: string;
+  difficulty:string;
+  optional:{[key:string]:string};
+}
+
+export interface IResponseAggregated{
+  paginatedResults: IWord[];
+  totalCount:[{count: number}];
 }
