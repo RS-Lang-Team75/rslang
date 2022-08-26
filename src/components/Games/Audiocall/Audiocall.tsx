@@ -31,13 +31,17 @@ export default function AudioCall (props: IAudioCall) {
     setPageWords(randomWords);
   };
 
-  const generateWordsForGame = () => {
-    const shuffledPageWords = pageWords.slice();
-    for (let i = 0; i < shuffledPageWords.length; i += 1) {
+  function shuffleArray<T> (arr: Array<T>): Array<T> {
+    const shuffledArray = arr.slice();
+    for (let i = 0; i < shuffledArray.length; i += 1) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledPageWords[i], shuffledPageWords[j]] =
-        [shuffledPageWords[j], shuffledPageWords[i]];
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
+    return shuffledArray;
+  }
+
+  const generateWordsForGame = () => {
+    const shuffledPageWords = shuffleArray(pageWords);
     const randomWordsForGame = shuffledPageWords.slice(10);
     setWordsForGame(randomWordsForGame);
     console.log(randomWordsForGame);
