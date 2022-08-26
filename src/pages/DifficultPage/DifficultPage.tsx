@@ -13,11 +13,12 @@ import { RootState } from '@/utils/store/store';
 
 export function DifficultPage (){
 
-  const savedPage = Number(localStorage.getItem('currentPage'));
+  const savedPageDifficult = Number(localStorage.getItem('currentPageDifficult'));
 
   const [words, setWords] = useState<IWord[]>([]);
   const [difficultWords, setDifficultWords] = useState<IDifficult[]>([]);
-  const [page, setPage] = useState(savedPage || 0);
+  const [page, setPage] = useState(savedPageDifficult || 0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const user = useSelector((state: RootState) => state.user);
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
@@ -40,6 +41,7 @@ export function DifficultPage (){
         `${SERVER_URL}/users/${user.userId}/words`,
         wordsAxiosConfig);
 
+      setTotalPages(Math.ceil(response.data[0].totalCount[0].count/10)-1);
       setDifficultWords(responseDifficultWord.data);
       setWords(response.data[0].paginatedResults);
 
@@ -58,12 +60,12 @@ export function DifficultPage (){
 
   const handlePages = (value:number) => {
     setPage(value);
-    localStorage.setItem('currentPage', value.toString());
+    localStorage.setItem('currentPageDifficult', value.toString());
   };
   return(
     <main>
       {!user.userId && <h1>Функция доступна только для авторизированных пользователей</h1>}
-      {user.userId && <Pagination handlePages={handlePages} page = {page}/>}
+      {user.userId && <Pagination handlePages={handlePages} page = {page} totalPages={totalPages}/>}
       {user.userId && <div className='aggregatedWordsContainer'>
         {words.map(word=> <CardWord word={word}  difficultWords = {difficultWords}  key = {word._id}/>)}
       </div>}

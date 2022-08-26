@@ -88,7 +88,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
 
     } catch(e:unknown){
       const err = e as AxiosError;
-      console.log('get err: ', err);
+      // console.log('get err: ', err);
       if(err.response){
         const res = err.response as AxiosResponse;
         if(res.status === 404 ){
