@@ -8,9 +8,13 @@ import { IWord } from '@/types/types';
 interface SoundButtonProps{
   word:IWord;
   classBtn : string;
+  playFirstOnly?: boolean;
 }
 
-export function SoundButton ({ word, classBtn }:SoundButtonProps) {
+export function SoundButton (props: SoundButtonProps) {
+
+  const { word, classBtn, playFirstOnly } = props;
+
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
   const firstSound = `${SERVER_URL}/${word.audio}`;
   const secondSound = `${SERVER_URL}/${word.audioMeaning}`;
@@ -42,7 +46,7 @@ export function SoundButton ({ word, classBtn }:SoundButtonProps) {
 
   };
   const playNext = () => {
-    if(playNumRef.current < allSoundsLinks.length - 1){
+    if(playNumRef.current < allSoundsLinks.length - 1 && !playFirstOnly){
       playingRef.current=true;
       playNumRef.current += 1;
       // TODO: для useState
@@ -78,7 +82,7 @@ export function SoundButton ({ word, classBtn }:SoundButtonProps) {
       <audio
         ref={vidRef}
         className={classBtn}
-        onEnded={()=>playNext()}
+        onEnded={()=> playNext()}
       >
         <track src={word.word} kind="captions"/>
       </audio>
