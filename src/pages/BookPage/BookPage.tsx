@@ -22,6 +22,7 @@ export function BookPage () : JSX.Element{
 
   const user = useSelector((state: RootState) => state.user);
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
+  const TOTAL_PAGES = 29;
 
   const wordsAxiosConfig: AxiosRequestConfig = {
     headers: {
@@ -72,7 +73,7 @@ export function BookPage () : JSX.Element{
 
   return(
     <main className='bookPageMain'>
-      <Pagination handlePages={handlePages} page = {page}/>
+      <Pagination handlePages={handlePages} page = {page} totalPages={TOTAL_PAGES}/>
       <div className='PageMainContent'>
         <SideBar onChange={handleChangeGroup}/>
         <div className='wordsContainer'>
