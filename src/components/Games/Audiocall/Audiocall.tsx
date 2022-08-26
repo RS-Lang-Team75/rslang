@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import React, { useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
 
@@ -23,6 +23,8 @@ export default function AudioCall (props: IAudioCall) {
   const [pageWords, setPageWords] = useState<IWord[] | []>(wordsArray || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
+
+  const isAnswerGiven = useRef<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -58,6 +60,21 @@ export default function AudioCall (props: IAudioCall) {
     return answers;
   };
 
+  const checkAnswer = (e: FormEvent): void => {
+    e.preventDefault();
+    if (!isAnswerGiven.current) {
+      if (e.currentTarget.innerHTML === wordsForGame[shownWordNumber].wordTranslate) {
+        console.log('TRUE!');
+        e.currentTarget.classList.add('answer');
+      } else {
+        console.log('FALSE!!');
+        e.currentTarget.classList.add('answer');
+      }
+      isAnswerGiven.current = true;
+      console.log(e.currentTarget.innerHTML);
+    }
+  };
+
   return(
     <main>
       <h1>Audiocall</h1>
@@ -79,8 +96,15 @@ export default function AudioCall (props: IAudioCall) {
         <Button
           text='Next'
           classBtn='nextBtn'
-          onClick={() =>
-            shownWordNumber < wordsForGame.length - 1 ? setShownWordNumber(n => n + 1) : setShownWordNumber(0)}/>
+          onClick={() => {
+            if (shownWordNumber < wordsForGame.length - 1) {
+              setShownWordNumber(n => n + 1);
+            } else {
+              setShownWordNumber(0);
+            }
+            isAnswerGiven.current = false;
+          }
+          }/>
 
       </section>
       }
@@ -96,8 +120,10 @@ export default function AudioCall (props: IAudioCall) {
           <div className='answerBtnContainer'>
             {
               shuffleArray(generateAnswers(wordsForGame[shownWordNumber])).map((w,i) =>
-                <div className='answerBtn'
-                  key={`${w.charCodeAt(0).toString(16)}${i*1}`}>{w}</div>)
+                <button className='answerBtn'
+                  type='button'
+                  key={`${w.charCodeAt(0).toString(16)}${i*1}`}
+                  onClick={checkAnswer}>{w}</button>)
             }
           </div>
         </div>
