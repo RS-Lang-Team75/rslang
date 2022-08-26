@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import parse from 'html-react-parser';
@@ -16,6 +17,7 @@ import { RootState } from '@/utils/store/store';
 interface CardWordProps {
   word:IWord;
   difficultWords:IDifficult[];
+  // difficultOff:boolean;
 }
 
 export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
@@ -37,7 +39,6 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
     'border-green-500',
     'border-yellow-500',
     'border-orange-500',
-    'border-orange-500',
     'border-red-500',
     'border-purple-500' ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
@@ -47,7 +48,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
   async function postWordInDifficultData (): Promise<void> {
     try {
       const response = await axios.post<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id}`,
+        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
         statusWordData,
         wordsAxiosConfig,
       );
@@ -65,7 +66,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
 
     try {
       const response = await axios.put<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id}`,
+        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
         statusWordData,
         wordsAxiosConfig,
       );
@@ -80,7 +81,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
   async function getWordInDifficultData (){
     try {
       const response = await axios.get<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id}`,
+        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
         wordsAxiosConfig,
       );
       return response.data;
@@ -127,7 +128,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
     }
   };
   function checkDifficultWords (){
-    const some = difficultWords.filter(item=>item.wordId===word.id);
+    const some = difficultWords.filter(item=>item.wordId===word.id || item.wordId===word._id);
     if(some.length !== 0){
       if(some[0].difficulty==='difficult'){
         setDifficult(true);
