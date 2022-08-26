@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { Audiocall } from '@/components/Games/Audiocall/Audiocall';
+import AudioCall from '@/components/Games/AudioCall/AudioCall';
 
 export function GamesPage (){
   return(
     <main>
       <h1>GamesPage</h1>
-      <Audiocall />
+      <AudioCall />
     </main>
-
   );
 }
