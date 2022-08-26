@@ -1,5 +1,6 @@
 export interface IWord{
   id: string;
+  _id: string;
   group: number;
   page: number;
   word: string;
