@@ -73,6 +73,7 @@ export default function AudioCall (props: IAudioCall) {
             <SoundButton
               word= {wordsForGame[shownWordNumber]}
               classBtn='audioBtn'
+              playFirstOnly
             /></div>
           <div>{wordsForGame[shownWordNumber].wordTranslate}</div>
         </div>
