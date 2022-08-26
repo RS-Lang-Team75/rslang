@@ -64,7 +64,7 @@ export function DifficultPage (){
   };
   return(
     <main>
-      {!user.userId && <h1>Функция доступна только для авторизированных пользователей</h1>}
+      {!user.userId && <h1 className='message'>Функция доступна только для авторизированных пользователей</h1>}
       {user.userId && <Pagination handlePages={handlePages} page = {page} totalPages={totalPages}/>}
       {user.userId && <div className='aggregatedWordsContainer'>
         {words.map(word=> <CardWord word={word}  difficultWords = {difficultWords}  key = {word._id}/>)}
