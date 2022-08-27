@@ -7,11 +7,11 @@
 }
 
 .answerBtnContainer {
-  @apply flex justify-center;
+  @apply flex justify-center my-5;
 }
 
 .answerBtn {
-  @apply border p-2 my-2 rounded-2xl text-center cursor-pointer m-3;
+  @apply border uppercase px-5 py-2 my-2 rounded-full text-center cursor-pointer m-3;
 }
 
 .activeAnswerBtn {
@@ -32,11 +32,11 @@
 }
 
 .answerContainer {
-  @apply h-10;
+  @apply h-10 my-3 uppercase text-2xl;
 }
 
 .answerImg {
-  @apply w-64 h-64 bg-cover bg-no-repeat bg-center my-auto rounded-full;
+  @apply w-40 h-40 bg-cover bg-no-repeat bg-center my-auto rounded-full;
 }
 
 .givenAnswer {
@@ -44,9 +44,9 @@
 }
 
 .answerCorrect {
-  @apply border-green-600 border-4
+  @apply text-green-700;
 }
 
 .answerIncorrect {
-  @apply border-red-600 border-4
+  @apply text-red-700;
 }
