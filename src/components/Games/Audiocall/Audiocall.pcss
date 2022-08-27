@@ -3,7 +3,7 @@
 }
 
 .nextBtn {
-  @apply border p-2 my-2 rounded-2xl hover:bg-sky-200 active:bg-sky-400
+  @apply border p-2 my-2 rounded-2xl hover:bg-sky-200 active:bg-sky-400;
 }
 
 .answerBtnContainer {
@@ -11,7 +11,11 @@
 }
 
 .answerBtn {
-  @apply nextBtn text-center cursor-pointer m-3;
+  @apply border p-2 my-2 rounded-2xl text-center cursor-pointer m-3;
+}
+
+.activeAnswerBtn {
+  @apply hover:bg-sky-200 active:bg-sky-400;
 }
 
 
@@ -35,8 +39,8 @@
   @apply w-64 h-64 bg-cover bg-no-repeat bg-center my-auto rounded-full;
 }
 
-.answer {
-  @apply border-red-900 border-8;
+.givenAnswer {
+  @apply bg-sky-400;
 }
 
 .answerCorrect {

@@ -49,10 +49,12 @@ export default function AudioCall (props: IAudioCall) {
     if (!isAnswerGiven) {
       if (e.currentTarget.innerHTML === wordsForGame[shownWordNumber].wordTranslate) {
         setIsCorrectAnswer(true);
+        e.currentTarget.classList.add('bg-green-400');
       } else {
         setIsCorrectAnswer(false);
+        e.currentTarget.classList.add('bg-red-400');
       }
-      e.currentTarget.classList.add('answer');
+      e.currentTarget.classList.remove('activeAnswerBtn');
       setIsAnswerGiven(true);
     }
   };
@@ -134,7 +136,7 @@ export default function AudioCall (props: IAudioCall) {
           <div className='answerBtnContainer'>
             {
               possibleAnswers.map((w,i) =>
-                <button className='answerBtn'
+                <button className='answerBtn activeAnswerBtn'
                   type='button'
                   key={`${w.charCodeAt(0).toString(16)}${i*1}`}
                   onClick={checkAnswer}>{w}</button>)
