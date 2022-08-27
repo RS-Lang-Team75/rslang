@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
 
@@ -24,11 +24,9 @@ export default function AudioCall (props: IAudioCall) {
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
-  // const isAnswerGiven = useRef<boolean>(false);
-
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
-  // const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
+  const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -41,48 +39,49 @@ export default function AudioCall (props: IAudioCall) {
     return shuffledArray;
   }
 
-  const generateWordsForGame = (): void => {
-    const shuffledPageWords = shuffleArray(pageWords);
-    const randomWordsForGame = shuffledPageWords.slice(10);
-    setWordsForGame(randomWordsForGame);
-  };
-
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await randomWordsQuery(page, group);
     setPageWords(randomWords);
-  };
-
-  const generateAnswers = (word: IWord): string[] => {
-    const answers = [word.wordTranslate];
-    while (answers.length < 5) {
-      const ind = Math.floor(Math.random() * pageWords.length);
-      if (pageWords[ind].wordTranslate !== word.wordTranslate) {
-        answers.push(pageWords[ind].wordTranslate);
-      }
-    }
-    console.log(answers);
-    return answers;
   };
 
   const checkAnswer = (e: FormEvent): void => {
     e.preventDefault();
     if (!isAnswerGiven) {
       if (e.currentTarget.innerHTML === wordsForGame[shownWordNumber].wordTranslate) {
-        console.log('TRUE!');
         setIsCorrectAnswer(true);
       } else {
-        console.log('FALSE!!');
         setIsCorrectAnswer(false);
       }
       e.currentTarget.classList.add('answer');
       setIsAnswerGiven(true);
-      console.log(e.currentTarget.innerHTML);
     }
   };
 
-  // useEffect(() => {
-  //   setPossibleAnswers(shuffleArray(generateAnswers(wordsForGame[shownWordNumber])));
-  // }, [wordsForGame]);
+  useEffect(() => {
+    const generateWordsForGame = (): void => {
+      const shuffledPageWords = shuffleArray(pageWords);
+      const randomWordsForGame = shuffledPageWords.slice(10);
+      setWordsForGame(randomWordsForGame);
+    };
+    generateWordsForGame();
+  }, [pageWords]);
+
+  useEffect(() => {
+    const generateAnswers = (word: IWord): void => {
+      const answers = [word.wordTranslate];
+      while (answers.length < 5) {
+        const ind = Math.floor(Math.random() * pageWords.length);
+        if (pageWords[ind].wordTranslate !== word.wordTranslate) {
+          answers.push(pageWords[ind].wordTranslate);
+        }
+      }
+      setPossibleAnswers(shuffleArray(answers));
+    };
+
+    if (wordsForGame.length > 0) {
+      generateAnswers(wordsForGame[shownWordNumber]);
+    }
+  }, [wordsForGame, shownWordNumber, pageWords]);
 
   return(
     <main>
@@ -96,11 +95,6 @@ export default function AudioCall (props: IAudioCall) {
       }
       {pageWords.length > 0 &&
       <section className='gameSection'>
-
-        <Button
-          text='Generate random'
-          classBtn='nextBtn'
-          onClick={() => generateWordsForGame()}/>
 
         <Button
           text='Next'
@@ -139,7 +133,7 @@ export default function AudioCall (props: IAudioCall) {
 
           <div className='answerBtnContainer'>
             {
-              shuffleArray(generateAnswers(wordsForGame[shownWordNumber])).map((w,i) =>
+              possibleAnswers.map((w,i) =>
                 <button className='answerBtn'
                   type='button'
                   key={`${w.charCodeAt(0).toString(16)}${i*1}`}
