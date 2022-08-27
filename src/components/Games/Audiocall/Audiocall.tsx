@@ -148,7 +148,7 @@ export default function AudioCall (props: IAudioCall) {
               possibleAnswers.map((w,i) =>
                 <button className='answerBtn activeAnswerBtn'
                   type='button'
-                  key={`${w.charCodeAt(0).toString(16)}${i*1}`}
+                  key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
                   onClick={checkAnswer}>{w}</button>)
             }
           </div>
