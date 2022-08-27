@@ -85,13 +85,15 @@ export default function AudioCall (props: IAudioCall) {
   };
 
   useEffect(() => {
-    const generateWordsForGame = (): void => {
-      const shuffledPageWords = shuffleArray(pageWords);
-      const randomWordsForGame = shuffledPageWords.slice(10);
-      setWordsForGame(randomWordsForGame);
-    };
-    generateWordsForGame();
-  }, [pageWords]);
+    if (pageWords.length > 0) {
+      const generateWordsForGame = (): void => {
+        const shuffledPageWords = shuffleArray(pageWords);
+        const randomWordsForGame = shuffledPageWords.slice(10);
+        setWordsForGame(randomWordsForGame);
+      };
+      generateWordsForGame();
+    }
+  }, [pageWords, isGameFinished]);
 
   useEffect(() => {
     const generateAnswers = (word: IWord): void => {
@@ -159,9 +161,18 @@ export default function AudioCall (props: IAudioCall) {
           classBtn='nextBtn'
           onClick={revealOrNext}/>
       </section>}
-      {isGameFinished && <section>
+      {isGameFinished && <section className='flex flex-col justify-center'>
         <h2>Game is finished!</h2>
         <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+        <Button text='Начать сначала'
+          classBtn='nextBtn'
+          onClick={() => {
+            setIsGameFinished(false);
+            setIsAnswerGiven(false);
+            setCorrectAnswers([]);
+            setWrongAnswers([]);
+            setShownWordNumber(0);
+          }}/>
       </section>}
     </section>
   );
