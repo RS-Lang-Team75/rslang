@@ -59,6 +59,20 @@ export default function AudioCall (props: IAudioCall) {
     }
   };
 
+  const revealOrNext = () => {
+    if (isAnswerGiven) {
+      if (shownWordNumber < wordsForGame.length - 1) {
+        setShownWordNumber(n => n + 1);
+      } else {
+        setShownWordNumber(0);
+      }
+      setIsAnswerGiven(false);
+      setIsCorrectAnswer(false);
+    } else {
+      setIsAnswerGiven(true);
+    }
+  };
+
   useEffect(() => {
     const generateWordsForGame = (): void => {
       const shuffledPageWords = shuffleArray(pageWords);
@@ -130,18 +144,9 @@ export default function AudioCall (props: IAudioCall) {
         </div>
         }
         <Button
-          text='Next'
+          text={isAnswerGiven ? 'далее' : 'не знаю'}
           classBtn='nextBtn'
-          onClick={() => {
-            if (shownWordNumber < wordsForGame.length - 1) {
-              setShownWordNumber(n => n + 1);
-            } else {
-              setShownWordNumber(0);
-            }
-            setIsAnswerGiven(false);
-            setIsCorrectAnswer(false);
-          }
-          }/>
+          onClick={revealOrNext}/>
       </section>}
     </section>
   );
