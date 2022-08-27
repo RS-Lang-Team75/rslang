@@ -69,7 +69,6 @@ export default function AudioCall (props: IAudioCall) {
   };
 
   const revealOrNext = () => {
-    console.log(`word #${shownWordNumber}`);
     if (isAnswerGiven) {
       if (shownWordNumber < wordsForGame.length - 1) {
         setShownWordNumber(n => n + 1);
