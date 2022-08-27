@@ -1,9 +1,13 @@
 .gameResultsSection {
   @apply divide-y-2;
+
+  & .wrongAnswers {
+    @apply mb-4;
+  }
 }
 
 .headerContainer {
-  @apply flex items-center my-2;
+  @apply flex items-center mb-2 mt-4;
 
   & .header {
     @apply text-xl;
@@ -21,3 +25,4 @@
     @apply bg-red-500 text-white;
   }
 }
+
