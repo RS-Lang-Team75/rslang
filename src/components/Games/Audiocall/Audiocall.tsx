@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import React, { FormEvent, useEffect, useState } from 'react';
 
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
+import { GameResults } from '../GameResults/GameResults';
 
 import { Button } from '@/components/Button/Button';
 import { SoundButton } from '@/components/Button/SoundButton';
@@ -22,10 +23,15 @@ export default function AudioCall (props: IAudioCall) {
 
   const [pageWords, setPageWords] = useState<IWord[] | []>(wordsArray || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
+  const [correctAnswers, setCorrectAnswers] = useState<IWord[] | []>([]);
+  const [wrongAnswers, setWrongAnswers] = useState<IWord[] | []>([]);
+
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+  const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+
   const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
 
   const user = useSelector((state: RootState) => state.user);
@@ -45,13 +51,16 @@ export default function AudioCall (props: IAudioCall) {
   };
 
   const checkAnswer = (e: FormEvent): void => {
+    const currentWord = wordsForGame[shownWordNumber];
     e.preventDefault();
     if (!isAnswerGiven) {
-      if (e.currentTarget.innerHTML === wordsForGame[shownWordNumber].wordTranslate) {
+      if (e.currentTarget.innerHTML === currentWord.wordTranslate) {
         setIsCorrectAnswer(true);
+        setCorrectAnswers([...correctAnswers, currentWord]);
         e.currentTarget.classList.add('bg-green-400');
       } else {
         setIsCorrectAnswer(false);
+        setWrongAnswers([...wrongAnswers, currentWord]);
         e.currentTarget.classList.add('bg-red-400');
       }
       e.currentTarget.classList.remove('activeAnswerBtn');
@@ -60,16 +69,19 @@ export default function AudioCall (props: IAudioCall) {
   };
 
   const revealOrNext = () => {
+    console.log(`word #${shownWordNumber}`);
     if (isAnswerGiven) {
       if (shownWordNumber < wordsForGame.length - 1) {
         setShownWordNumber(n => n + 1);
       } else {
         setShownWordNumber(0);
+        setIsGameFinished(true);
       }
       setIsAnswerGiven(false);
       setIsCorrectAnswer(false);
     } else {
       setIsAnswerGiven(true);
+      setWrongAnswers([...wrongAnswers, wordsForGame[shownWordNumber]]);
     }
   };
 
@@ -111,7 +123,7 @@ export default function AudioCall (props: IAudioCall) {
         returnRandomWords={returnRandomWords}
       />
       }
-      {pageWords.length > 0 &&
+      {!isGameFinished && pageWords.length > 0 &&
       <section className='gameSection'>
         {wordsForGame.length > 0 &&
         <div className='gameSection'>
@@ -147,6 +159,10 @@ export default function AudioCall (props: IAudioCall) {
           text={isAnswerGiven ? 'далее' : 'не знаю'}
           classBtn='nextBtn'
           onClick={revealOrNext}/>
+      </section>}
+      {isGameFinished && <section>
+        <h2>Game is finished!</h2>
+        <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
       </section>}
     </section>
   );

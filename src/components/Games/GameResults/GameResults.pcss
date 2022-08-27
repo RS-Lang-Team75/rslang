@@ -1,0 +1,23 @@
+.gameResultsSection {
+  @apply divide-y-2;
+}
+
+.headerContainer {
+  @apply flex items-center my-2;
+
+  & .header {
+    @apply text-xl;
+  }
+
+  & .indicator {
+    @apply h-7 w-7 p-1 ml-2 rounded-full text-center text-sm;
+  }
+
+  & .correct {
+    @apply bg-green-500 text-white; 
+  }
+
+  & .wrong {
+    @apply bg-red-500 text-white;
+  }
+}
