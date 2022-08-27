@@ -86,10 +86,12 @@ export default function AudioCall (props: IAudioCall) {
   }, [wordsForGame, shownWordNumber, pageWords]);
 
   return(
-    <main>
-      <h1>Audiocall</h1>
-      <p>User: {user.name}</p>
-      <p>ID: {user.userId}</p>
+    <section>
+      <div className="gameSection">
+        <h2>Audiocall</h2>
+        <h2>User: {user.name}</h2>
+        <h3>ID: {user.userId}</h3>
+      </div>
       {pageWords.length === 0 &&
       <DifficultySelector
         returnRandomWords={returnRandomWords}
@@ -97,24 +99,7 @@ export default function AudioCall (props: IAudioCall) {
       }
       {pageWords.length > 0 &&
       <section className='gameSection'>
-
-        <Button
-          text='Next'
-          classBtn='nextBtn'
-          onClick={() => {
-            if (shownWordNumber < wordsForGame.length - 1) {
-              setShownWordNumber(n => n + 1);
-            } else {
-              setShownWordNumber(0);
-            }
-            setIsAnswerGiven(false);
-            setIsCorrectAnswer(false);
-          }
-          }/>
-
-      </section>
-      }
-      {wordsForGame.length > 0 &&
+        {wordsForGame.length > 0 &&
         <div className='gameSection'>
           <div className='cardAudio'>
             <SoundButton
@@ -143,16 +128,21 @@ export default function AudioCall (props: IAudioCall) {
             }
           </div>
         </div>
-      }
-      {pageWords.length > 0 && <div className='gameSection temp'>
-        <h2>Слова, с которыми проходит игра</h2>
-        <div className="temp-word-cont">
-          {pageWords.map(w =>
-            <p key={w.id} className='temp-word'> {w.word} </p>,
-          )}
-        </div>
-      </div>}
-
-    </main>
+        }
+        <Button
+          text='Next'
+          classBtn='nextBtn'
+          onClick={() => {
+            if (shownWordNumber < wordsForGame.length - 1) {
+              setShownWordNumber(n => n + 1);
+            } else {
+              setShownWordNumber(0);
+            }
+            setIsAnswerGiven(false);
+            setIsCorrectAnswer(false);
+          }
+          }/>
+      </section>}
+    </section>
   );
 }
