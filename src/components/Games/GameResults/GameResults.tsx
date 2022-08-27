@@ -1,6 +1,8 @@
 import React from 'react';
 
 import './GameResults.pcss';
+import { GameResultLine } from '../GameResultLine/GameResultLine';
+
 import { IWord } from '@/types/types';
 
 interface IGameResults {
@@ -23,6 +25,10 @@ export function GameResults (props: IGameResults){
               {wrongAnswers.length}
             </div>
           </div>
+          {wrongAnswers.map(w =>
+            <GameResultLine
+              key={w.id}
+              word={w}/>)}
         </div>
         <div className="correctAnswers">
           <div className="headerContainer">
@@ -31,6 +37,10 @@ export function GameResults (props: IGameResults){
               {correctAnswers.length}
             </div>
           </div>
+          {correctAnswers.map(w =>
+            <GameResultLine
+              key={w.id}
+              word={w}/>)}
         </div>
       </section>
     </section>
