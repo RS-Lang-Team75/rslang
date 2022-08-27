@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import React, { FormEvent, useRef, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
 
@@ -24,7 +24,11 @@ export default function AudioCall (props: IAudioCall) {
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
-  const isAnswerGiven = useRef<boolean>(false);
+  // const isAnswerGiven = useRef<boolean>(false);
+
+  const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+  // const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
 
   const user = useSelector((state: RootState) => state.user);
 
@@ -62,18 +66,23 @@ export default function AudioCall (props: IAudioCall) {
 
   const checkAnswer = (e: FormEvent): void => {
     e.preventDefault();
-    if (!isAnswerGiven.current) {
+    if (!isAnswerGiven) {
       if (e.currentTarget.innerHTML === wordsForGame[shownWordNumber].wordTranslate) {
         console.log('TRUE!');
-        e.currentTarget.classList.add('answer');
+        setIsCorrectAnswer(true);
       } else {
         console.log('FALSE!!');
-        e.currentTarget.classList.add('answer');
+        setIsCorrectAnswer(false);
       }
-      isAnswerGiven.current = true;
+      e.currentTarget.classList.add('answer');
+      setIsAnswerGiven(true);
       console.log(e.currentTarget.innerHTML);
     }
   };
+
+  // useEffect(() => {
+  //   setPossibleAnswers(shuffleArray(generateAnswers(wordsForGame[shownWordNumber])));
+  // }, [wordsForGame]);
 
   return(
     <main>
@@ -102,7 +111,8 @@ export default function AudioCall (props: IAudioCall) {
             } else {
               setShownWordNumber(0);
             }
-            isAnswerGiven.current = false;
+            setIsAnswerGiven(false);
+            setIsCorrectAnswer(false);
           }
           }/>
 
@@ -116,7 +126,17 @@ export default function AudioCall (props: IAudioCall) {
               classBtn='audioBtn'
               playFirstOnly
             /></div>
-          <div>{wordsForGame[shownWordNumber].wordTranslate}</div>
+
+          <div className="answerContainer">
+            {isAnswerGiven && <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
+              {wordsForGame[shownWordNumber].wordTranslate}
+            </div>}
+          </div>
+
+          <div className='answerImg'
+            style={isAnswerGiven ?
+              { backgroundImage: `url(https://rslang-team75.herokuapp.com/${wordsForGame[shownWordNumber].image})` } : {}}/>
+
           <div className='answerBtnContainer'>
             {
               shuffleArray(generateAnswers(wordsForGame[shownWordNumber])).map((w,i) =>
