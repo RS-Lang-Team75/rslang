@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './GameResultLine.pcss';
-import { SoundButton } from '@/components/Button/SoundButton';
+import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 
 interface IGameResultLine {

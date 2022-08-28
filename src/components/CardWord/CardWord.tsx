@@ -6,7 +6,7 @@ import React from 'react';
 import './CardWord.pcss';
 
 import { Button } from '../Button/Button';
-import { SoundButton } from '../Button/SoundButton';
+import { SoundButton } from '../SoundButton/SoundButton';
 
 import { IWord } from '@/types/types';
 import { RootState } from '@/utils/store/store';

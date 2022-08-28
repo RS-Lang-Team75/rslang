@@ -7,7 +7,7 @@ import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 
 import { Button } from '@/components/Button/Button';
-import { SoundButton } from '@/components/Button/SoundButton';
+import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { randomWordsQuery } from '@/utils/queries/wordsQueries';
 import { RootState } from '@/utils/store/store';

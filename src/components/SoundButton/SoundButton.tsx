@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { MutableRefObject, useRef, useState } from 'react';
 
 import AudioSvg from '@/assets/icons/audio.svg';
 import StopSvg from '@/assets/icons/stop.svg';
 import { IWord } from '@/types/types';
+
+import './SoundButton.pcss';
 
 interface SoundButtonProps{
   word:IWord;
@@ -36,8 +37,7 @@ export function SoundButton (props: SoundButtonProps) {
     if(playingRef.current){
       audio.src = allSoundsLinks[playNumRef.current];
       audio.load();
-      audio.play();
-
+      audio.play().catch(e => console.log(e));
     }else{
       audio.pause();
       // playingRef.current=true;
@@ -74,10 +74,11 @@ export function SoundButton (props: SoundButtonProps) {
   return (
     <div
       onClick={activatePlayer}
-      onKeyPress={activatePlayer}
+      onKeyPress={e => e.preventDefault()}
       role='button'
       tabIndex={0}
       aria-label='play'
+      className='soundBtn'
     >
       <audio
         ref={vidRef}
