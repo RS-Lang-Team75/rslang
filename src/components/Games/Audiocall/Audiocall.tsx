@@ -51,22 +51,22 @@ export default function AudioCall (props: IAudioCall) {
     setPageWords(randomWords);
   };
 
-  const checkAnswer = (wordIndex: number): void => {
+  const checkAnswer = (wordIndex: number): string => {
     const currentWord = wordsForGame[shownWordNumber];
-    // e.preventDefault();
+    let additionalClass = '';
     if (!isAnswerGiven) {
       if (possibleAnswers[wordIndex-1] === currentWord.wordTranslate) {
         setIsCorrectAnswer(true);
         setCorrectAnswers([...correctAnswers, currentWord]);
-        // e.currentTarget.classList.add('bg-green-400');
+        additionalClass = 'bg-green-400';
       } else {
         setIsCorrectAnswer(false);
         setWrongAnswers([...wrongAnswers, currentWord]);
-        // e.currentTarget.classList.add('bg-red-400');
+        additionalClass = 'bg-red-400';
       }
-      // e.currentTarget.classList.remove('activeAnswerBtn');
       setIsAnswerGiven(true);
     }
+    return additionalClass;
   };
 
   const revealOrNext = () => {
@@ -152,7 +152,10 @@ export default function AudioCall (props: IAudioCall) {
                 <GameButton classBtn='answerBtn activeAnswerBtn'
                   key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
                   id={`${i+1}`}
-                  onClick={e => checkAnswer(Number(e.currentTarget.id))}
+                  onClick={e => {
+                    e.currentTarget.classList.add(checkAnswer(Number(e.currentTarget.id)));
+                    e.currentTarget.classList.remove('activeAnswerBtn');
+                  }}
                   text={`${i+1}. ${w}`}
                   simulatedButtonCode={`Digit${i+1}`}/>)
             }
