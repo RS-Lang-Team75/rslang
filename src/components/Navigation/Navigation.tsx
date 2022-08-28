@@ -37,7 +37,7 @@ export function Navigation (): JSX.Element {
           {[
             ['Учебник', '/book'],
             ['Словарь', '/dictionary'],
-            ['Игры', '/games'],
+            ['Аудиовызов', '/audiocall'],
             ['Статистика', '/statistic'],
             ['Команда', '/team'],
             ['Видео', '/video'],
@@ -84,7 +84,7 @@ export function Navigation (): JSX.Element {
                 ['LOGIN', '/login'],
                 ['Учебник', '/book'],
                 ['Словарь', '/dictionary'],
-                ['Игры', '/games'],
+                ['Аудиовызов', '/audiocall'],
                 ['Статистика', '/statistic'],
                 ['Команда', '/team'],
                 ['Видео', '/video'],

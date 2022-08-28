@@ -114,7 +114,7 @@ export default function AudioCall (props: IAudioCall) {
   }, [wordsForGame, shownWordNumber, pageWords]);
 
   return(
-    <section>
+    <main className='gamesPage'>
       <div className="gameSection">
         <h2>Audiocall</h2>
         <h2>User: {user.name}</h2>
@@ -184,6 +184,6 @@ export default function AudioCall (props: IAudioCall) {
             setShownWordNumber(0);
           }}/>
       </section>}
-    </section>
+    </main>
   );
 }
