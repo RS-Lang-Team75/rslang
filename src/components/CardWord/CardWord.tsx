@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-// import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 
@@ -18,7 +17,6 @@ import { RootState } from '@/utils/store/store';
 interface CardWordProps {
   word:IWord;
   difficultWords:IDifficult[];
-  // difficultOff:boolean;
 }
 
 export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
@@ -26,15 +24,6 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
   const [studied,setStudied] = useState(false);
   const user = useSelector((state: RootState) => state.user);
   const  wordId = word.id || word._id;
-  // const wordsAxiosConfig: AxiosRequestConfig = {
-  //   headers: {
-  //     'Authorization': `Bearer ${user.token}`,
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  // };
-  // const statusWordData:IDifficult = { difficulty: 'difficult',
-  //   optional: {} };
 
   const sectionsBgColor = ['border-gray-500',
     'border-sky-500',
@@ -45,65 +34,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
     'border-purple-500' ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
 
-  // console.log('word: ', word);
-
-  // async function postWordInDifficultData (): Promise<void> {
-  //   try {
-  //     const response = await axios.post<IDifficult>(
-  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-  //       statusWordData,
-  //       wordsAxiosConfig,
-  //     );
-  //     console.log(response.data);
-
-  //   }
-  //   catch (e:unknown) {
-  //     const error = e as AxiosError;
-  //     console.log('post err: ', error);
-  //   }
-
-  // }
-
-  // async function putWordInDifficultData (): Promise<void> {
-
-  //   try {
-  //     const response = await axios.put<IDifficult>(
-  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-  //       statusWordData,
-  //       wordsAxiosConfig,
-  //     );
-  //     console.log(response.data);
-
-  //   } catch (e:unknown) {
-  //     const err = e as AxiosError;
-  //     console.log('put err: ', err);
-  //   }
-
-  // }
-  // async function getWordInDifficultData (){
-  //   try {
-  //     const response = await axios.get<IDifficult>(
-  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-  //       wordsAxiosConfig,
-  //     );
-  //     return response.data;
-
-  //   } catch(e:unknown){
-  //     const err = e as AxiosError;
-  //     // console.log('get err: ', err);
-  //     if(err.response){
-  //       const res = err.response as AxiosResponse;
-  //       if(res.status === 404 ){
-  //         await postWordInDifficultData ();
-  //       }
-  //     }
-  //     throw new Error(err.message);
-  //   }
-  // }
-
   const addWordInDifficultData= async ():Promise<void>=>{
-
-    // statusWordData.difficulty = 'difficult';
     const wordStatus = 'difficult';
     setDifficult(true);
     setStudied(false);
@@ -113,8 +44,6 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
   };
 
   const addWordInStudiedData= async ():Promise<void> =>{
-
-    // statusWordData.difficulty = 'studied';
     const wordStatus = 'studied';
     setDifficult(false);
     setStudied(true);
@@ -123,18 +52,17 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
 
   };
 
-  function checkDifficultWords (){
-    const some = difficultWords.filter(item=>item.wordId===word.id || item.wordId===word._id);
-    if(some.length !== 0){
-      if(some[0].difficulty==='difficult'){
-        setDifficult(true);
-      }else(setStudied(true));
-    }
-  }
   useEffect(()=>{
-
+    function checkDifficultWords (){
+      const some = difficultWords.filter(item=>item.wordId === wordId);
+      if(some.length !== 0){
+        if(some[0].difficulty==='difficult'){
+          setDifficult(true);
+        }else(setStudied(true));
+      }
+    }
     checkDifficultWords();
-  },[]);
+  },[difficultWords, user.userId, wordId]);
 
   return (
     <div className='cardWords'>

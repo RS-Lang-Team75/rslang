@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import React, { useState, MouseEvent, KeyboardEvent } from 'react';
 import 'flowbite';
@@ -153,15 +153,14 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
                 </div>
               </li>
               <li>
-                <Link
-                  to='/difficult'
+                <div
                   className={seventhSection.join(' ')}
                   onClick = {sectionChoose}
                   onKeyPress={sectionChoose}
                   role="menuitem"
                   tabIndex={0}>
-                  <span className="ml-3">Сложные слова</span>
-                </Link>
+                  <span className="ml-3">Раздел 7</span>
+                </div>
               </li>
               {/* <li>
                 <a href="#" className="bookSection seventhSection">
