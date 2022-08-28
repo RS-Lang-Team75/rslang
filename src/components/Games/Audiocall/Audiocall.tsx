@@ -66,7 +66,7 @@ export default function AudioCall (props: IAudioCall) {
       }
       setIsAnswerGiven(true);
     }
-    return additionalClass;
+    return !isAnswerGiven ? additionalClass : '';
   };
 
   const revealOrNext = () => {
@@ -127,40 +127,43 @@ export default function AudioCall (props: IAudioCall) {
       }
       {!isGameFinished && pageWords.length > 0 &&
       <section className='gameSection'>
-        {wordsForGame.length > 0 &&
-        <div className='gameSection'>
-          <div className='cardAudio'>
-            <SoundButton
-              word= {wordsForGame[shownWordNumber]}
-              classBtn='audioBtn'
-              playFirstOnly
-            /></div>
+        {
+          wordsForGame.length > 0 &&
+            <div className='gameSection'>
+              <div className='cardAudio'>
+                <SoundButton
+                  word= {wordsForGame[shownWordNumber]}
+                  classBtn='audioBtn'
+                  playFirstOnly
+                /></div>
 
-          <div className="answerContainer">
-            {isAnswerGiven && <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
-              {wordsForGame[shownWordNumber].wordTranslate}
-            </div>}
-          </div>
+              <div className="answerContainer">
+                {isAnswerGiven && <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
+                  {wordsForGame[shownWordNumber].wordTranslate}
+                </div>}
+              </div>
 
-          <div className='answerImg'
-            style={isAnswerGiven ?
-              { backgroundImage: `url(https://rslang-team75.herokuapp.com/${wordsForGame[shownWordNumber].image})` } : {}}/>
+              <div className='answerImg'
+                style={isAnswerGiven ?
+                  { backgroundImage: `url(https://rslang-team75.herokuapp.com/${wordsForGame[shownWordNumber].image})` } : {}}/>
 
-          <div className='answerBtnContainer'>
-            {
-              possibleAnswers.map((w,i) =>
-                <GameButton classBtn='answerBtn activeAnswerBtn'
-                  key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
-                  id={`${i+1}`}
-                  onClick={e => {
-                    e.currentTarget.classList.add(checkAnswer(Number(e.currentTarget.id)));
-                    e.currentTarget.classList.remove('activeAnswerBtn');
-                  }}
-                  text={`${i+1}. ${w}`}
-                  simulatedButtonCode={`Digit${i+1}`}/>)
-            }
-          </div>
-        </div>
+              <div className='answerBtnContainer'>
+                {
+                  possibleAnswers.map((w,i) =>
+                    <GameButton classBtn='answerBtn activeAnswerBtn'
+                      key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
+                      id={`${i+1}`}
+                      onClick={e => {
+                        if (!isAnswerGiven) {
+                          e.currentTarget.classList.add(checkAnswer(Number(e.currentTarget.id)));
+                          e.currentTarget.classList.remove('activeAnswerBtn');
+                        }
+                      }}
+                      text={`${i+1}. ${w}`}
+                      simulatedButtonCode={`Digit${i+1}`}/>)
+                }
+              </div>
+            </div>
         }
         <GameButton
           text={isAnswerGiven ? 'далее' : 'не знаю'}
