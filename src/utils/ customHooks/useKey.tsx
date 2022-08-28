@@ -14,5 +14,4 @@ export function useKey (key: string, callback: KeyCallback) {
     document.addEventListener('keyup', handle);
     return () => document.removeEventListener('keyup', handle);
   }, [key]);
-
 }
