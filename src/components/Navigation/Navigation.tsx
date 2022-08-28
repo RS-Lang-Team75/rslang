@@ -36,7 +36,6 @@ export function Navigation (): JSX.Element {
         <div className="desktopMenu">
           {[
             ['Учебник', '/book'],
-            ['Сложные слова', '/difficult'],
             ['Аудиовызов', '/audiocall'],
             ['Статистика', '/statistic'],
             ['Команда', '/team'],
@@ -82,7 +81,6 @@ export function Navigation (): JSX.Element {
               {[
                 ['LOGIN', '/login'],
                 ['Учебник', '/book'],
-                ['Сложные слова', '/difficult'],
                 ['Аудиовызов', '/audiocall'],
                 ['Статистика', '/statistic'],
                 ['Команда', '/team'],
