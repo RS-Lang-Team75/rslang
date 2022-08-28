@@ -1,13 +1,14 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, ReactNode } from 'react';
 
 import './Button.pcss';
 
-interface ButtonProps{
+export interface ButtonProps{
   text: string;
   classBtn : string;
   disabled?:boolean;
-  children?:React.ReactNode;
+  children?:ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  id?: string;
 }
 
 export const Button = ({
@@ -16,8 +17,14 @@ export const Button = ({
   disabled,
   children,
   onClick,
+  id,
 }:ButtonProps): JSX.Element => (
-  <button type="button" className={classBtn} disabled= {disabled} onClick={onClick}>
+  <button
+    type="button"
+    className={classBtn}
+    disabled={disabled}
+    onClick={onClick}
+    id={id}>
     {text}
     {children}
   </button>

@@ -1,16 +1,21 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { MutableRefObject, useRef, useState } from 'react';
 
 import AudioSvg from '@/assets/icons/audio.svg';
 import StopSvg from '@/assets/icons/stop.svg';
 import { IWord } from '@/types/types';
 
+import './SoundButton.pcss';
+
 interface SoundButtonProps{
   word:IWord;
   classBtn : string;
+  playFirstOnly?: boolean;
 }
 
-export function SoundButton ({ word, classBtn }:SoundButtonProps) {
+export function SoundButton (props: SoundButtonProps) {
+
+  const { word, classBtn, playFirstOnly } = props;
+
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
   const firstSound = `${SERVER_URL}/${word.audio}`;
   const secondSound = `${SERVER_URL}/${word.audioMeaning}`;
@@ -32,8 +37,7 @@ export function SoundButton ({ word, classBtn }:SoundButtonProps) {
     if(playingRef.current){
       audio.src = allSoundsLinks[playNumRef.current];
       audio.load();
-      audio.play();
-
+      audio.play().catch(e => console.log(e));
     }else{
       audio.pause();
       // playingRef.current=true;
@@ -42,7 +46,7 @@ export function SoundButton ({ word, classBtn }:SoundButtonProps) {
 
   };
   const playNext = () => {
-    if(playNumRef.current < allSoundsLinks.length - 1){
+    if(playNumRef.current < allSoundsLinks.length - 1 && !playFirstOnly){
       playingRef.current=true;
       playNumRef.current += 1;
       // TODO: для useState
@@ -70,15 +74,16 @@ export function SoundButton ({ word, classBtn }:SoundButtonProps) {
   return (
     <div
       onClick={activatePlayer}
-      onKeyPress={activatePlayer}
+      onKeyPress={e => e.preventDefault()}
       role='button'
       tabIndex={0}
       aria-label='play'
+      className='soundBtn'
     >
       <audio
         ref={vidRef}
         className={classBtn}
-        onEnded={()=>playNext()}
+        onEnded={()=> playNext()}
       >
         <track src={word.word} kind="captions"/>
       </audio>

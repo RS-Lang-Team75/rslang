@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import './CardWord.pcss';
 
 import { Button } from '../Button/Button';
-import { SoundButton } from '../Button/SoundButton';
+import { SoundButton } from '../SoundButton/SoundButton';
 
 import { IDifficult, IWord } from '@/types/types';
 import { getWordInDifficultData, putWordInDifficultData } from '@/utils/queries/cardWordsQueries';

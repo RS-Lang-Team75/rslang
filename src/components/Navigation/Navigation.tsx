@@ -36,7 +36,7 @@ export function Navigation (): JSX.Element {
         <div className="desktopMenu">
           {[
             ['Учебник', '/book'],
-            ['Игры', '/games'],
+            ['Аудиовызов', '/audiocall'],
             ['Статистика', '/statistic'],
             ['Команда', '/team'],
           ].map(([title, url]) => (
@@ -81,7 +81,7 @@ export function Navigation (): JSX.Element {
               {[
                 ['LOGIN', '/login'],
                 ['Учебник', '/book'],
-                ['Игры', '/games'],
+                ['Аудиовызов', '/audiocall'],
                 ['Статистика', '/statistic'],
                 ['Команда', '/team'],
               ].map(([title, url]) => (
