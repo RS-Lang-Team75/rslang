@@ -1,16 +1,11 @@
-import React, { MouseEventHandler, useRef } from 'react';
+import React, { useRef } from 'react';
 
+import { ButtonProps } from '@/components/Button/Button';
 import { useKey } from '@/utils/ customHooks/useKey';
 
 import './GameButton.pcss';
 
-interface GameButtonProps{
-  text: string;
-  classBtn : string;
-  disabled?:boolean;
-  children?:React.ReactNode;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  id?: string;
+interface GameButtonProps extends ButtonProps{
   simulatedButtonCode: string;
 }
 

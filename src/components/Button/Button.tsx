@@ -2,7 +2,7 @@ import React, { MouseEventHandler, ReactNode } from 'react';
 
 import './Button.pcss';
 
-interface ButtonProps{
+export interface ButtonProps{
   text: string;
   classBtn : string;
   disabled?:boolean;
