@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
 
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
+import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 
 import { Button } from '@/components/Button/Button';
@@ -50,20 +51,20 @@ export default function AudioCall (props: IAudioCall) {
     setPageWords(randomWords);
   };
 
-  const checkAnswer = (e: FormEvent): void => {
+  const checkAnswer = (wordIndex: number): void => {
     const currentWord = wordsForGame[shownWordNumber];
-    e.preventDefault();
+    // e.preventDefault();
     if (!isAnswerGiven) {
-      if (e.currentTarget.innerHTML === currentWord.wordTranslate) {
+      if (possibleAnswers[wordIndex-1] === currentWord.wordTranslate) {
         setIsCorrectAnswer(true);
         setCorrectAnswers([...correctAnswers, currentWord]);
-        e.currentTarget.classList.add('bg-green-400');
+        // e.currentTarget.classList.add('bg-green-400');
       } else {
         setIsCorrectAnswer(false);
         setWrongAnswers([...wrongAnswers, currentWord]);
-        e.currentTarget.classList.add('bg-red-400');
+        // e.currentTarget.classList.add('bg-red-400');
       }
-      e.currentTarget.classList.remove('activeAnswerBtn');
+      // e.currentTarget.classList.remove('activeAnswerBtn');
       setIsAnswerGiven(true);
     }
   };
@@ -85,7 +86,7 @@ export default function AudioCall (props: IAudioCall) {
   };
 
   useEffect(() => {
-    if (pageWords.length > 0) {
+    if (pageWords.length > 0 && !isGameFinished) {
       const generateWordsForGame = (): void => {
         const shuffledPageWords = shuffleArray(pageWords);
         const randomWordsForGame = shuffledPageWords.slice(10);
@@ -148,18 +149,21 @@ export default function AudioCall (props: IAudioCall) {
           <div className='answerBtnContainer'>
             {
               possibleAnswers.map((w,i) =>
-                <button className='answerBtn activeAnswerBtn'
-                  type='button'
+                <GameButton classBtn='answerBtn activeAnswerBtn'
                   key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
-                  onClick={checkAnswer}>{w}</button>)
+                  id={`${i+1}`}
+                  onClick={e => checkAnswer(Number(e.currentTarget.id))}
+                  text={`${i+1}. ${w}`}
+                  simulatedButtonCode={`Digit${i+1}`}/>)
             }
           </div>
         </div>
         }
-        <Button
+        <GameButton
           text={isAnswerGiven ? 'далее' : 'не знаю'}
           classBtn='nextBtn'
-          onClick={revealOrNext}/>
+          onClick={revealOrNext}
+          simulatedButtonCode="Space"/>
       </section>}
       {isGameFinished && <section className='flex flex-col justify-center'>
         <h2>Game is finished!</h2>
