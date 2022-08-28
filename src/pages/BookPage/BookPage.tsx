@@ -8,7 +8,7 @@ import './BookPage.pcss';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
-import { IDifficult, IResponseAggregated, IWord } from '@/types/types';
+import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
 import { RootState } from '@/utils/store/store';
 
 export function BookPage () : JSX.Element{
@@ -17,7 +17,7 @@ export function BookPage () : JSX.Element{
   const savedGroup = Number(localStorage.getItem('currentGroup'));
 
   const [words, setWords] = useState<IWord[]>([]);
-  const [difficultWords, setDifficultWords] = useState<IDifficult[]>([]);
+  const [difficultWords, setDifficultWords] = useState<IDifficulty[]>([]);
   const [page, setPage] = useState(savedPage || 0);
   const [group, setGroup] = useState(savedGroup || 0);
   const[isGroupSix, setIsGroupSix] = useState(false);
@@ -38,7 +38,7 @@ export function BookPage () : JSX.Element{
     };
 
     const getDataDifficultWords = async (): Promise<void> => {
-      const responseDifficultWord = await axios.get<IDifficult[]>(
+      const responseDifficultWord = await axios.get<IDifficulty[]>(
         `${SERVER_URL}/users/${user.userId}/words`,
         wordsAxiosConfig);
       setDifficultWords(responseDifficultWord.data);

@@ -2,71 +2,159 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { UserState } from '../slices/userSlice';
 
-import { IDifficult } from '@/types/types';
+import { IDifficulty, IWord } from '@/types/types';
 
-type CardWordQueryFunction = (user:UserState, wordStatus:string, wordId:string) => Promise<void> ;
+type GetWordQueryFunction = (user: UserState, wordId: string, wordStatus?: string) => Promise<IDifficulty>;
+type WordQueryFunction = (
+  user: UserState,
+  wordId: string,
+  wordStatus: string,
+  addGameStats?: boolean,
+  gameName?: string,
+  isAnswerCorrect?: boolean,
+  currentWordData?: IDifficulty,
+) => Promise<void>;
+
 const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
-export const setWordsAxiosConfig = (token:string): AxiosRequestConfig => ({ headers: {
-  'Authorization': `Bearer ${token}`,
+export const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
+  'Authorization': token ? `Bearer ${token}` : '',
   'Accept': 'application/json',
   'Content-Type': 'application/json',
 } });
 
-const setStatusWordData = (wordStatus:string):IDifficult =>
-  ({ difficulty: wordStatus, optional: {} });
+const answer = {
+  correct: 'correct',
+  wrong: 'wrong',
+};
 
-const postWordInDifficultData:CardWordQueryFunction = async (user, wordStatus, wordId) => {
+const setStatusWordData = (wordDifficulty:string): IDifficulty =>
+  ({ difficulty: wordDifficulty, optional: {} });
+
+export const getWordsQuery = async (page: number, group: number): Promise<IWord[]> => {
+  const response = await axios.get<IWord[]>(
+    `${SERVER_URL}/words?group=${group}&page=${page}`,
+    setWordsAxiosConfig());
+  return response.data;
+};
+
+export const getUserWordData: GetWordQueryFunction = async (
+  user,
+  wordId,
+) => (await axios.get<IDifficulty>(
+  `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
+  setWordsAxiosConfig(user.token),
+)).data;
+
+const postUserWordData: WordQueryFunction = async (
+  user,
+  wordId,
+  wordStatus,
+  addGameStats?,
+  gameName?,
+  isAnswerCorrect?) => {
   try {
-    await axios.post<IDifficult>(
+    const wordData = setStatusWordData(wordStatus);
+    if (addGameStats && gameName) {
+      wordData.optional[gameName] = {
+        correct: 0,
+        wrong: 0,
+      };
+      if (isAnswerCorrect) {
+        wordData.optional[gameName][answer.correct] = 1;
+      } else {
+        wordData.optional[gameName][answer.wrong] = 1;
+      }
+    }
+    await axios.post<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
-      setStatusWordData(wordStatus),
+      wordData,
       setWordsAxiosConfig(user.token),
     );
-    // console.log(response.data);
-
   }
   catch (e:unknown) {
-    const error = e as AxiosError;
-    console.log('post err: ', error);
+    const err = e as AxiosError;
+    throw new Error(`POST query error, ${err.message}`);
   }
 
 };
 
-export const putWordInDifficultData:CardWordQueryFunction = async (user, wordStatus, wordId): Promise<void> => {
-
+export const putWordInDifficultData: WordQueryFunction = async (
+  user,
+  wordId,
+  wordStatus,
+  addGameStats?,
+  gameName?,
+  isAnswerCorrect?,
+  currentWordData?,
+): Promise<void> => {
   try {
-    await axios.put<IDifficult>(
+    const wordData = setStatusWordData(wordStatus);
+    if (addGameStats && currentWordData && gameName) {
+      if (isAnswerCorrect) {
+        wordData.optional[gameName][answer.correct] =
+          +currentWordData.optional[gameName][answer.correct] + 1;
+      } else {
+        wordData.optional[gameName][answer.wrong] =
+          +currentWordData.optional[gameName][answer.wrong] + 1;
+      }
+    }
+    await axios.put<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
-      setStatusWordData(wordStatus),
+      wordData,
       setWordsAxiosConfig(user.token),
     );
-    // console.log(response.data);
-
   } catch (e:unknown) {
     const err = e as AxiosError;
-    console.log('put err: ', err);
+    throw new Error(`PUT query error, ${err.message}`);
   }
 
 };
 
-export const getWordInDifficultData:CardWordQueryFunction = async (user, wordStatus, wordId)=> {
+export const updateOrCreateUserWordData: WordQueryFunction = async (
+  user,
+  wordId,
+  wordStatus,
+  addGameStats?,
+  gameName?,
+  isAnswerCorrect?,
+) => {
   try {
-    await axios.get<IDifficult>(
+    const userWordData = (await axios.get<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
       setWordsAxiosConfig(user.token),
-    );
-    // console.log(response.data);
-    // return response.data;
-
-  } catch(e:unknown){
+    )).data;
+    if (addGameStats) {
+      await putWordInDifficultData(
+        user,
+        wordId,
+        wordStatus,
+        addGameStats,
+        gameName,
+        isAnswerCorrect,
+        userWordData);
+    } else {
+      await putWordInDifficultData(user, wordId, wordStatus);
+    }
+  } catch (e: unknown) {
     const err = e as AxiosError;
     if(err.response){
       const res = err.response as AxiosResponse;
-      if(res.status === 404 ){
-        await postWordInDifficultData (user, wordStatus, wordId);
+      if(res.status === 404 && wordStatus){
+        if (addGameStats) {
+          await postUserWordData(
+            user,
+            wordId,
+            wordStatus,
+            addGameStats,
+            gameName,
+            isAnswerCorrect);
+        } else {
+          await postUserWordData(user, wordId, wordStatus);
+        }
       }
+    } else {
+      throw new Error(err.message);
     }
-    throw new Error(err.message);
   }
 };

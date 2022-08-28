@@ -14,13 +14,20 @@ export interface IWord{
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
-  userWord?: IDifficult;
+  userWord?: IDifficulty;
 }
 
-export interface IDifficult{
+interface GameStats {
+  correct: number;
+  wrong: number;
+}
+
+export interface IDifficulty{
   wordId?: string;
   difficulty:string;
-  optional:{[key:string]:string};
+  optional:{
+    [key:string]:GameStats;
+  };
 }
 
 export interface IResponseAggregated{

@@ -9,7 +9,7 @@ import { GameResults } from '../GameResults/GameResults';
 import { Button } from '@/components/Button/Button';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
-import { randomWordsQuery } from '@/utils/queries/wordsQueries';
+import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
 import './Audioсall.pcss';
@@ -19,6 +19,8 @@ interface IAudioCall {
 }
 
 export default function Audioсall (props: IAudioCall) {
+
+  const gameName = 'audiocall';
 
   const { wordsArray } = props;
 
@@ -47,7 +49,7 @@ export default function Audioсall (props: IAudioCall) {
   }
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
-    const randomWords = await randomWordsQuery(page, group);
+    const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
   };
 
@@ -59,10 +61,27 @@ export default function Audioсall (props: IAudioCall) {
         setIsCorrectAnswer(true);
         setCorrectAnswers([...correctAnswers, currentWord]);
         additionalClass = 'bg-green-400';
-      } else {
+        updateOrCreateUserWordData(
+          user,
+          currentWord.id,
+          'studied',
+          true,
+          gameName,
+          true,
+        ).catch(() => {throw new Error('Cannot update or create word');});
+      }
+      else {
         setIsCorrectAnswer(false);
         setWrongAnswers([...wrongAnswers, currentWord]);
         additionalClass = 'bg-red-400';
+        updateOrCreateUserWordData(
+          user,
+          currentWord.id,
+          'learning',
+          true,
+          gameName,
+          false,
+        ).catch(() => {throw new Error('Cannot update or create word');});
       }
       setIsAnswerGiven(true);
     }

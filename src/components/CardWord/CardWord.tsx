@@ -10,13 +10,13 @@ import './CardWord.pcss';
 import { Button } from '../Button/Button';
 import { SoundButton } from '../SoundButton/SoundButton';
 
-import { IDifficult, IWord } from '@/types/types';
-import { getWordInDifficultData, putWordInDifficultData } from '@/utils/queries/cardWordsQueries';
+import { IDifficulty, IWord } from '@/types/types';
+import { updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
   word:IWord;
-  difficultWords:IDifficult[];
+  difficultWords:IDifficulty[];
 }
 
 export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
@@ -38,17 +38,16 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
     const wordStatus = 'difficult';
     setDifficult(true);
     setStudied(false);
-    await getWordInDifficultData(user, wordStatus, wordId);
-    await putWordInDifficultData(user, wordStatus, wordId);
-
+    await updateOrCreateUserWordData(user, wordId, wordStatus);
+    // await putWordInDifficultData(user, wordId, wordStatus);
   };
 
   const addWordInStudiedData= async ():Promise<void> =>{
     const wordStatus = 'studied';
     setDifficult(false);
     setStudied(true);
-    await getWordInDifficultData(user, wordStatus, wordId);
-    await putWordInDifficultData(user, wordStatus, wordId);
+    await updateOrCreateUserWordData(user, wordId, wordStatus);
+    // await putWordInDifficultData(user, wordId, wordStatus);
 
   };
 
