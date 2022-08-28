@@ -95,7 +95,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
           await postWordInDifficultData ();
         }
       }
-      return err;
+      throw new Error(err.message);
     }
   }
 
