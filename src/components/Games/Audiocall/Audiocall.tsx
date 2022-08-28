@@ -12,13 +12,13 @@ import { IWord } from '@/types/types';
 import { randomWordsQuery } from '@/utils/queries/wordsQueries';
 import { RootState } from '@/utils/store/store';
 
-import './AudioCall.pcss';
+import './Audioсall.pcss';
 
 interface IAudioCall {
   wordsArray?: IWord[];
 }
 
-export default function AudioCall (props: IAudioCall) {
+export default function Audioсall (props: IAudioCall) {
 
   const { wordsArray } = props;
 
