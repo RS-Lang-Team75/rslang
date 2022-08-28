@@ -7,16 +7,17 @@ import './Pagination.pcss';
 interface PaginationProps {
   handlePages:(page:number)=>void;
   page:number;
+  totalPages:number;
 }
 
-export function Pagination ({ handlePages, page }:PaginationProps) : JSX.Element {
+export function Pagination ({ handlePages, page, totalPages }:PaginationProps) : JSX.Element {
 
   const pagePagRef = useRef(page);
-  const TOTAL_PAGES = 29;
   const hasPrev =  page > 0;
-  const hasNext = pagePagRef.current < TOTAL_PAGES || page===0;
+  const hasNext = pagePagRef.current < totalPages || page===0 && totalPages!==0 ;
   // console.log('pagePagRef.current: ', pagePagRef.current);
   // console.log('page: ', page);
+  // console.log('totalPages: ', totalPages);
 
   function handleClickPlus () {
     if (hasNext) {
@@ -40,7 +41,7 @@ export function Pagination ({ handlePages, page }:PaginationProps) : JSX.Element
   }
 
   function handleClickLast (){
-    pagePagRef.current = TOTAL_PAGES;
+    pagePagRef.current = totalPages;
     handlePages(pagePagRef.current);
   }
 

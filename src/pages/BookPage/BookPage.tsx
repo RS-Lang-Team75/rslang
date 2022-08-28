@@ -1,13 +1,14 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { useSelector } from 'react-redux';
 
 import { useEffect, useState } from 'react';
 
+import './BookPage.pcss';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
-import { IWord } from '@/types/types';
-
-import './BookPage.pcss';
+import { IDifficult, IWord } from '@/types/types';
+import { RootState } from '@/utils/store/store';
 
 export function BookPage () : JSX.Element{
 
@@ -15,13 +16,32 @@ export function BookPage () : JSX.Element{
   const savedGroup = Number(localStorage.getItem('currentGroup'));
 
   const [words, setWords] = useState<IWord[]>([]);
+  const [difficultWords, setDifficultWords] = useState<IDifficult[]>([]);
   const [page, setPage] = useState(savedPage || 0);
   const [group, setGroup] = useState(savedGroup || 0);
+
+  const user = useSelector((state: RootState) => state.user);
+  const SERVER_URL = 'https://rslang-team75.herokuapp.com';
+  const TOTAL_PAGES = 29;
+
+  const wordsAxiosConfig: AxiosRequestConfig = {
+    headers: {
+      'Authorization': `Bearer ${user.token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  };
 
   async function fetchWord (p = 0,g = 0 ) {
 
     try {
-      const response = await axios.get<IWord[]>(`https://rslang-team75.herokuapp.com/words?page=${p}&group=${g}`);
+      const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
+      if(user.userId){
+        const responseDifficultWord = await axios.get<IDifficult[]>(
+          `${SERVER_URL}/users/${user.userId}/words`,
+          wordsAxiosConfig);
+        setDifficultWords(responseDifficultWord.data);
+      }else{setDifficultWords([]);}
       setWords(response.data);
 
     } catch (e:unknown) {
@@ -53,11 +73,11 @@ export function BookPage () : JSX.Element{
 
   return(
     <main className='bookPageMain'>
-      <Pagination handlePages={handlePages} page = {page}/>
+      <Pagination handlePages={handlePages} page = {page} totalPages={TOTAL_PAGES}/>
       <div className='PageMainContent'>
         <SideBar onChange={handleChangeGroup}/>
         <div className='wordsContainer'>
-          {words.map(word=> <CardWord word={word} key = {word.id}/>)}
+          {words.map(word=> <CardWord word={word}  difficultWords = {difficultWords} key = {word.id}/>)}
         </div>
       </div>
     </main>

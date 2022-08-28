@@ -36,11 +36,10 @@ export function Navigation (): JSX.Element {
         <div className="desktopMenu">
           {[
             ['Учебник', '/book'],
-            ['Словарь', '/dictionary'],
+            ['Сложные слова', '/difficult'],
             ['Аудиовызов', '/audiocall'],
             ['Статистика', '/statistic'],
             ['Команда', '/team'],
-            ['Видео', '/video'],
           ].map(([title, url]) => (
             <Link key = {title} to={url} className="navLink">{title}</Link>
           ))}
@@ -83,11 +82,10 @@ export function Navigation (): JSX.Element {
               {[
                 ['LOGIN', '/login'],
                 ['Учебник', '/book'],
-                ['Словарь', '/dictionary'],
+                ['Сложные слова', '/difficult'],
                 ['Аудиовызов', '/audiocall'],
                 ['Статистика', '/statistic'],
                 ['Команда', '/team'],
-                ['Видео', '/video'],
               ].map(([title, url]) => (
                 <Link key = {title} to={url} className="mobileMenuBtn" onClick={() => setIsNavOpen(false)} >{title}</Link>
               ))}

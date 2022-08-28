@@ -1,7 +1,10 @@
+import { Link } from 'react-router-dom';
+
 import React, { useState, MouseEvent, KeyboardEvent } from 'react';
 import 'flowbite';
 
 import './SideBar.pcss';
+
 import MenuSvg from '@/assets/icons/menu-bars.svg';
 
 interface SideBarProps {
@@ -39,7 +42,7 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
   const sixthSection = ['bookSection sixthSection', sixthSectionActive];
   const seventhSection = ['bookSection seventhSection', seventhSectionActive];
 
-  function sectionChoose ({ currentTarget }: MouseEvent | KeyboardEvent){
+  const sectionChoose = ({ currentTarget }: MouseEvent | KeyboardEvent)=>{
     setFirstSectionActive('');
     setSecondSectionActive('');
     setThirdSectionActive('');
@@ -76,7 +79,7 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
         break;
     }
 
-  }
+  };
 
   return (
     <>
@@ -150,13 +153,15 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
                 </div>
               </li>
               <li>
-                <div className={seventhSection.join(' ')}
+                <Link
+                  to='/difficult'
+                  className={seventhSection.join(' ')}
                   onClick = {sectionChoose}
                   onKeyPress={sectionChoose}
                   role="menuitem"
                   tabIndex={0}>
-                  <span className="ml-3">Раздел 7</span>
-                </div>
+                  <span className="ml-3">Сложные слова</span>
+                </Link>
               </li>
               {/* <li>
                 <a href="#" className="bookSection seventhSection">
