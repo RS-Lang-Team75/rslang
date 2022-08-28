@@ -4,7 +4,6 @@ import { Footer } from './components/Footer/Footer';
 import AudioCall from './components/Games/AudioCall/AudioCall';
 import { Navigation } from './components/Navigation/Navigation';
 import { BookPage } from './pages/BookPage/BookPage';
-import { GamesPage } from './pages/GamesPage/GamesPage';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import { MainPage } from './pages/MainPage/MainPage';
 import { StatisticPage } from './pages/StatisticPage/StatisticPage';
