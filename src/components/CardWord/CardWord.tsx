@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+// import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 
@@ -12,6 +12,7 @@ import { Button } from '../Button/Button';
 import { SoundButton } from '../Button/SoundButton';
 
 import { IDifficult, IWord } from '@/types/types';
+import { getWordInDifficultData, putWordInDifficultData } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
@@ -24,15 +25,16 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
   const [difficult,setDifficult] = useState(false);
   const [studied,setStudied] = useState(false);
   const user = useSelector((state: RootState) => state.user);
-  const wordsAxiosConfig: AxiosRequestConfig = {
-    headers: {
-      'Authorization': `Bearer ${user.token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  };
-  const statusWordData:IDifficult = { difficulty: 'difficult',
-    optional: {} };
+  const  wordId = word.id || word._id;
+  // const wordsAxiosConfig: AxiosRequestConfig = {
+  //   headers: {
+  //     'Authorization': `Bearer ${user.token}`,
+  //     'Accept': 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  // };
+  // const statusWordData:IDifficult = { difficulty: 'difficult',
+  //   optional: {} };
 
   const sectionsBgColor = ['border-gray-500',
     'border-sky-500',
@@ -45,88 +47,82 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
 
   // console.log('word: ', word);
 
-  async function postWordInDifficultData (): Promise<void> {
-    try {
-      const response = await axios.post<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-        statusWordData,
-        wordsAxiosConfig,
-      );
-      console.log(response.data);
+  // async function postWordInDifficultData (): Promise<void> {
+  //   try {
+  //     const response = await axios.post<IDifficult>(
+  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
+  //       statusWordData,
+  //       wordsAxiosConfig,
+  //     );
+  //     console.log(response.data);
 
-    }
-    catch (e:unknown) {
-      const error = e as AxiosError;
-      console.log('post err: ', error);
-    }
+  //   }
+  //   catch (e:unknown) {
+  //     const error = e as AxiosError;
+  //     console.log('post err: ', error);
+  //   }
 
-  }
+  // }
 
-  async function putWordInDifficultData (): Promise<void> {
+  // async function putWordInDifficultData (): Promise<void> {
 
-    try {
-      const response = await axios.put<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-        statusWordData,
-        wordsAxiosConfig,
-      );
-      console.log(response.data);
+  //   try {
+  //     const response = await axios.put<IDifficult>(
+  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
+  //       statusWordData,
+  //       wordsAxiosConfig,
+  //     );
+  //     console.log(response.data);
 
-    } catch (e:unknown) {
-      const err = e as AxiosError;
-      console.log('put err: ', err);
-    }
+  //   } catch (e:unknown) {
+  //     const err = e as AxiosError;
+  //     console.log('put err: ', err);
+  //   }
 
-  }
-  async function getWordInDifficultData (){
-    try {
-      const response = await axios.get<IDifficult>(
-        `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
-        wordsAxiosConfig,
-      );
-      return response.data;
+  // }
+  // async function getWordInDifficultData (){
+  //   try {
+  //     const response = await axios.get<IDifficult>(
+  //       `https://rslang-team75.herokuapp.com/users/${user.userId}/words/${word.id || word._id}`,
+  //       wordsAxiosConfig,
+  //     );
+  //     return response.data;
 
-    } catch(e:unknown){
-      const err = e as AxiosError;
-      // console.log('get err: ', err);
-      if(err.response){
-        const res = err.response as AxiosResponse;
-        if(res.status === 404 ){
-          await postWordInDifficultData ();
-        }
-      }
-      throw new Error(err.message);
-    }
-  }
+  //   } catch(e:unknown){
+  //     const err = e as AxiosError;
+  //     // console.log('get err: ', err);
+  //     if(err.response){
+  //       const res = err.response as AxiosResponse;
+  //       if(res.status === 404 ){
+  //         await postWordInDifficultData ();
+  //       }
+  //     }
+  //     throw new Error(err.message);
+  //   }
+  // }
 
-  const addWordInDifficultData= async ()=>{
-    try{
-      statusWordData.difficulty = 'difficult';
-      setDifficult(true);
-      setStudied(false);
-      await getWordInDifficultData();
-      await putWordInDifficultData();
-    }
-    catch(e:unknown){
-      const err = e as AxiosError;
-      console.log('addWord: ', err);
+  const addWordInDifficultData= async ():Promise<void>=>{
 
-    }
+    // statusWordData.difficulty = 'difficult';
+    const wordStatus = 'difficult';
+    setDifficult(true);
+    setStudied(false);
+    await getWordInDifficultData(user, wordStatus, wordId);
+    await putWordInDifficultData(user, wordStatus, wordId);
+
   };
-  const addWordInStudiedData= async ()=>{
-    try{
-      statusWordData.difficulty = 'studied';
-      setDifficult(false);
-      setStudied(true);
-      await getWordInDifficultData();
-      await putWordInDifficultData();
-    }
-    catch(e:unknown){
-      const err = e as AxiosError;
-      console.log('addWord: ', err);
 
-    }
+  const addWordInStudiedData= async ():Promise<void> =>{
+
+    // statusWordData.difficulty = 'studied';
+    const wordStatus = 'studied';
+    setDifficult(false);
+    setStudied(true);
+    await getWordInDifficultData(user, wordStatus, wordId);
+    await putWordInDifficultData(user, wordStatus, wordId);
+
   };
+
   function checkDifficultWords (){
     const some = difficultWords.filter(item=>item.wordId===word.id || item.wordId===word._id);
     if(some.length !== 0){
