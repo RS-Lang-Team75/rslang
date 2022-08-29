@@ -186,7 +186,7 @@ export default function Audioсall (props: IAudioCall) {
         }
         <GameButton
           text={isAnswerGiven ? 'далее' : 'не знаю'}
-          classBtn='nextBtn'
+          classBtn='nextRound'
           onClick={revealOrNext}
           simulatedButtonCode="Space"/>
       </section>}
