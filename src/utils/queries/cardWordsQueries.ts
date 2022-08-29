@@ -37,6 +37,11 @@ const answer = {
   wrong: 'wrong',
 };
 
+const initialGameStats = {
+  correct: 0,
+  wrong: 0,
+};
+
 const { correct, wrong } = answer;
 
 const difficulty = {
@@ -84,14 +89,12 @@ const postUserWordData: WordQueryFunction = async (
     const wordData = setStatusWordData(wordStatus);
     const { optional } = wordData;
     if (addGameStats && gameName) {
-      optional[gameName] = {
-        correct: 0,
-        wrong: 0,
-      };
-      optional[allGames] = {
-        correct: 0,
-        wrong: 0,
-      };
+      optional[gameName] = structuredClone(initialGameStats);
+      optional[allGames] = structuredClone(initialGameStats);
+      // Object.assign(optional[gameName], initialGameStats);
+      // Object.assign(optional[allGames], initialGameStats);
+      // optional[gameName] = initialGameStats;
+      // optional[allGames] = initialGameStats;
       if (isAnswerCorrect) {
         optional[gameName][correct] = 1;
         optional[allGames][correct] = 1;
@@ -129,16 +132,23 @@ export const putWordInDifficultData: UpdateWordQueryFunction = async (
     } else {
       wordData = setStatusWordData(wordStatus);
     }
-    wordData.optional = currentWordData.optional;
+    if (currentWordData.optional) {
+      wordData.optional = structuredClone(currentWordData.optional);
+    }
+    const { optional } = wordData;
     if (addGameStats && currentWordData && gameName) {
+      if (!optional[gameName]) {
+        optional[gameName] = structuredClone(initialGameStats);
+      }
+      if (!optional[allGames]) {
+        optional[allGames] = structuredClone(initialGameStats);
+      }
       if (isAnswerCorrect) {
-        wordData.optional[gameName][correct] =
-          +currentWordData.optional[gameName][correct] + 1;
-        wordData.optional[allGames][correct] += 1;
+        optional[gameName][correct] += 1;
+        optional[allGames][correct] += 1;
       } else {
-        wordData.optional[gameName][wrong] =
-          +currentWordData.optional[gameName][wrong] + 1;
-        wordData.optional[allGames][wrong] += 1;
+        optional[gameName][wrong] += 1;
+        optional[allGames][wrong] += 1;
       }
     }
     await axios.put<IDifficulty>(
