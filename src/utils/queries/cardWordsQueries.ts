@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { UserState } from '../slices/userSlice';
 
-import { IDifficulty, IWord } from '@/types/types';
+import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
 
 type GetWordQueryFunction = (user: UserState, wordId: string, wordStatus?: string) => Promise<IDifficulty>;
 type WordQueryFunction = (
@@ -157,4 +157,18 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
       throw new Error(err.message);
     }
   }
+};
+
+export const getStudiedWords  = async (user:UserState, wordPage:number, wordGroup:number):Promise<IWord[]> => {
+  try {
+    const response = await axios.get<IResponseAggregated[]>(
+      `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${wordGroup}&filter={"$and":[{"page":${wordPage}},{"userWord.difficulty":"studied"}]}`,
+      setWordsAxiosConfig(user.token));
+    return response.data[0].paginatedResults;
+  } catch(e:unknown){
+    const err = e as AxiosError;
+    throw new Error(err.message);
+
+  }
+
 };

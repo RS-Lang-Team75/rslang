@@ -9,6 +9,7 @@ import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
+import { getStudiedWords } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
 export function BookPage () : JSX.Element{
@@ -22,6 +23,7 @@ export function BookPage () : JSX.Element{
   const [group, setGroup] = useState(savedGroup || 0);
   const[isGroupSix, setIsGroupSix] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+  const [pageStudied, setPageStudied] = useState(false);
 
   const user = useSelector((state: RootState) => state.user);
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
@@ -57,6 +59,8 @@ export function BookPage () : JSX.Element{
         }else{
           const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
           if(g !== 6 ) {setTotalPages(TOTAL_PAGES);}else{setTotalPages(0);}
+          const studiedWords = await getStudiedWords(user,p,g);
+          setPageStudied(studiedWords.length === 20);
           if(user.userId){
             await getDataDifficultWords();
           }
@@ -71,7 +75,7 @@ export function BookPage () : JSX.Element{
     }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fetchWord(page,group);
-  },[group, page, user.token, user.userId]);
+  },[group, page, user, user.token, user.userId]);
 
   const PAGE_ONE = 0;
 
@@ -89,6 +93,10 @@ export function BookPage () : JSX.Element{
     localStorage.setItem('currentPage', value.toString());
   };
 
+  const handleChangeStudiedWordMessage = (value:boolean)=>{
+    setPageStudied(value);
+  };
+
   return(
     <main className='bookPageMain'>
       <Pagination handlePages={handlePages} page = {page} totalPages={totalPages}/>
@@ -96,7 +104,12 @@ export function BookPage () : JSX.Element{
         <SideBar onChange={handleChangeGroup}/>
         <div className='wordsContainer'>
           {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
-          {words.map(word=> <CardWord word={word}  difficultWords = {difficultWords} key = {word.id || word._id}/>)}
+          {pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165;Поздравляю!!!&#128165; <br/> Все слова на этой странице изучены!!!</h2>}
+          {words.map(word=> <CardWord
+            word={word}
+            difficultWords = {difficultWords}
+            studiedWordMessage = {handleChangeStudiedWordMessage}
+            key = {word.id || word._id}/>)}
         </div>
       </div>
     </main>
