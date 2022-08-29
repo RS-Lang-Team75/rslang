@@ -5,6 +5,16 @@ import { UserState } from '../slices/userSlice';
 import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
 
 type GetWordQueryFunction = (user: UserState, wordId: string, wordStatus?: string) => Promise<IDifficulty>;
+type UpdateWordQueryFunction = (
+  user: UserState,
+  wordId: string,
+  wordStatus: string,
+  currentWordData: IDifficulty,
+  addGameStats?: boolean,
+  gameName?: string,
+  isAnswerCorrect?: boolean,
+) => Promise<void>;
+
 type WordQueryFunction = (
   user: UserState,
   wordId: string,
@@ -12,7 +22,6 @@ type WordQueryFunction = (
   addGameStats?: boolean,
   gameName?: string,
   isAnswerCorrect?: boolean,
-  currentWordData?: IDifficulty,
 ) => Promise<void>;
 
 const SERVER_URL = 'https://rslang-team75.herokuapp.com';
@@ -79,17 +88,18 @@ const postUserWordData: WordQueryFunction = async (
 
 };
 
-export const putWordInDifficultData: WordQueryFunction = async (
+export const putWordInDifficultData: UpdateWordQueryFunction = async (
   user,
   wordId,
   wordStatus,
+  currentWordData,
   addGameStats?,
   gameName?,
   isAnswerCorrect?,
-  currentWordData?,
 ): Promise<void> => {
   try {
     const wordData = setStatusWordData(wordStatus);
+    wordData.optional = currentWordData.optional;
     if (addGameStats && currentWordData && gameName) {
       if (isAnswerCorrect) {
         wordData.optional[gameName][answer.correct] =
@@ -129,12 +139,13 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
         user,
         wordId,
         wordStatus,
+        userWordData,
         addGameStats,
         gameName,
         isAnswerCorrect,
-        userWordData);
+      );
     } else {
-      await putWordInDifficultData(user, wordId, wordStatus);
+      await putWordInDifficultData(user, wordId, wordStatus, userWordData);
     }
   } catch (e: unknown) {
     const err = e as AxiosError;
