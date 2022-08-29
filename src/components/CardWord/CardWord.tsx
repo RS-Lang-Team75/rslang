@@ -53,7 +53,7 @@ export function CardWord ({ word, difficultWords }:CardWordProps) : JSX.Element{
 
   useEffect(()=>{
     function checkDifficultWords (){
-      const some = difficultWords.filter(item=>item.wordId === wordId);
+      const some:IDifficulty[] = difficultWords.filter(item=>item.wordId === wordId);
       if(some.length !== 0){
         if(some[0].difficulty==='difficult'){
           setDifficult(true);
