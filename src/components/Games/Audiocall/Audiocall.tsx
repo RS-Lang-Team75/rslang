@@ -18,7 +18,7 @@ import './Audioсall.pcss';
 export default function Audioсall () {
 
   const words = useLocation();
-  const { wordsArray } = words.state as { wordsArray: IWord[] };
+  const wordsArray = words.state ? (words.state as { wordsArray: IWord[] }).wordsArray : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
@@ -194,7 +194,7 @@ export default function Audioсall () {
         <h2>Game is finished!</h2>
         <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
         <Button text='Начать сначала'
-          classBtn='nextBtn'
+          classBtn='nextRound'
           onClick={() => {
             setIsGameFinished(false);
             setIsAnswerGiven(false);
