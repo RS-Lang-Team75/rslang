@@ -18,13 +18,14 @@ import './Audioсall.pcss';
 export default function Audioсall () {
 
   const words = useLocation();
-  const wordsArray = words.state ? (words.state as { wordsArray: IWord[] }).wordsArray : [];
+  const unstudiedWords =
+    words.state ? (words.state as { unstudiedWords: IWord[] }).unstudiedWords : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
-  const roundsNumber = wordsArray.length < 10 ? 10 : wordsArray.length;
+  const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
-  const [pageWords, setPageWords] = useState<IWord[] | []>(wordsArray || []);
+  const [pageWords, setPageWords] = useState<IWord[] | []>(unstudiedWords || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[] | []>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[] | []>([]);
@@ -116,12 +117,16 @@ export default function Audioсall () {
   }, [pageWords, isGameFinished, roundsNumber]);
 
   useEffect(() => {
+    const allWordsFromBookPage =
+    words.state ? (words.state as { allWordsFromPage: IWord[] }).allWordsFromPage: [];
+
     const generateAnswers = (word: IWord): void => {
+      const arrayOfAnswers = allWordsFromBookPage || pageWords;
       const answers = [word.wordTranslate];
       while (answers.length < answerOptionsPerRound) {
-        const ind = Math.floor(Math.random() * pageWords.length);
-        if (pageWords[ind].wordTranslate !== word.wordTranslate) {
-          answers.push(pageWords[ind].wordTranslate);
+        const ind = Math.floor(Math.random() * arrayOfAnswers.length);
+        if (arrayOfAnswers[ind].wordTranslate !== word.wordTranslate) {
+          answers.push(arrayOfAnswers[ind].wordTranslate);
         }
       }
       setPossibleAnswers(shuffleArray(answers));
@@ -130,7 +135,7 @@ export default function Audioсall () {
     if (wordsForGame.length > 0) {
       generateAnswers(wordsForGame[shownWordNumber]);
     }
-  }, [wordsForGame, shownWordNumber, pageWords]);
+  }, [wordsForGame, shownWordNumber, pageWords, words.state]);
 
   return(
     <main className='gamesPage'>

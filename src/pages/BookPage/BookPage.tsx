@@ -109,7 +109,11 @@ export function BookPage () : JSX.Element{
             <Link key='audiocallLink'
               to='/audiocall'
               className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
-              state={{ wordsArray: words.filter(w => !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')) }}
+              state={{
+                unstudiedWords: words.filter(w =>
+                  !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')),
+                allWordsFromPage: words,
+              }}
             >Попробовать Аудиовызов</Link>
           </div>
         </aside>
