@@ -52,7 +52,7 @@ export function BookPage () : JSX.Element{
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
             wordsAxiosConfig);
           await getDataDifficultWords();
-          setTotalPages(Math.ceil(response.data[0].totalCount[0].count/10)-1);
+          setTotalPages(Math.ceil(response.data[0].totalCount[0].count/20)-1);
           setWords(response.data[0].paginatedResults);
         }else{
           const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
