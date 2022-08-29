@@ -17,7 +17,7 @@ export interface IWord{
   userWord?: IDifficulty;
 }
 
-interface GameStats {
+export interface GameStats {
   correct: number;
   wrong: number;
 }

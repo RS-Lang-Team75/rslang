@@ -23,6 +23,7 @@ interface CardWordProps {
 export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordProps) : JSX.Element{
   const [difficult,setDifficult] = useState(false);
   const [studied,setStudied] = useState(false);
+  const [gameScore,setGameScore] = useState({ correct: 0,wrong: 0 });
   const user = useSelector((state: RootState) => state.user);
   const  wordId = word.id || word._id;
 
@@ -56,11 +57,12 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
 
   useEffect(()=>{
     function checkDifficultWords (){
-      const some:IDifficulty[] = difficultWords.filter(item=>item.wordId === wordId);
-      if(some.length !== 0){
-        if(some[0].difficulty==='difficult'){
-          setDifficult(true);
-        }else(setStudied(true));
+      const userWordData:IDifficulty[] = difficultWords.filter(item=>item.wordId === wordId);
+      if(userWordData.length !== 0){
+        if(userWordData[0].difficulty==='difficult'){setDifficult(true);}
+        if(userWordData[0].difficulty==='studied'){setStudied(true);}
+        if(userWordData[0].optional){
+          setGameScore(userWordData[0].optional.audiocall);};
       }
     }
     checkDifficultWords();
@@ -98,6 +100,9 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
           <p className='cardExampleEnglish'>{parse(word.textExample)}</p>
           <p className='cardExampleRussian'>{word.textExampleTranslate}</p>
         </div>
+        { user.userId && <div className= 'pt-4'>
+          <p>{`В играх слово было угаданно: ${gameScore.correct},  не было угадано: ${gameScore.wrong}`}</p>
+        </div>}
         { user.userId &&
         <div className='cardButton'>
           <Button
