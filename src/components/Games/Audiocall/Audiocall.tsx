@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import React, { useEffect, useState } from 'react';
 
@@ -14,15 +15,14 @@ import { RootState } from '@/utils/store/store';
 
 import './Audioсall.pcss';
 
-interface IAudioCall {
-  wordsArray?: IWord[];
-}
+export default function Audioсall () {
 
-export default function Audioсall (props: IAudioCall) {
+  const words = useLocation();
+  const { wordsArray } = words.state as { wordsArray: IWord[] };
 
   const gameName = 'audiocall';
-
-  const { wordsArray } = props;
+  const answerOptionsPerRound = 5;
+  const roundsNumber = wordsArray.length < 10 ? 10 : wordsArray.length;
 
   const [pageWords, setPageWords] = useState<IWord[] | []>(wordsArray || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
@@ -108,17 +108,17 @@ export default function Audioсall (props: IAudioCall) {
     if (pageWords.length > 0 && !isGameFinished) {
       const generateWordsForGame = (): void => {
         const shuffledPageWords = shuffleArray(pageWords);
-        const randomWordsForGame = shuffledPageWords.slice(10);
+        const randomWordsForGame = shuffledPageWords.slice(0, roundsNumber-1);
         setWordsForGame(randomWordsForGame);
       };
       generateWordsForGame();
     }
-  }, [pageWords, isGameFinished]);
+  }, [pageWords, isGameFinished, roundsNumber]);
 
   useEffect(() => {
     const generateAnswers = (word: IWord): void => {
       const answers = [word.wordTranslate];
-      while (answers.length < 5) {
+      while (answers.length < answerOptionsPerRound) {
         const ind = Math.floor(Math.random() * pageWords.length);
         if (pageWords[ind].wordTranslate !== word.wordTranslate) {
           answers.push(pageWords[ind].wordTranslate);

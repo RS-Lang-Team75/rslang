@@ -22,7 +22,7 @@ export function BookPage () : JSX.Element{
   const [difficultWords, setDifficultWords] = useState<IDifficulty[]>([]);
   const [page, setPage] = useState(savedPage || 0);
   const [group, setGroup] = useState(savedGroup || 0);
-  const[isGroupSix, setIsGroupSix] = useState(false);
+  const [isGroupSix, setIsGroupSix] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [pageStudied, setPageStudied] = useState(false);
 
@@ -102,12 +102,18 @@ export function BookPage () : JSX.Element{
     <main className='bookPageMain'>
       <Pagination handlePages={handlePages} page = {page} totalPages={totalPages}/>
       <div className='PageMainContent'>
+
         <aside className="stickyContainer">
           <div className="asideMenuContainer">
             <SideBar onChange={handleChangeGroup}/>
-            <Link key='audiocallLink' to='/audiocall' className='gameLink'>Сыграть в Аудиовызов с этими словами</Link>
+            <Link key='audiocallLink'
+              to='/audiocall'
+              className='gameLink'
+              state={{ wordsArray: words.filter(w => !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')) }}
+            >Сыграть в Аудиовызов с неизученными словами</Link>
           </div>
         </aside>
+
         <div className='wordsContainer'>
           {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
           {user.userId && pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165;Поздравляю!!!&#128165; <br/> Все слова на этой странице изучены!!!</h2>}
