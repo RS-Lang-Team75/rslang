@@ -37,6 +37,12 @@ const answer = {
   wrong: 'wrong',
 };
 
+const difficulty = {
+  difficult: 'difficult',
+  studied: 'studied',
+  learning: 'learning',
+};
+
 const setStatusWordData = (wordDifficulty:string): IDifficulty =>
   ({ difficulty: wordDifficulty, optional: {} });
 
@@ -98,7 +104,12 @@ export const putWordInDifficultData: UpdateWordQueryFunction = async (
   isAnswerCorrect?,
 ): Promise<void> => {
   try {
-    const wordData = setStatusWordData(wordStatus);
+    let wordData: IDifficulty;
+    if (currentWordData.difficulty === difficulty.difficult && addGameStats) {
+      wordData = setStatusWordData(difficulty.difficult);
+    } else {
+      wordData = setStatusWordData(wordStatus);
+    }
     wordData.optional = currentWordData.optional;
     if (addGameStats && currentWordData && gameName) {
       if (isAnswerCorrect) {
