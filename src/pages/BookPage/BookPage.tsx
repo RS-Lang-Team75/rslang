@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 
@@ -104,6 +105,7 @@ export function BookPage () : JSX.Element{
         <aside className="stickyContainer">
           <div className="asideMenuContainer">
             <SideBar onChange={handleChangeGroup}/>
+            <Link key='audiocallLink' to='/audiocall' className='gameLink'>Сыграть в Аудиовызов с этими словами</Link>
           </div>
         </aside>
         <div className='wordsContainer'>
