@@ -59,10 +59,10 @@ export function BookPage () : JSX.Element{
         }else{
           const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
           if(g !== 6 ) {setTotalPages(TOTAL_PAGES);}else{setTotalPages(0);}
-          const studiedWords = await getStudiedWords(user,p,g);
-          setPageStudied(studiedWords.length === 20);
           if(user.userId){
             await getDataDifficultWords();
+            const studiedWords = await getStudiedWords(user,p,g);
+            setPageStudied(studiedWords.length === 20);
           }
           setWords(response.data);
         }
