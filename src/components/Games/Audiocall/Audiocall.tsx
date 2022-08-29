@@ -108,7 +108,7 @@ export default function Audioсall () {
     if (pageWords.length > 0 && !isGameFinished) {
       const generateWordsForGame = (): void => {
         const shuffledPageWords = shuffleArray(pageWords);
-        const randomWordsForGame = shuffledPageWords.slice(0, roundsNumber-1);
+        const randomWordsForGame = shuffledPageWords.slice(0, roundsNumber);
         setWordsForGame(randomWordsForGame);
       };
       generateWordsForGame();
