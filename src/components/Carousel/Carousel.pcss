@@ -1,0 +1,32 @@
+.carousel {
+  @apply flex justify-center items-center mb-10 mt-4;
+
+  & .carouselContainer {
+    @apply w-full overflow-hidden;
+
+    & .slider {
+      @apply whitespace-nowrap inline-block shadow-lg;
+      & .slide {
+        @apply w-full whitespace-nowrap inline-block relative;
+      }
+    }
+  }
+}
+
+.sliderImg {
+  @apply w-full mx-auto rounded-xl max-h-96;
+  transition: background 0.2s linear;
+}
+
+.sliderArrow,
+.sliderArrowLeft {
+  @apply w-8 text-sky-300 cursor-pointer;
+}
+.sliderArrowLeft {
+  @apply -order-1;
+}
+
+.sign {
+  @apply absolute z-10 left-1/2 top-1/2 text-sky-900 text-3xl italic sm:text-lg;
+  transform: translate(-50%, -50%);
+}

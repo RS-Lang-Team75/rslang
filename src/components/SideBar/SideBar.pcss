@@ -1,0 +1,55 @@
+/* * {
+  outline: 1px solid red;
+} */
+
+.sideBarContainer {
+  @apply relative;
+}
+
+.showMenuSideBar {
+  @apply min-w-[10rem] mt-4
+
+  md:absolute top-0 left-0 z-40 md:w-full  md:shadow-lg md:border-2 md:rounded-lg;
+}
+.hideMenuSideBar {
+  @apply min-w-[10rem] mt-4
+  md:hidden;
+}
+.menuIcon {
+  @apply hidden
+  mt-2 md:flex md:justify-center;
+}
+
+.menuSideBar {
+  @apply overflow-y-auto py-4 px-3 bg-white rounded;
+}
+
+.bookSection {
+  @apply flex items-center p-2 text-base font-normal text-sky-900 rounded-lg cursor-pointer;
+}
+.firstSection {
+  @apply hover:bg-gray-100;
+}
+
+.secondSection {
+  @apply hover:bg-sky-100;
+}
+
+.thirdSection {
+  @apply hover:bg-green-100;
+}
+.fourthSection {
+  @apply hover:bg-yellow-100;
+}
+.fifthSection {
+  @apply hover:bg-orange-100;
+}
+.sixthSection {
+  @apply hover:bg-red-100;
+}
+.seventhSection {
+  @apply hover:bg-purple-100;
+}
+.active {
+  @apply bg-inherit;
+}

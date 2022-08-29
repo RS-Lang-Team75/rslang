@@ -1,0 +1,65 @@
+.headerNav {
+  @apply container mx-auto h-[60px] bg-sky-800  text-white sticky top-0 rounded-b-md z-50;
+
+  & .wrapperNav {
+    @apply max-w-7xl mx-auto h-full flex justify-between items-center px-5;
+
+    & .navLogo {
+      @apply mr-2 text-3xl font-bold;
+
+      & .rsLetters {
+        @apply text-sky-200;
+      }
+    }
+  }
+}
+
+.desktopMenu {
+  @apply lg:hidden space-x-4 flex sm:justify-center;
+}
+.navLink {
+  @apply rounded-lg px-3 py-2 text-sky-200 font-medium;
+  &:hover {
+    @apply bg-sky-200 text-sky-800;
+  }
+}
+.mobileMenu {
+  @apply lg:flex justify-end px-4 grow hidden;
+}
+.humbuggerIcon {
+  @apply space-y-2 cursor-pointer;
+}
+
+.line {
+  @apply block h-0.5 w-8 animate-pulse bg-sky-200;
+}
+
+.hideMenuNav {
+  @apply hidden;
+  /* display: none; */
+}
+.showMenuNav {
+  @apply absolute min-w-[320px] h-screen top-0 right-0 bg-sky-800 z-10 flex flex-col justify-evenly align-middle text-center;
+}
+
+.crossIcon {
+  @apply absolute top-0 right-0 px-8 py-8 bg-sky-800 cursor-pointer;
+}
+
+.menuMobileOpen {
+  @apply flex flex-col items-center justify-between min-h-[250px] bg-sky-800;
+}
+
+.mobileMenuBtn {
+  @apply w-32 border-b my-2 uppercase rounded-lg px-3 py-2 text-sky-200 font-medium bg-sky-400;
+  &:hover {
+    @apply bg-sky-200 text-sky-800;
+  }
+}
+
+.userIconContainer {
+  @apply flex items-center justify-center;
+}
+.userIcon {
+  @apply w-6;
+}

@@ -1,0 +1,19 @@
+# Logs
+logs
+*.log
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Build
+build
+
+node_modules
+__generated__
+
+# Environment
+.env
+
+# TernJS port file
+.tern-port
+.DS_Store
