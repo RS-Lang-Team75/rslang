@@ -108,9 +108,9 @@ export function BookPage () : JSX.Element{
             <SideBar onChange={handleChangeGroup}/>
             <Link key='audiocallLink'
               to='/audiocall'
-              className='gameLink'
+              className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
               state={{ wordsArray: words.filter(w => !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')) }}
-            >Сыграть в Аудиовызов с неизученными словами</Link>
+            >Попробовать Аудиовызов</Link>
           </div>
         </aside>
 
