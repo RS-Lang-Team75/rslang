@@ -196,7 +196,7 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
     if(err.response){
       const res = err.response as AxiosResponse;
       if(res.status === 404 && wordStatus){
-        await getStatisticsData(user);
+        await getStatisticsData(user, 'newWord');
         if (addGameStats) {
           await postUserWordData(
             user,

@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useSelector } from 'react-redux';
 
-import React from 'react';
-
 import { UserStatistics } from '@/types/types';
+import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 
 export function StatisticsPage (){
@@ -24,6 +24,7 @@ export function StatisticsPage (){
         `${SERVER_URL}/users/${user.userId}/statistics`,
         wordsAxiosConfig);
       console.log('statistics data', response.data);
+      await statisticsForStudiedWords(user);
 
     } catch (e:unknown) {
       const error = e as AxiosError;
