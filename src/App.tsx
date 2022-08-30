@@ -6,7 +6,7 @@ import { Navigation } from './components/Navigation/Navigation';
 import { BookPage } from './pages/BookPage/BookPage';
 import { LoginPage } from './pages/LoginPage/LoginPage';
 import { MainPage } from './pages/MainPage/MainPage';
-import { StatisticPage } from './pages/StatisticPage/StatisticPage';
+import { StatisticsPage } from './pages/StatisticsPage/StatisticPage';
 import { TeamPage } from './pages/TeamPage/TeamPage';
 
 export const App = (): JSX.Element =>  (
@@ -16,7 +16,7 @@ export const App = (): JSX.Element =>  (
       <Route path='/' element={<MainPage/>} />
       <Route path='/book' element={<BookPage/>} />
       <Route path='/audiocall' element={<Audioсall/>} />
-      <Route path='/statistic' element={<StatisticPage/>} />
+      <Route path='/statistic' element={<StatisticsPage/>} />
       <Route path='/team' element={<TeamPage/>} />
       <Route path='/login' element={<LoginPage/>} />
     </Routes>
