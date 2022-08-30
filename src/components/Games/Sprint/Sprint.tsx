@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Countdown from '../Countdown/Countdown';
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
@@ -9,35 +8,41 @@ import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 
 import { Button } from '@/components/Button/Button';
-import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
-import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
-import { RootState } from '@/utils/store/store';
-
-import './Sprint.pcss';
 import { shuffleArray } from '@/utils/misc';
+import { getWordsQuery } from '@/utils/queries/cardWordsQueries';
+import { RootState } from '@/utils/store/store';
+import './Sprint.pcss';
 
 export default function Sprint () {
+
+  const [currentGroup, setCurrentGroup] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const [pageWords, setPageWords] = useState<IWord[]>([]);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
 
-  const [shownWordNumber, setShownWordNumber] = useState<number>(0);
-
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+
+  const [shownWordNumber, setShownWordNumber] = useState<number>(0);
+  const [currentWordEnglish, setCurrentWordEnglish] = useState<string>('');
+  const [currentWordTranslation, setCurrentWordTranslation] = useState<string>('');
   const [currentAnswer, setCurrentAnswer] = useState<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
 
   console.log('render!');
+  const addWordsDelta = 18;
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
+    setCurrentGroup(group);
+    setCurrentPage(page < 29 ? page + 1 : 0);
   };
 
   const onTimerEnd = () => {
@@ -61,6 +66,31 @@ export default function Sprint () {
     }
   }, [pageWords, isGameFinished, isGameStarted]);
 
+  useEffect(() => {
+    const prepareWord = () => {
+      setCurrentWordEnglish(wordsForGame[shownWordNumber].word);
+      const dice = Math.random();
+      if (dice < 0.5) {
+        // take random translation (answer is false)
+        const delta = Math.ceil(dice * (wordsForGame.length - shownWordNumber - 1));
+        setCurrentWordTranslation(wordsForGame[shownWordNumber + delta].wordTranslate);
+        setCurrentAnswer(false);
+      } else {
+        // (answer is true)
+        setCurrentWordTranslation(wordsForGame[shownWordNumber].wordTranslate);
+        setCurrentAnswer(true);
+      }
+    };
+
+    if (wordsForGame.length > 0) {
+      prepareWord();
+    }
+    if (isGameStarted && (wordsForGame.length - shownWordNumber < addWordsDelta)) {
+      returnRandomWords(currentPage, currentGroup).catch(err => {throw new Error(err as string);});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shownWordNumber]);
+
   return(
     <main className='gamesPage'>
       <div className="gameSection">
@@ -78,11 +108,24 @@ export default function Sprint () {
               onClick={() => {
                 if (wordsForGame.length > 0) {
                   setIsGameStarted(true);
-                }}}
-            /></>}
+                }
+              }}/>
+          </>}
         {wordsForGame.length > 0 && isGameStarted &&
-          <Countdown onTimerEnd={onTimerEnd}/>
-        }
+          <>
+            <Countdown onTimerEnd={onTimerEnd} />
+            <div className="flex justify-center gap-5">
+              <div>{currentWordEnglish}</div>
+              <div>ЭТО</div>
+              <div>{currentWordTranslation}</div>
+              <div>?????</div>
+            </div>
+            <GameButton
+              text={currentAnswer.toString()}
+              classBtn='nextRound'
+              onClick={() => setShownWordNumber(n => n+1)}
+              simulatedButtonCode="Space"/>
+          </>}
         {isGameFinished && <section className='flex flex-col justify-center'>
           <h2>Game is finished!</h2>
           <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
@@ -92,12 +135,11 @@ export default function Sprint () {
               setIsGameFinished(false);
               setCorrectAnswers([]);
               setWrongAnswers([]);
+              setWordsForGame([]);
+              setShownWordNumber(0);
             }}/>
         </section>}
       </div>
-      {wordsForGame.length > 0 && <div className="flex flex-wrap justify-center">
-        {wordsForGame.map(w => <div className='nextRound' key={w.id}>{w.wordTranslate}</div> )}
-      </div>}
     </main>
   );
 }
