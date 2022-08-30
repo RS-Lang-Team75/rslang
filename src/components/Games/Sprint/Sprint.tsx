@@ -36,7 +36,7 @@ export default function Sprint () {
   const user = useSelector((state: RootState) => state.user);
 
   console.log('render!');
-  const addWordsDelta = 18;
+  const addWordsDelta = 3;
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
@@ -81,15 +81,16 @@ export default function Sprint () {
         setCurrentAnswer(true);
       }
     };
-
+    console.log('useEffect!');
     if (wordsForGame.length > 0) {
       prepareWord();
     }
     if (isGameStarted && (wordsForGame.length - shownWordNumber < addWordsDelta)) {
       returnRandomWords(currentPage, currentGroup).catch(err => {throw new Error(err as string);});
     }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shownWordNumber]);
+  }, [shownWordNumber, wordsForGame]);
 
   return(
     <main className='gamesPage'>
