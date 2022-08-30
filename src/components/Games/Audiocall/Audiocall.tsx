@@ -25,10 +25,10 @@ export default function Audioсall () {
   const answerOptionsPerRound = 5;
   const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
-  const [pageWords, setPageWords] = useState<IWord[] | []>(unstudiedWords || []);
-  const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<IWord[] | []>([]);
-  const [wrongAnswers, setWrongAnswers] = useState<IWord[] | []>([]);
+  const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
+  const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
+  const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
+  const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
@@ -36,7 +36,7 @@ export default function Audioсall () {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
-  const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
+  const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
   const user = useSelector((state: RootState) => state.user);
 
