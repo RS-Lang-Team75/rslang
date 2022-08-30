@@ -15,18 +15,25 @@ import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardW
 import { RootState } from '@/utils/store/store';
 
 import './Sprint.pcss';
+import { shuffleArray } from '@/utils/misc';
 
 export default function Sprint () {
 
   const [pageWords, setPageWords] = useState<IWord[]>([]);
+  const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
+
+  const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+  const [currentAnswer, setCurrentAnswer] = useState<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
+
+  console.log('render!');
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
@@ -36,7 +43,23 @@ export default function Sprint () {
   const onTimerEnd = () => {
     setIsGameStarted(false);
     setIsGameFinished(true);
+    setWordsForGame([]);
   };
+
+  useEffect(() => {
+    if (pageWords.length > 0 && !isGameFinished) {
+      const generateWordsForGame = (): void => {
+        const shuffledPageWords = shuffleArray(pageWords);
+        if (isGameStarted) {
+          setWordsForGame(w => [...w, ...shuffledPageWords]);
+        } else {
+          setWordsForGame(shuffledPageWords);
+        }
+      };
+      generateWordsForGame();
+      setPageWords([]);
+    }
+  }, [pageWords, isGameFinished, isGameStarted]);
 
   return(
     <main className='gamesPage'>
@@ -53,11 +76,11 @@ export default function Sprint () {
             <Button text='Начать игру'
               classBtn='nextRound'
               onClick={() => {
-                if (pageWords.length > 0) {
+                if (wordsForGame.length > 0) {
                   setIsGameStarted(true);
                 }}}
             /></>}
-        {pageWords.length > 0 && isGameStarted &&
+        {wordsForGame.length > 0 && isGameStarted &&
           <Countdown onTimerEnd={onTimerEnd}/>
         }
         {isGameFinished && <section className='flex flex-col justify-center'>
@@ -72,6 +95,9 @@ export default function Sprint () {
             }}/>
         </section>}
       </div>
+      {wordsForGame.length > 0 && <div className="flex flex-wrap justify-center">
+        {wordsForGame.map(w => <div className='nextRound' key={w.id}>{w.wordTranslate}</div> )}
+      </div>}
     </main>
   );
 }
