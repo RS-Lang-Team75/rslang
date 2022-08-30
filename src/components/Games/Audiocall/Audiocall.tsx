@@ -35,6 +35,8 @@ export default function Audioсall () {
 
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+
+  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
   const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
@@ -113,7 +115,7 @@ export default function Audioсall () {
     words.state ? (words.state as { allWordsFromPage: IWord[] }).allWordsFromPage: [];
 
     const generateAnswers = (word: IWord): void => {
-      const arrayOfAnswers = allWordsFromBookPage || pageWords;
+      const arrayOfAnswers = allWordsFromBookPage.length > 0 ? allWordsFromBookPage : pageWords;
       const answers = [word.wordTranslate];
       while (answers.length < answerOptionsPerRound) {
         const ind = Math.floor(Math.random() * arrayOfAnswers.length);
@@ -136,12 +138,20 @@ export default function Audioсall () {
         <h2>User: {user.name}</h2>
         <h3>ID: {user.userId}</h3>
       </div>
-      {pageWords.length === 0 &&
-      <DifficultySelector
-        returnRandomWords={returnRandomWords}
-      />
+      {!isGameStarted && !isGameFinished && unstudiedWords.length === 0 &&
+      <>
+        <DifficultySelector
+          returnRandomWords={returnRandomWords} />
+        <Button text='Начать игру'
+          classBtn='nextRound'
+          onClick={() => {
+            if (wordsForGame.length > 0) {
+              setIsGameStarted(true);
+            }
+          }}/>
+      </>
       }
-      {!isGameFinished && pageWords.length > 0 &&
+      {!isGameFinished && isGameStarted &&
       <section className='gameSection'>
         {
           wordsForGame.length > 0 &&
@@ -194,6 +204,7 @@ export default function Audioсall () {
           classBtn='nextRound'
           onClick={() => {
             setIsGameFinished(false);
+            setIsGameStarted(false);
             setIsAnswerGiven(false);
             setCorrectAnswers([]);
             setWrongAnswers([]);
