@@ -10,6 +10,7 @@ import { GameResults } from '../GameResults/GameResults';
 import { Button } from '@/components/Button/Button';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
+import { shuffleArray } from '@/utils/misc';
 import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
@@ -39,15 +40,6 @@ export default function Audioсall () {
   const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
   const user = useSelector((state: RootState) => state.user);
-
-  function shuffleArray<T> (arr: Array<T>): Array<T> {
-    const shuffledArray = arr.slice();
-    for (let i = 0; i < shuffledArray.length; i += 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-    return shuffledArray;
-  }
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
