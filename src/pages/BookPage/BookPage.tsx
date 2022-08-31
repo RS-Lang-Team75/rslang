@@ -115,6 +115,17 @@ export function BookPage () : JSX.Element{
                 allWordsFromPage: words,
               }}
             >Попробовать Аудиовызов</Link>
+
+            <Link key='sprintLink'
+              to='/sprint'
+              className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
+              state={{
+                unstudiedWords: words.filter(w =>
+                  !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')),
+                pageFromBook: page,
+                groupFromBook: group,
+              }}
+            >Попробовать Спринт</Link>
           </div>
         </aside>
 
