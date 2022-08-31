@@ -10,44 +10,44 @@ import { GameResults } from '../GameResults/GameResults';
 import { Button } from '@/components/Button/Button';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
+import { shuffleArray } from '@/utils/misc';
 import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 
 import './Audioсall.pcss';
 
+interface AudiocallFromBookState {
+  unstudiedWords: IWord[];
+  allWordsFromPage: IWord[];
+}
+
 export default function Audioсall () {
 
   const words = useLocation();
-  const unstudiedWords =
-    words.state ? (words.state as { unstudiedWords: IWord[] }).unstudiedWords : [];
+  const stateFromBook = words.state ? (words.state as AudiocallFromBookState) : undefined;
+  const unstudiedWords = stateFromBook ? stateFromBook.unstudiedWords : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
   const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
-  const [pageWords, setPageWords] = useState<IWord[] | []>(unstudiedWords || []);
-  const [wordsForGame, setWordsForGame] = useState<IWord[] | []>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<IWord[] | []>([]);
-  const [wrongAnswers, setWrongAnswers] = useState<IWord[] | []>([]);
+  const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
+  const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
+  const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
+  const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
+  const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+
+  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
-  const [possibleAnswers, setPossibleAnswers] = useState<string[] | []>([]);
+  const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
   const user = useSelector((state: RootState) => state.user);
-
-  function shuffleArray<T> (arr: Array<T>): Array<T> {
-    const shuffledArray = arr.slice();
-    for (let i = 0; i < shuffledArray.length; i += 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-    return shuffledArray;
-  }
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
@@ -117,16 +117,17 @@ export default function Audioсall () {
   }, [pageWords, isGameFinished, roundsNumber]);
 
   useEffect(() => {
-    const allWordsFromBookPage =
-    words.state ? (words.state as { allWordsFromPage: IWord[] }).allWordsFromPage: [];
+    const allWordsFromBookPage = stateFromBook ? stateFromBook.allWordsFromPage : [];
 
     const generateAnswers = (word: IWord): void => {
-      const arrayOfAnswers = allWordsFromBookPage || pageWords;
+      const arrayOfAnswers = allWordsFromBookPage.length > 0 ? allWordsFromBookPage : pageWords;
       const answers = [word.wordTranslate];
-      while (answers.length < answerOptionsPerRound) {
-        const ind = Math.floor(Math.random() * arrayOfAnswers.length);
-        if (arrayOfAnswers[ind].wordTranslate !== word.wordTranslate) {
-          answers.push(arrayOfAnswers[ind].wordTranslate);
+      if (arrayOfAnswers.length > 5) {
+        while (answers.length < answerOptionsPerRound) {
+          const ind = Math.floor(Math.random() * arrayOfAnswers.length);
+          if (arrayOfAnswers[ind].wordTranslate !== word.wordTranslate) {
+            answers.push(arrayOfAnswers[ind].wordTranslate);
+          }
         }
       }
       setPossibleAnswers(shuffleArray(answers));
@@ -135,7 +136,7 @@ export default function Audioсall () {
     if (wordsForGame.length > 0) {
       generateAnswers(wordsForGame[shownWordNumber]);
     }
-  }, [wordsForGame, shownWordNumber, pageWords, words.state]);
+  }, [wordsForGame, shownWordNumber, pageWords, stateFromBook]);
 
   return(
     <main className='gamesPage'>
@@ -144,12 +145,21 @@ export default function Audioсall () {
         <h2>User: {user.name}</h2>
         <h3>ID: {user.userId}</h3>
       </div>
-      {pageWords.length === 0 &&
-      <DifficultySelector
-        returnRandomWords={returnRandomWords}
-      />
+      {!isGameStarted && !isGameFinished &&
+      <>
+        {!isStartedFromBook &&
+        <DifficultySelector
+          returnRandomWords={returnRandomWords} />}
+        <Button text='Начать игру'
+          classBtn='nextRound'
+          onClick={() => {
+            if (wordsForGame.length > 0) {
+              setIsGameStarted(true);
+            }
+          }}/>
+      </>
       }
-      {!isGameFinished && pageWords.length > 0 &&
+      {!isGameFinished && isGameStarted &&
       <section className='gameSection'>
         {
           wordsForGame.length > 0 &&
@@ -202,6 +212,7 @@ export default function Audioсall () {
           classBtn='nextRound'
           onClick={() => {
             setIsGameFinished(false);
+            setIsGameStarted(false);
             setIsAnswerGiven(false);
             setCorrectAnswers([]);
             setWrongAnswers([]);

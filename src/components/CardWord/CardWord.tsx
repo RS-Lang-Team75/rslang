@@ -23,7 +23,7 @@ interface CardWordProps {
 export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordProps) : JSX.Element{
   const [difficult,setDifficult] = useState(false);
   const [studied,setStudied] = useState(false);
-  const [gameScore,setGameScore] = useState({ correct: 0,wrong: 0 });
+  const [gameScore,setGameScore] = useState({ correct: 0, wrong: 0 });
   const user = useSelector((state: RootState) => state.user);
   const  wordId = word.id || word._id;
 
@@ -62,7 +62,7 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
         if(userWordData[0].difficulty==='difficult'){setDifficult(true);}
         if(userWordData[0].difficulty==='studied'){setStudied(true);}
         if(userWordData[0].optional){
-          setGameScore(userWordData[0].optional.audiocall);};
+          setGameScore(userWordData[0].optional.allGames);};
       }
     }
     checkDifficultWords();

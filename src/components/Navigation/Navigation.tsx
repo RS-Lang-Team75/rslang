@@ -37,6 +37,7 @@ export function Navigation (): JSX.Element {
           {[
             ['Учебник', '/book'],
             ['Аудиовызов', '/audiocall'],
+            ['Спринт', '/sprint'],
             ['Статистика', '/statistic'],
             ['Команда', '/team'],
           ].map(([title, url]) => (
@@ -82,6 +83,7 @@ export function Navigation (): JSX.Element {
                 ['LOGIN', '/login'],
                 ['Учебник', '/book'],
                 ['Аудиовызов', '/audiocall'],
+                ['Спринт', '/sprint'],
                 ['Статистика', '/statistic'],
                 ['Команда', '/team'],
               ].map(([title, url]) => (

@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Footer } from './components/Footer/Footer';
 import Audioсall from './components/Games/Audiocall/Audiocall';
+import Sprint from './components/Games/Sprint/Sprint';
 import { Navigation } from './components/Navigation/Navigation';
 import { BookPage } from './pages/BookPage/BookPage';
 import { LoginPage } from './pages/LoginPage/LoginPage';
@@ -16,6 +17,7 @@ export const App = (): JSX.Element =>  (
       <Route path='/' element={<MainPage/>} />
       <Route path='/book' element={<BookPage/>} />
       <Route path='/audiocall' element={<Audioсall/>} />
+      <Route path='/sprint' element={<Sprint />} />
       <Route path='/statistic' element={<StatisticsPage/>} />
       <Route path='/team' element={<TeamPage/>} />
       <Route path='/login' element={<LoginPage/>} />
