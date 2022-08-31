@@ -6,6 +6,18 @@
   @apply flex flex-col align-middle items-center justify-center;
 }
 
-.nextRound {
-  @apply border-2 border-gray-400 uppercase py-2 px-6 my-2 rounded-full hover:bg-sky-200 active:bg-sky-400 active:border-transparent;
+.answerButtonsContainer {
+  @apply flex justify-center;
+}
+
+.answerBtn{
+  @apply block border-2 mx-0 uppercase py-2 px-6 my-2 rounded-full hover:bg-sky-200 active:border-transparent;
+}
+
+.leftBtn {
+  @apply border-red-500 active:bg-red-500 rounded-r-none hover:bg-red-200;
+}
+
+.rightBtn {
+  @apply border-green-500 active:bg-green-500 rounded-l-none hover:bg-green-200;
 }
