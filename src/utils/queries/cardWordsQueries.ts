@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
+import { getStatisticsData } from './statisticQueries';
+
 import { UserState } from '../slices/userSlice';
 
 import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
@@ -26,7 +28,7 @@ type WordQueryFunction = (
 
 const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
-export const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
+const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
   'Authorization': token ? `Bearer ${token}` : '',
   'Accept': 'application/json',
   'Content-Type': 'application/json',
@@ -194,6 +196,7 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
     if(err.response){
       const res = err.response as AxiosResponse;
       if(res.status === 404 && wordStatus){
+        await getStatisticsData(user, 'newWord');
         if (addGameStats) {
           await postUserWordData(
             user,

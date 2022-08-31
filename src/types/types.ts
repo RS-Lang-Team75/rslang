@@ -34,3 +34,20 @@ export interface IResponseAggregated{
   paginatedResults: IWord[];
   totalCount:[{count: number}];
 }
+
+export interface UserStatistics {
+  learnedWords:number;
+  optional:StatisticsStates;
+}
+export interface StatisticsStates{
+  stateLearnedByDay:string;
+  stateNewWords:string;
+  stateLearnedLong:string;
+}
+export interface StatisticsByDay{
+  // [key:string]:number|number;
+  date?:string;
+  learnedWordsByDay?: number;
+  newWords?: number;
+  learnedWordsLong?:number;
+}
