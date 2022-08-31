@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Countdown from '../Countdown/Countdown';
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
@@ -14,13 +14,34 @@ import { getWordsQuery } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
 import './Sprint.pcss';
 
+interface SprintWord {
+  wordEnglish: string;
+  wordTranslation: string;
+  isAnswerCorrect: boolean;
+}
+
+interface PageAndGroup {
+  page: number;
+  group: number;
+}
+
 export default function Sprint () {
 
-  const [currentGroup, setCurrentGroup] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const emptySprintWord = {
+    wordEnglish: '',
+    wordTranslation: '',
+    isAnswerCorrect: false,
+  };
+
+  // const [currentGroup, setCurrentGroup] = useState<number>(0);
+  const PageAndGroupRef = useRef<PageAndGroup>({
+    page: 0,
+    group: 0,
+  });
 
   const [pageWords, setPageWords] = useState<IWord[]>([]);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
+
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
 
@@ -29,20 +50,19 @@ export default function Sprint () {
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
-  const [currentWordEnglish, setCurrentWordEnglish] = useState<string>('');
-  const [currentWordTranslation, setCurrentWordTranslation] = useState<string>('');
-  const [currentAnswer, setCurrentAnswer] = useState<boolean>(false);
+  const [sprintWord, setSprintWord] = useState<SprintWord>(emptySprintWord);
 
   const user = useSelector((state: RootState) => state.user);
 
-  console.log('render!');
   const addWordsDelta = 3;
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
-    setCurrentGroup(group);
-    setCurrentPage(page < 29 ? page + 1 : 0);
+    PageAndGroupRef.current = {
+      page: page < 29 ? page + 1 : 0,
+      group,
+    };
   };
 
   const onTimerEnd = () => {
@@ -67,30 +87,45 @@ export default function Sprint () {
   }, [pageWords, isGameFinished, isGameStarted]);
 
   useEffect(() => {
+    let isGetWordsHappen = false;
     const prepareWord = () => {
-      setCurrentWordEnglish(wordsForGame[shownWordNumber].word);
       const dice = Math.random();
+
       if (dice < 0.5) {
         // take random translation (answer is false)
         const delta = Math.ceil(dice * (wordsForGame.length - shownWordNumber - 1));
-        setCurrentWordTranslation(wordsForGame[shownWordNumber + delta].wordTranslate);
-        setCurrentAnswer(false);
-      } else {
+        setSprintWord({
+          wordEnglish: wordsForGame[shownWordNumber].word,
+          wordTranslation: wordsForGame[shownWordNumber + delta].wordTranslate,
+          isAnswerCorrect: false,
+        });
+      }
+      else {
         // (answer is true)
-        setCurrentWordTranslation(wordsForGame[shownWordNumber].wordTranslate);
-        setCurrentAnswer(true);
+        setSprintWord({
+          wordEnglish: wordsForGame[shownWordNumber].word,
+          wordTranslation: wordsForGame[shownWordNumber].wordTranslate,
+          isAnswerCorrect: true,
+        });
       }
     };
-    console.log('useEffect!');
-    if (wordsForGame.length > 0) {
-      prepareWord();
-    }
+
     if (isGameStarted && (wordsForGame.length - shownWordNumber < addWordsDelta)) {
-      returnRandomWords(currentPage, currentGroup).catch(err => {throw new Error(err as string);});
+      const { page, group } = PageAndGroupRef.current;
+      returnRandomWords(page, group)
+        .catch(err => {
+          if (typeof err === 'string') {
+            throw new Error(err);
+          }
+        });
+      isGetWordsHappen = true;
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shownWordNumber, wordsForGame]);
+    if (wordsForGame.length > 0 && !isGetWordsHappen) {
+      prepareWord();
+    }
+
+  }, [isGameStarted, shownWordNumber, wordsForGame]);
 
   return(
     <main className='gamesPage'>
@@ -116,13 +151,13 @@ export default function Sprint () {
           <>
             <Countdown onTimerEnd={onTimerEnd} />
             <div className="flex justify-center gap-5">
-              <div>{currentWordEnglish}</div>
+              <div>{sprintWord.wordEnglish}</div>
               <div>ЭТО</div>
-              <div>{currentWordTranslation}</div>
+              <div>{sprintWord.wordTranslation}</div>
               <div>?????</div>
             </div>
             <GameButton
-              text={currentAnswer.toString()}
+              text={sprintWord.isAnswerCorrect.toString()}
               classBtn='nextRound'
               onClick={() => setShownWordNumber(n => n+1)}
               simulatedButtonCode="Space"/>
