@@ -39,7 +39,7 @@ const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
 
 const getDate = ():string=>{
   const date = new Date();
-  return`${date.getFullYear()} ${date.toDateString().substr(4, 3)} ${date.getDate()}`;
+  return`${date.getFullYear()} ${date.toDateString().substring(4, 7)} ${date.getDate()}`;
 };
 
 export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
@@ -58,9 +58,12 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
 
     let stateLen = stateStudiedWordsByDayParse.length;
     let lastSign = stateStudiedWordsByDayParse[stateLen - 1];
-    if(stateLen <= 1 ){
+    if(stateLen === 0 ){
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: allStudiedWords });
+    }else if(stateLen === 1 ){
+      stateStudiedWordsForAllTimeParse[0].learnedWordsLong = allStudiedWords;
+      stateStudiedWordsByDayParse[0].learnedWordsByDay = allStudiedWords;
     }else if(stateLen > 1 && lastSign.date !== today){
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       let studiedWordsByDay = allStudiedWords - (lastSign.learnedWordsByDay as number);
@@ -160,8 +163,10 @@ export const statisticsForStudiedWords:GetStudiedWordFunction = async user=>{
     const response = await axios.get<IResponseAggregated[]>(
       `${SERVER_URL}/users/${user.userId}/aggregatedWords?wordsPerPage=3600&filter={"$and":[{"userWord.difficulty":"studied"}]}`,
       setWordsAxiosConfig(user.token));
-
-    const allStudiedWords = response.data[0].totalCount[0].count;
+    console.log(response.data);
+    let allStudiedWords = 0;
+    if(response.data[0].totalCount.length > 0)
+    { allStudiedWords = response.data[0].totalCount[0].count;}
     await getStatisticsData(user,'studiedWords', allStudiedWords);
 
   } catch(e:unknown){
