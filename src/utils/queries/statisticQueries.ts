@@ -61,10 +61,10 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
     if(stateLen === 0 ){
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: allStudiedWords });
-    }else if(stateLen === 1 ){
+    }else if(stateLen === 1 && lastSign.date === today){
       stateStudiedWordsForAllTimeParse[0].learnedWordsLong = allStudiedWords;
       stateStudiedWordsByDayParse[0].learnedWordsByDay = allStudiedWords;
-    }else if(stateLen > 1 && lastSign.date !== today){
+    }else if(stateLen >= 1 && lastSign.date !== today){
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       let studiedWordsByDay = allStudiedWords - (lastSign.learnedWordsByDay as number);
       if(studiedWordsByDay<=0){studiedWordsByDay = 0;}
