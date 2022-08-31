@@ -16,11 +16,16 @@ import { RootState } from '@/utils/store/store';
 
 import './Audioсall.pcss';
 
+interface AudiocallFromBookState {
+  unstudiedWords: IWord[];
+  allWordsFromPage: IWord[];
+}
+
 export default function Audioсall () {
 
   const words = useLocation();
-  const unstudiedWords =
-    words.state ? (words.state as { unstudiedWords: IWord[] }).unstudiedWords : [];
+  const stateFromBook = words.state ? (words.state as AudiocallFromBookState) : undefined;
+  const unstudiedWords = stateFromBook ? stateFromBook.unstudiedWords : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
@@ -33,6 +38,7 @@ export default function Audioсall () {
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
+  const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
 
@@ -111,16 +117,17 @@ export default function Audioсall () {
   }, [pageWords, isGameFinished, roundsNumber]);
 
   useEffect(() => {
-    const allWordsFromBookPage =
-    words.state ? (words.state as { allWordsFromPage: IWord[] }).allWordsFromPage: [];
+    const allWordsFromBookPage = stateFromBook ? stateFromBook.allWordsFromPage : [];
 
     const generateAnswers = (word: IWord): void => {
       const arrayOfAnswers = allWordsFromBookPage.length > 0 ? allWordsFromBookPage : pageWords;
       const answers = [word.wordTranslate];
-      while (answers.length < answerOptionsPerRound) {
-        const ind = Math.floor(Math.random() * arrayOfAnswers.length);
-        if (arrayOfAnswers[ind].wordTranslate !== word.wordTranslate) {
-          answers.push(arrayOfAnswers[ind].wordTranslate);
+      if (arrayOfAnswers.length > 5) {
+        while (answers.length < answerOptionsPerRound) {
+          const ind = Math.floor(Math.random() * arrayOfAnswers.length);
+          if (arrayOfAnswers[ind].wordTranslate !== word.wordTranslate) {
+            answers.push(arrayOfAnswers[ind].wordTranslate);
+          }
         }
       }
       setPossibleAnswers(shuffleArray(answers));
@@ -129,7 +136,7 @@ export default function Audioсall () {
     if (wordsForGame.length > 0) {
       generateAnswers(wordsForGame[shownWordNumber]);
     }
-  }, [wordsForGame, shownWordNumber, pageWords, words.state]);
+  }, [wordsForGame, shownWordNumber, pageWords, stateFromBook]);
 
   return(
     <main className='gamesPage'>
@@ -138,10 +145,11 @@ export default function Audioсall () {
         <h2>User: {user.name}</h2>
         <h3>ID: {user.userId}</h3>
       </div>
-      {!isGameStarted && !isGameFinished && unstudiedWords.length === 0 &&
+      {!isGameStarted && !isGameFinished &&
       <>
+        {!isStartedFromBook &&
         <DifficultySelector
-          returnRandomWords={returnRandomWords} />
+          returnRandomWords={returnRandomWords} />}
         <Button text='Начать игру'
           classBtn='nextRound'
           onClick={() => {
