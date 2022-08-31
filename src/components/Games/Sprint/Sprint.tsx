@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -10,8 +11,9 @@ import { GameResults } from '../GameResults/GameResults';
 import { Button } from '@/components/Button/Button';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
-import { getWordsQuery } from '@/utils/queries/cardWordsQueries';
+import { getWordsQuery, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { RootState } from '@/utils/store/store';
+
 import './Sprint.pcss';
 
 interface SprintWord {
@@ -25,7 +27,17 @@ interface PageAndGroup {
   group: number;
 }
 
+interface SprintFromBookState {
+  unstudiedWords: IWord[];
+  pageFromBook: number;
+  groupFromBook: number;
+}
+
 export default function Sprint () {
+
+  const words = useLocation();
+  const stateFromBook = words.state ? (words.state as SprintFromBookState) : undefined;
+  const unstudiedWords = stateFromBook ? stateFromBook.unstudiedWords : [];
 
   const emptySprintWord = {
     wordEnglish: '',
@@ -33,13 +45,15 @@ export default function Sprint () {
     isAnswerCorrect: false,
   };
 
-  // const [currentGroup, setCurrentGroup] = useState<number>(0);
   const PageAndGroupRef = useRef<PageAndGroup>({
-    page: 0,
-    group: 0,
+    page: stateFromBook ? stateFromBook.pageFromBook + 1 : 0,
+    group: stateFromBook ? stateFromBook.groupFromBook : 0,
   });
 
-  const [pageWords, setPageWords] = useState<IWord[]>([]);
+  const gameName = 'sprint';
+  const addWordsDelta = 3;
+
+  const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
 
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
@@ -54,8 +68,6 @@ export default function Sprint () {
 
   const user = useSelector((state: RootState) => state.user);
 
-  const addWordsDelta = 3;
-
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
@@ -69,6 +81,31 @@ export default function Sprint () {
     setIsGameStarted(false);
     setIsGameFinished(true);
     setWordsForGame([]);
+  };
+
+  const checkAnswer = (answer: boolean) => {
+    if (sprintWord.isAnswerCorrect === answer) {
+      setCorrectAnswers(a => [...a, wordsForGame[shownWordNumber]]);
+      updateOrCreateUserWordData(
+        user,
+        wordsForGame[shownWordNumber].id,
+        'studied',
+        true,
+        gameName,
+        true,
+      ).catch(() => {throw new Error('Cannot update or create word');});
+    } else {
+      setWrongAnswers(a => [...a, wordsForGame[shownWordNumber]]);
+      updateOrCreateUserWordData(
+        user,
+        wordsForGame[shownWordNumber].id,
+        'learning',
+        true,
+        gameName,
+        true,
+      ).catch(() => {throw new Error('Cannot update or create word');});
+    }
+    setShownWordNumber(n => n + 1);
   };
 
   useEffect(() => {
@@ -156,11 +193,18 @@ export default function Sprint () {
               <div>{sprintWord.wordTranslation}</div>
               <div>?????</div>
             </div>
-            <GameButton
-              text={sprintWord.isAnswerCorrect.toString()}
-              classBtn='nextRound'
-              onClick={() => setShownWordNumber(n => n+1)}
-              simulatedButtonCode="Space"/>
+            <div className="answerButtonsContainer">
+              <GameButton
+                text='неверно'
+                classBtn='answerBtn leftBtn'
+                onClick={() => checkAnswer(false)}
+                simulatedButtonCode="ArrowLeft"/>
+              <GameButton
+                text='верно'
+                classBtn='answerBtn rightBtn'
+                onClick={() => checkAnswer(true)}
+                simulatedButtonCode="ArrowRight"/>
+            </div>
           </>}
         {isGameFinished && <section className='flex flex-col justify-center'>
           <h2>Game is finished!</h2>
