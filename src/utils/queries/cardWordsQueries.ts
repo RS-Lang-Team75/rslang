@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { getStatisticsData } from './statisticQueries';
+import { SERVER_URL } from './url';
 
 import { UserState } from '../slices/userSlice';
 
@@ -25,8 +26,6 @@ type WordQueryFunction = (
   gameName?: string,
   isAnswerCorrect?: boolean,
 ) => Promise<void>;
-
-const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
 const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
   'Authorization': token ? `Bearer ${token}` : '',
