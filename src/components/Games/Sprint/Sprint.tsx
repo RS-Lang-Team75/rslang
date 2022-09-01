@@ -111,6 +111,14 @@ export default function Sprint () {
     setShownWordNumber(n => n + 1);
   };
 
+  const gameReset = () => {
+    setIsGameFinished(false);
+    setCorrectAnswers([]);
+    setWrongAnswers([]);
+    setWordsForGame([]);
+    setShownWordNumber(0);
+  };
+
   useEffect(() => {
     if (pageWords.length > 0 && !isGameFinished) {
       const generateWordsForGame = (): void => {
@@ -188,7 +196,8 @@ export default function Sprint () {
                   setIsGameStarted(true);
                 }
               }}/>
-          </>}
+          </>
+        }
         {wordsForGame.length > 0 && isGameStarted &&
           <>
             <Countdown onTimerEnd={onTimerEnd} />
@@ -210,20 +219,17 @@ export default function Sprint () {
                 onClick={() => checkAnswer(true)}
                 simulatedButtonCode="ArrowRight"/>
             </div>
-          </>}
-        {isGameFinished && <section className='flex flex-col justify-center'>
-          <h2>Game is finished!</h2>
-          <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
-          <Button text='Начать сначала'
-            classBtn='nextRound'
-            onClick={() => {
-              setIsGameFinished(false);
-              setCorrectAnswers([]);
-              setWrongAnswers([]);
-              setWordsForGame([]);
-              setShownWordNumber(0);
-            }}/>
-        </section>}
+          </>
+        }
+        {isGameFinished &&
+          <section className='flex flex-col justify-center'>
+            <h2>Game is finished!</h2>
+            <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+            <Button text='Начать сначала'
+              classBtn='nextRound'
+              onClick={gameReset}
+            />
+          </section>}
       </div>
     </main>
   );
