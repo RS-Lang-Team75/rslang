@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import React, { useEffect, useState } from 'react';
 
+import AudioсallAnswers from '../AudiocallAnswers/AudiocallAnswers';
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
@@ -200,22 +201,12 @@ export default function Audioсall () {
                   { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {} }
               />
 
-              <div className='answerBtnContainer'>
-                {
-                  possibleAnswers.map((w,i) =>
-                    <GameButton classBtn='answerBtn activeAnswerBtn'
-                      key={`${w.charCodeAt(0).toString(16)}${shownWordNumber}${i*1}`}
-                      id={`${i+1}`}
-                      onClick={e => {
-                        if (!isAnswerGiven) {
-                          e.currentTarget.classList.add(checkAnswer(Number(e.currentTarget.id)));
-                          e.currentTarget.classList.remove('activeAnswerBtn');
-                        }
-                      }}
-                      text={`${i+1}. ${w}`}
-                      simulatedButtonCode={`Digit${i+1}`}/>)
-                }
-              </div>
+              <AudioсallAnswers
+                answers={possibleAnswers}
+                shownWordNumber={shownWordNumber}
+                checkAnswer={checkAnswer}
+                isAnswerGiven={isAnswerGiven}
+              />
 
             </div>
           }
@@ -228,7 +219,8 @@ export default function Audioсall () {
 
         </section>
       }
-      {isGameFinished && <section className='flex flex-col justify-center'>
+      {isGameFinished &&
+      <section className='flex flex-col justify-center'>
         <h2>Game is finished!</h2>
         <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
         <Button text='Начать сначала'
