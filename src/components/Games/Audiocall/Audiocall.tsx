@@ -120,6 +120,7 @@ export default function Audioсall () {
     setCorrectAnswers([]);
     setWrongAnswers([]);
     setShownWordNumber(0);
+    setChosenGroup(0);
   };
 
   useEffect(() => {
