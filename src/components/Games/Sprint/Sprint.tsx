@@ -117,6 +117,7 @@ export default function Sprint () {
     setWrongAnswers([]);
     setWordsForGame([]);
     setShownWordNumber(0);
+    setChosenGroup(0);
   };
 
   useEffect(() => {
