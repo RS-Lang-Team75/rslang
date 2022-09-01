@@ -12,6 +12,7 @@ import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
 import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
+import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
 import './Audioсall.pcss';
@@ -26,12 +27,14 @@ export default function Audioсall () {
   const words = useLocation();
   const stateFromBook = words.state ? (words.state as AudiocallFromBookState) : undefined;
   const unstudiedWords = stateFromBook ? stateFromBook.unstudiedWords : [];
+  const allWordsFromBookPage = stateFromBook ? stateFromBook.allWordsFromPage : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
   const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
   const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
+  const [pageWordsFromBook] = useState<IWord[]>(allWordsFromBookPage);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
@@ -117,10 +120,11 @@ export default function Audioсall () {
   }, [pageWords, isGameFinished, roundsNumber]);
 
   useEffect(() => {
-    const allWordsFromBookPage = stateFromBook ? stateFromBook.allWordsFromPage : [];
 
     const generateAnswers = (word: IWord): void => {
-      const arrayOfAnswers = allWordsFromBookPage.length > 0 ? allWordsFromBookPage : pageWords;
+      const arrayOfAnswers = pageWordsFromBook.length > 0 ? pageWordsFromBook : pageWords;
+      // проверка, чтобы избежать перегенерации ответов при клике на Audiocall в шапке при открытой странице
+      console.log(arrayOfAnswers);
       const answers = [word.wordTranslate];
       if (arrayOfAnswers.length > 5) {
         while (answers.length < answerOptionsPerRound) {
@@ -129,14 +133,15 @@ export default function Audioсall () {
             answers.push(arrayOfAnswers[ind].wordTranslate);
           }
         }
+        console.log('generate possible answers!');
+        setPossibleAnswers(shuffleArray(answers));
       }
-      setPossibleAnswers(shuffleArray(answers));
     };
 
     if (wordsForGame.length > 0) {
       generateAnswers(wordsForGame[shownWordNumber]);
     }
-  }, [wordsForGame, shownWordNumber, pageWords, stateFromBook]);
+  }, [wordsForGame, shownWordNumber, pageWords]);
 
   return(
     <main className='gamesPage'>
@@ -149,7 +154,7 @@ export default function Audioсall () {
       <>
         {!isStartedFromBook &&
         <DifficultySelector
-          returnRandomWords={returnRandomWords} />}
+          returnRandomWords={returnRandomWords}/>}
         <Button text='Начать игру'
           classBtn='nextRound'
           onClick={() => {
@@ -169,17 +174,21 @@ export default function Audioсall () {
                   word= {wordsForGame[shownWordNumber]}
                   classBtn='audioBtn'
                   playFirstOnly
-                /></div>
-
-              <div className="answerContainer">
-                {isAnswerGiven && <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
-                  {wordsForGame[shownWordNumber].wordTranslate}
-                </div>}
+                />
               </div>
 
-              <div className='answerImg'
+              <div className="answerContainer">
+                {isAnswerGiven &&
+                  <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
+                    {wordsForGame[shownWordNumber].wordTranslate}
+                  </div>
+                }
+              </div>
+
+              <div
+                className='answerImg'
                 style={isAnswerGiven ?
-                  { backgroundImage: `url(https://rslang-team75.herokuapp.com/${wordsForGame[shownWordNumber].image})` } : {}}/>
+                  { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {}}/>
 
               <div className='answerBtnContainer'>
                 {
