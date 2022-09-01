@@ -77,7 +77,7 @@ export default function Sprint () {
       page: page < 29 ? page + 1 : 0,
       group,
     };
-    setChosenGroup(group);
+    setChosenGroup(group + 1);
   };
 
   const onTimerEnd = () => {
