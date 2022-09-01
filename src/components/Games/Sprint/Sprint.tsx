@@ -53,6 +53,8 @@ export default function Sprint () {
   const gameName = 'sprint';
   const addWordsDelta = 3;
 
+  const [chosenGroup, setChosenGroup] = useState<number>(0);
+
   const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
 
@@ -75,6 +77,7 @@ export default function Sprint () {
       page: page < 29 ? page + 1 : 0,
       group,
     };
+    setChosenGroup(group);
   };
 
   const onTimerEnd = () => {
@@ -174,7 +177,9 @@ export default function Sprint () {
           <>
             {!isStartedFromBook &&
               <DifficultySelector
-                returnRandomWords={returnRandomWords} />
+                returnRandomWords={returnRandomWords}
+                chosenGroup={chosenGroup}
+              />
             }
             <Button text='Начать игру'
               classBtn='nextRound'
