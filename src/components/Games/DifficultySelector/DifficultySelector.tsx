@@ -17,6 +17,10 @@ export function DifficultySelector (props: IDiffSelector){
     await returnRandomWords(randomPage, groupNumber);
   };
 
+  const throwErrorMessage = () => {
+    throw new Error('Cannot get words');
+  };
+
   return(
     <section>
       <h4  className='selectorHeader'>Выбери уровень сложности:</h4>
@@ -26,7 +30,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='A1'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(0).catch(err => console.log(err));
+              chosePageAndGroup(0)
+                .catch(throwErrorMessage);
             }}/>
         </div>
         <div className="selectorBtnWrap">
@@ -34,7 +39,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='A2'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(1).catch(err => console.log(err));
+              chosePageAndGroup(1)
+                .catch(throwErrorMessage);
             }}/>
         </div>
         <div className="selectorBtnWrap">
@@ -42,7 +48,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='B1'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(2).catch(err => console.log(err));
+              chosePageAndGroup(2)
+                .catch(throwErrorMessage);
             }}/>
         </div>
         <div className="selectorBtnWrap">
@@ -50,7 +57,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='B2'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(3).catch(err => console.log(err));
+              chosePageAndGroup(3)
+                .catch(throwErrorMessage);
             }}/>
         </div>
         <div className="selectorBtnWrap">
@@ -58,7 +66,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='C1'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(4).catch(err => console.log(err));
+              chosePageAndGroup(4)
+                .catch(throwErrorMessage);
             }}/>
         </div>
         <div className="selectorBtnWrap">
@@ -66,7 +75,8 @@ export function DifficultySelector (props: IDiffSelector){
             text='C2'
             classBtn='btn'
             onClick={() => {
-              chosePageAndGroup(5).catch(err => console.log(err));
+              chosePageAndGroup(5)
+                .catch(throwErrorMessage);
             }}/>
         </div>
       </div>
