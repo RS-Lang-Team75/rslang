@@ -4,17 +4,14 @@ import { Line } from 'react-chartjs-2';
 import React from 'react';
 
 import './ChartStatistic.pcss';
-import { StatisticsByDay, StatisticsStates } from '@/types/types';
+import { StatisticsByDay } from '@/types/types';
 
 interface ChartStatisticProps {
-  statisticState:StatisticsStates;
+  learnedLong:StatisticsByDay[];
+  newWords:StatisticsByDay[];
 }
 
-export function ChartStatistic ({ statisticState  }:ChartStatisticProps) : JSX.Element{
-  const learnedLong:StatisticsByDay[] =
-   JSON.parse(statisticState.stateLearnedLong) as StatisticsByDay[];
-  const newWords:StatisticsByDay[] =
-   JSON.parse(statisticState.stateNewWords) as StatisticsByDay[];
+export function ChartStatistic ({ learnedLong,newWords  }:ChartStatisticProps) : JSX.Element{
 
   const options = {
     responsive: true,

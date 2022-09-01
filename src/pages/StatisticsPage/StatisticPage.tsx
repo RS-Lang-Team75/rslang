@@ -5,20 +5,17 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 import { ChartStatistic } from '@/components/ChartStatistic/ChartStatistic';
-import { UserStatistics } from '@/types/types';
+import { StatisticsByDay, UserStatistics } from '@/types/types';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
+import './StatisticsPage.pcss';
 
 export function StatisticsPage (){
-  const userStatistics:UserStatistics = {
-    learnedWords:0,
-    optional:{
-      stateLearnedByDay:'[]',
-      stateNewWords:'[]',
-      stateLearnedLong:'[]',
-    },
-  };
-  const [statisticState, setStatisticState] = useState<UserStatistics>(userStatistics);
+
+  const [learnedLongData, setLearnedLongData] = useState<StatisticsByDay[]>([]);
+  const [learnedByDayData, setLearnedByDayData] = useState<StatisticsByDay[]>([]);
+  const [newWordsData, setNewWordsData] = useState<StatisticsByDay[]>([]);
+
   const user = useSelector((state: RootState) => state.user);
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
@@ -39,8 +36,17 @@ export function StatisticsPage (){
           `${SERVER_URL}/users/${user.userId}/statistics`,
           wordsAxiosConfig);
 
-        // console.log('statistics data', response.data);
-        setStatisticState(response.data);
+        const learnedLongParse:StatisticsByDay[] =
+        JSON.parse(response.data.optional.stateLearnedLong) as StatisticsByDay[];
+        setLearnedLongData(learnedLongParse);
+
+        const learnedByDayParse:StatisticsByDay[] =
+        JSON.parse(response.data.optional.stateLearnedByDay) as StatisticsByDay[];
+        setLearnedByDayData(learnedByDayParse);
+
+        const newWordsDataParse:StatisticsByDay[] =
+        JSON.parse(response.data.optional.stateNewWords) as StatisticsByDay[];
+        setNewWordsData(newWordsDataParse);
 
       } catch (e:unknown) {
         const err = e as AxiosError;
@@ -48,14 +54,25 @@ export function StatisticsPage (){
       }
 
     };
+
     getStatistics();
   },[user]);
 
   return(
     <main>
       {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
-      {user.userId && <div className='flex w-5/6 justify-center items-center mx-auto'>
-        <ChartStatistic statisticState = {statisticState.optional}/>
+      {user.userId && <div className='dayStatisticContainer'>
+        <div className='dayStatisticBlock'>
+          <p>{newWordsData.length !== 0 ? newWordsData.slice(-1)[0].newWords : 0}</p>
+          <p>Новых слов за сегодня</p>
+        </div>
+        <div  className='dayStatisticBlock'>
+          <p>{learnedByDayData.length !== 0 ? learnedByDayData.slice(-1)[0].learnedWordsByDay : 0}</p>
+          <p>Изученных слов за сегодня</p>
+        </div>
+      </div>}
+      {user.userId && <div className='chartContainer'>
+        <ChartStatistic learnedLong = {learnedLongData} newWords={newWordsData}/>
       </div>}
 
     </main>
