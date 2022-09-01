@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { AboutTeam } from '@/components/AboutTeam/AboutTeam';
+
 export function TeamPage (){
   return(
-    <main>
-      <h1>TeamPage</h1>
+    <main className='mt-20'>
+      <AboutTeam/>
     </main>
 
   );

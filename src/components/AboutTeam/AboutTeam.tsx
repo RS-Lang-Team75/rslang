@@ -19,13 +19,6 @@ export function AboutTeam () : JSX.Element{
           gitHubLink= 'https://github.com/a-selyugin'
           telegramSvg = '#'/>
         {/* card2 */}
-        <CardMember imgLink = {ExImg}
-          memberName = "Maria Pashkovich"
-          memberRole='Frontend developer'
-          gitHubLink= 'https://github.com/pashkovichma'
-          telegramSvg = '#'/>
-        {/* TODO:add Link for Teleram */}
-        {/* card3 */}
         <CardMember imgLink = {NadezhdaImg}
           memberName = "Nadezhda Budarina"
           memberRole='Frontend developer'

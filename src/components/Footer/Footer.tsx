@@ -25,19 +25,6 @@ export function Footer (): JSX.Element {
           </a>
         </div>
         <div className="git-link">
-          <a href="https://github.com/pashkovichma"
-            rel="noreferrer noopener"
-            target="_blank">
-            <img src={GitPNG}  alt="GitHub link" />
-
-          </a>
-          <a href="https://github.com/pashkovichma"
-            rel="noreferrer noopener"
-            target="_blank">
-            <span>Maria Pashkovich</span>
-          </a>
-        </div>
-        <div className="git-link">
           <a href="https://github.com/Hopechka?tab=stars"
             rel="noreferrer noopener"
             target="_blank">
