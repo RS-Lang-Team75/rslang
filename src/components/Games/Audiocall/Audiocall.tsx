@@ -35,13 +35,14 @@ export default function Audioсall () {
 
   const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
   const [pageWordsFromBook] = useState<IWord[]>(allWordsFromBookPage);
+  const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
+
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
-  const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isAnswerGiven, setIsAnswerGiven] = useState<boolean>(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
 
@@ -89,7 +90,7 @@ export default function Audioсall () {
       }
       setIsAnswerGiven(true);
     }
-    return !isAnswerGiven ? additionalClass : '';
+    return additionalClass;
   };
 
   const revealOrNext = () => {
@@ -108,6 +109,15 @@ export default function Audioсall () {
     }
   };
 
+  const gameReset = () => {
+    setIsGameFinished(false);
+    setIsGameStarted(false);
+    setIsAnswerGiven(false);
+    setCorrectAnswers([]);
+    setWrongAnswers([]);
+    setShownWordNumber(0);
+  };
+
   useEffect(() => {
     if (pageWords.length > 0 && !isGameFinished) {
       const generateWordsForGame = (): void => {
@@ -123,9 +133,8 @@ export default function Audioсall () {
 
     const generateAnswers = (word: IWord): void => {
       const arrayOfAnswers = pageWordsFromBook.length > 0 ? pageWordsFromBook : pageWords;
-      // проверка, чтобы избежать перегенерации ответов при клике на Audiocall в шапке при открытой странице
-      console.log(arrayOfAnswers);
       const answers = [word.wordTranslate];
+
       if (arrayOfAnswers.length > 5) {
         while (answers.length < answerOptionsPerRound) {
           const ind = Math.floor(Math.random() * arrayOfAnswers.length);
@@ -133,7 +142,6 @@ export default function Audioсall () {
             answers.push(arrayOfAnswers[ind].wordTranslate);
           }
         }
-        console.log('generate possible answers!');
         setPossibleAnswers(shuffleArray(answers));
       }
     };
@@ -141,7 +149,7 @@ export default function Audioсall () {
     if (wordsForGame.length > 0) {
       generateAnswers(wordsForGame[shownWordNumber]);
     }
-  }, [wordsForGame, shownWordNumber, pageWords]);
+  }, [wordsForGame, shownWordNumber, pageWords, pageWordsFromBook]);
 
   return(
     <main className='gamesPage'>
@@ -165,10 +173,11 @@ export default function Audioсall () {
       </>
       }
       {!isGameFinished && isGameStarted &&
-      <section className='gameSection'>
-        {
-          wordsForGame.length > 0 &&
+        <section className='gameSection'>
+          {
+            wordsForGame.length > 0 &&
             <div className='gameSection'>
+
               <div className='cardAudio'>
                 <SoundButton
                   word= {wordsForGame[shownWordNumber]}
@@ -188,7 +197,8 @@ export default function Audioсall () {
               <div
                 className='answerImg'
                 style={isAnswerGiven ?
-                  { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {}}/>
+                  { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {} }
+              />
 
               <div className='answerBtnContainer'>
                 {
@@ -206,27 +216,24 @@ export default function Audioсall () {
                       simulatedButtonCode={`Digit${i+1}`}/>)
                 }
               </div>
+
             </div>
-        }
-        <GameButton
-          text={isAnswerGiven ? 'далее' : 'не знаю'}
-          classBtn='nextRound'
-          onClick={revealOrNext}
-          simulatedButtonCode="Space"/>
-      </section>}
+          }
+          <GameButton
+            text={isAnswerGiven ? 'далее' : 'не знаю'}
+            classBtn='nextRound'
+            onClick={revealOrNext}
+            simulatedButtonCode="Space"
+          />
+
+        </section>
+      }
       {isGameFinished && <section className='flex flex-col justify-center'>
         <h2>Game is finished!</h2>
         <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
         <Button text='Начать сначала'
           classBtn='nextRound'
-          onClick={() => {
-            setIsGameFinished(false);
-            setIsGameStarted(false);
-            setIsAnswerGiven(false);
-            setCorrectAnswers([]);
-            setWrongAnswers([]);
-            setShownWordNumber(0);
-          }}/>
+          onClick={gameReset}/>
       </section>}
     </main>
   );
