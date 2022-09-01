@@ -34,6 +34,8 @@ export default function Audioсall () {
   const answerOptionsPerRound = 5;
   const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
+  const [chosenGroup, setChosenGroup] = useState<number>(0);
+
   const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
   const [pageWordsFromBook] = useState<IWord[]>(allWordsFromBookPage);
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
@@ -57,6 +59,7 @@ export default function Audioсall () {
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
+    setChosenGroup(group + 1);
   };
 
   const checkAnswer = (wordIndex: number): string => {
@@ -163,7 +166,9 @@ export default function Audioсall () {
       <>
         {!isStartedFromBook &&
         <DifficultySelector
-          returnRandomWords={returnRandomWords}/>}
+          returnRandomWords={returnRandomWords}
+          chosenGroup={chosenGroup}
+        />}
         <Button text='Начать игру'
           classBtn='nextRound'
           onClick={() => {
