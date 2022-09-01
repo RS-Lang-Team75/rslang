@@ -179,28 +179,27 @@ export default function Audioсall () {
             wordsForGame.length > 0 &&
             <div className='gameSection'>
 
-              <div className='cardAudio'>
+              <div
+                className='cardAudio'>
                 <SoundButton
                   word= {wordsForGame[shownWordNumber]}
                   classBtn='audioBtn'
                   playFirstOnly
                 />
               </div>
-
-              <div className="answerContainer">
+              <div
+                className="answerContainer">
                 {isAnswerGiven &&
                   <div className= {isCorrectAnswer ? 'answerCorrect' : 'answerIncorrect'}>
                     {wordsForGame[shownWordNumber].wordTranslate}
                   </div>
                 }
               </div>
-
               <div
                 className='answerImg'
                 style={isAnswerGiven ?
                   { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {} }
               />
-
               <AudioсallAnswers
                 answers={possibleAnswers}
                 shownWordNumber={shownWordNumber}
@@ -219,14 +218,15 @@ export default function Audioсall () {
 
         </section>
       }
-      {isGameFinished &&
-      <section className='flex flex-col justify-center'>
-        <h2>Game is finished!</h2>
-        <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
-        <Button text='Начать сначала'
-          classBtn='nextRound'
-          onClick={gameReset}/>
-      </section>}
+      {
+        isGameFinished &&
+        <section className='flex flex-col justify-center'>
+          <h2>Game is finished!</h2>
+          <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+          <Button text='Начать сначала'
+            classBtn='nextRound'
+            onClick={gameReset}/>
+        </section>}
     </main>
   );
 }
