@@ -72,8 +72,10 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
       stateLen = stateStudiedWordsByDayParse.length;
       lastSign = stateStudiedWordsByDayParse[stateLen - 1];
     }else{
-      let studiedWordsByDay = allStudiedWords -
-      (stateStudiedWordsByDayParse[stateLen - 2].learnedWordsByDay as number);
+      const sumPrevLearnedWords = stateStudiedWordsByDayParse
+        .slice(0,-1)
+        .reduce((prev,cur)=> cur.learnedWordsByDay ? prev + +cur.learnedWordsByDay :0 , 0);
+      let studiedWordsByDay = allStudiedWords - sumPrevLearnedWords;
       if(studiedWordsByDay<=0){studiedWordsByDay = 0;}
       lastSign.learnedWordsByDay = studiedWordsByDay;
       stateStudiedWordsForAllTimeParse[stateLen - 1].learnedWordsLong = allStudiedWords;
