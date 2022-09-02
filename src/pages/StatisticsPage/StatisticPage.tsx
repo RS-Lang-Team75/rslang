@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -6,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { ChartStatistic } from '@/components/ChartStatistic/ChartStatistic';
 import { StatisticsByDay, UserStatistics } from '@/types/types';
-import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
+import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 import './StatisticsPage.pcss';
 
@@ -17,7 +16,6 @@ export function StatisticsPage (){
   const [newWordsData, setNewWordsData] = useState<StatisticsByDay[]>([]);
 
   const user = useSelector((state: RootState) => state.user);
-  const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
   useEffect(()=>{
     const wordsAxiosConfig: AxiosRequestConfig = {
@@ -30,7 +28,6 @@ export function StatisticsPage (){
 
     const getStatistics = async () => {
       try {
-        await statisticsForStudiedWords(user);
 
         const response = await axios.get<UserStatistics>(
           `${SERVER_URL}/users/${user.userId}/statistics`,
@@ -55,11 +52,14 @@ export function StatisticsPage (){
 
     };
 
-    getStatistics();
+    getStatistics().catch(() => {
+      throw new Error('Cannot get statistics');
+    });
   },[user]);
 
   return(
     <main>
+
       {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
       {user.userId && <div className='dayStatisticContainer'>
         <div className='dayStatisticBlock'>
@@ -76,6 +76,5 @@ export function StatisticsPage (){
       </div>}
 
     </main>
-
   );
 }
