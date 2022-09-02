@@ -55,27 +55,43 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
     let lastSign = stateStudiedWordsByDayParse[stateLen - 1];
 
     if (stateLen === 0 ) {
-      stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
-      stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: allStudiedWords });
+      stateStudiedWordsForAllTimeParse.push({
+        date: today,
+        learnedWordsLong: allStudiedWords,
+      });
+      stateStudiedWordsByDayParse.push({
+        date: today,
+        learnedWordsByDay: allStudiedWords,
+      });
     }
     else if (stateLen === 1 && lastSign.date === today) {
       stateStudiedWordsForAllTimeParse[0].learnedWordsLong = allStudiedWords;
       stateStudiedWordsByDayParse[0].learnedWordsByDay = allStudiedWords;
     }
     else if (stateLen >= 1 && lastSign.date !== today) {
-      stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
+      stateStudiedWordsForAllTimeParse.push({
+        date: today,
+        learnedWordsLong: allStudiedWords,
+      });
       let studiedWordsByDay = allStudiedWords - (lastSign.learnedWordsByDay as number);
-      if(studiedWordsByDay<=0){studiedWordsByDay = 0;}
-      stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: studiedWordsByDay });
+      if ( studiedWordsByDay <= 0 ) {
+        studiedWordsByDay = 0;
+      }
+      stateStudiedWordsByDayParse.push({
+        date: today,
+        learnedWordsByDay: studiedWordsByDay,
+      });
       stateLen = stateStudiedWordsByDayParse.length;
       lastSign = stateStudiedWordsByDayParse[stateLen - 1];
     }
     else {
       const sumPrevLearnedWords = stateStudiedWordsByDayParse
-        .slice(0,-1)
-        .reduce((prev,cur)=> cur.learnedWordsByDay ? prev + +cur.learnedWordsByDay :0 , 0);
+        .slice(0, -1)
+        .reduce(( prev, cur ) => cur.learnedWordsByDay ? prev + +cur.learnedWordsByDay :0 , 0);
       let studiedWordsByDay = allStudiedWords - sumPrevLearnedWords;
-      if(studiedWordsByDay<=0){studiedWordsByDay = 0;}
+      if (studiedWordsByDay <= 0) {
+        studiedWordsByDay = 0;
+      }
       lastSign.learnedWordsByDay = studiedWordsByDay;
       stateStudiedWordsForAllTimeParse[stateLen - 1].learnedWordsLong = allStudiedWords;
     }
@@ -114,7 +130,10 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
     let lastSign = stateNewWordsParse[stateLen - 1];
 
     if (stateLen === 0 || lastSign.date !== today) {
-      stateNewWordsParse.push({ date: today, newWords: 1 });
+      stateNewWordsParse.push({
+        date: today,
+        newWords: 1,
+      });
       stateLen = stateNewWordsParse.length;
       lastSign = stateNewWordsParse[stateLen - 1];
     }
