@@ -46,27 +46,31 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
     const { optional } = userStatisticsFromGet;
     const today = getDate();
 
-    const stateStudiedWordsByDayParse:StatisticsByDay[] =
+    const stateStudiedWordsByDayParse =
     JSON.parse(optional.stateLearnedByDay) as StatisticsByDay[];
-    const stateStudiedWordsForAllTimeParse:StatisticsByDay[] =
+    const stateStudiedWordsForAllTimeParse =
     JSON.parse(optional.stateLearnedLong) as StatisticsByDay[];
 
     let stateLen = stateStudiedWordsByDayParse.length;
     let lastSign = stateStudiedWordsByDayParse[stateLen - 1];
-    if(stateLen === 0 ){
+
+    if (stateLen === 0 ) {
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: allStudiedWords });
-    }else if(stateLen === 1 && lastSign.date === today){
+    }
+    else if (stateLen === 1 && lastSign.date === today) {
       stateStudiedWordsForAllTimeParse[0].learnedWordsLong = allStudiedWords;
       stateStudiedWordsByDayParse[0].learnedWordsByDay = allStudiedWords;
-    }else if(stateLen >= 1 && lastSign.date !== today){
+    }
+    else if (stateLen >= 1 && lastSign.date !== today) {
       stateStudiedWordsForAllTimeParse.push({ date: today, learnedWordsLong: allStudiedWords });
       let studiedWordsByDay = allStudiedWords - (lastSign.learnedWordsByDay as number);
       if(studiedWordsByDay<=0){studiedWordsByDay = 0;}
       stateStudiedWordsByDayParse.push({ date: today, learnedWordsByDay: studiedWordsByDay });
       stateLen = stateStudiedWordsByDayParse.length;
       lastSign = stateStudiedWordsByDayParse[stateLen - 1];
-    }else{
+    }
+    else {
       const sumPrevLearnedWords = stateStudiedWordsByDayParse
         .slice(0,-1)
         .reduce((prev,cur)=> cur.learnedWordsByDay ? prev + +cur.learnedWordsByDay :0 , 0);
@@ -108,11 +112,13 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
 
     let stateLen = stateNewWordsParse.length;
     let lastSign = stateNewWordsParse[stateLen - 1];
-    if(stateLen === 0 || lastSign.date !== today){
+
+    if (stateLen === 0 || lastSign.date !== today) {
       stateNewWordsParse.push({ date: today, newWords: 1 });
       stateLen = stateNewWordsParse.length;
       lastSign = stateNewWordsParse[stateLen - 1];
-    }else{
+    }
+    else {
       (lastSign.newWords as number) += 1;
     }
 
@@ -128,7 +134,7 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
     );
   } catch (e:unknown) {
     const err = e as AxiosError;
-    throw new Error(`PUT to statistics query error, ${err.message}`);
+    throw new Error(`statistics PUT query error, ${err.message}`);
   }
 };
 
@@ -147,12 +153,13 @@ export const getStatisticsData: GetWordQueryFunction = async (user, flag, allStu
 
   } catch (e: unknown) {
     const err = e as AxiosError;
-    if(err.response){
+    if (err.response) {
       const res = err.response as AxiosResponse;
-      if(res.status === 404 ){
-        if(flag === 'newWord'){await putNewWordInStatisticsData(user, userStatistics);}
+      if (res.status === 404 && flag === 'newWord') {
+        await putNewWordInStatisticsData(user, userStatistics);
       }
-    } else {
+    }
+    else {
       throw new Error(`GET to statistic query error, ${err.message}`);
     }
   }
@@ -163,14 +170,17 @@ export const statisticsForStudiedWords:GetStudiedWordFunction = async user=>{
     const response = await axios.get<IResponseAggregated[]>(
       `${SERVER_URL}/users/${user.userId}/aggregatedWords?wordsPerPage=3600&filter={"$and":[{"userWord.difficulty":"studied"}]}`,
       setAxiosConfig(user.token));
+
     let allStudiedWords = 0;
-    if(response.data[0].totalCount.length > 0)
-    { allStudiedWords = response.data[0].totalCount[0].count;}
+
+    if (response.data[0].totalCount.length > 0) {
+      allStudiedWords = response.data[0].totalCount[0].count;
+    }
+
     await getStatisticsData(user,'studiedWords', allStudiedWords);
 
-  } catch(e:unknown){
+  } catch (e:unknown) {
     const err = e as AxiosError;
     throw new Error(`Studied statistic query error, ${err.message}`);
   }
-
 };
