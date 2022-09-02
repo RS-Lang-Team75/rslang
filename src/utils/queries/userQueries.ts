@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { setAxiosConfig } from './headers';
 import { SERVER_URL } from './url';
 
 import { UserCredentials } from '@/types/userTypes';
@@ -12,18 +13,11 @@ export interface UserResponse {
   name: string;
 }
 
-const axiosConfig = {
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-  },
-};
-
 export const createUser = async (user: UserCredentials): Promise<UserResponse> => {
   const response = await axios.post<UserResponse>(
     `${SERVER_URL}/users`,
     user,
-    axiosConfig);
+    setAxiosConfig());
   return response.data;
 };
 
@@ -31,6 +25,6 @@ export const signIn =async (user: UserCredentials): Promise<UserResponse> => {
   const response = await axios.post<UserResponse>(
     `${SERVER_URL}/signin`,
     user,
-    axiosConfig);
+    setAxiosConfig());
   return response.data;
 };

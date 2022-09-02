@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
+import { setAxiosConfig } from './headers';
 import { getStatisticsData } from './statisticQueries';
 import { SERVER_URL } from './url';
 
@@ -26,12 +27,6 @@ type WordQueryFunction = (
   gameName?: string,
   isAnswerCorrect?: boolean,
 ) => Promise<void>;
-
-const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
-  'Authorization': token ? `Bearer ${token}` : '',
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-} });
 
 const answer = {
   correct: 'correct',
@@ -67,7 +62,7 @@ const setStatusWordData = (wordDifficulty:string): IDifficulty =>
 export const getWordsQuery = async (page: number, group: number): Promise<IWord[]> => {
   const response = await axios.get<IWord[]>(
     `${SERVER_URL}/words?group=${group}&page=${page}`,
-    setWordsAxiosConfig());
+    setAxiosConfig());
   return response.data;
 };
 
@@ -76,7 +71,7 @@ export const getUserWordData: GetWordQueryFunction = async (
   wordId,
 ) => (await axios.get<IDifficulty>(
   `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
-  setWordsAxiosConfig(user.token),
+  setAxiosConfig(user.token),
 )).data;
 
 const postUserWordData: WordQueryFunction = async (
@@ -103,7 +98,7 @@ const postUserWordData: WordQueryFunction = async (
     await axios.post<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
       wordData,
-      setWordsAxiosConfig(user.token),
+      setAxiosConfig(user.token),
     );
   }
   catch (e:unknown) {
@@ -151,7 +146,7 @@ export const putWordInDifficultData: UpdateWordQueryFunction = async (
     await axios.put<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
       wordData,
-      setWordsAxiosConfig(user.token),
+      setAxiosConfig(user.token),
     );
   } catch (e:unknown) {
     const err = e as AxiosError;
@@ -171,7 +166,7 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
   try {
     const userWordData = (await axios.get<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
-      setWordsAxiosConfig(user.token),
+      setAxiosConfig(user.token),
     )).data;
     if (addGameStats) {
       await putWordInDifficultData(
@@ -188,9 +183,9 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
     }
   } catch (e: unknown) {
     const err = e as AxiosError;
-    if(err.response){
+    if (err.response) {
       const res = err.response as AxiosResponse;
-      if(res.status === 404 && wordStatus){
+      if (res.status === 404 && wordStatus) {
         await getStatisticsData(user, 'newWord');
         if (addGameStats) {
           await postUserWordData(
@@ -214,12 +209,12 @@ export const getStudiedWords  = async (user:UserState, wordPage:number, wordGrou
   try {
     const response = await axios.get<IResponseAggregated[]>(
       `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${wordGroup}&filter={"$and":[{"page":${wordPage}},{"userWord.difficulty":"studied"}]}`,
-      setWordsAxiosConfig(user.token));
+      setAxiosConfig(user.token));
     return response.data[0].paginatedResults;
-  } catch(e:unknown){
+  }
+  catch (e:unknown) {
     const err = e as AxiosError;
     throw new Error(err.message);
-
   }
 
 };

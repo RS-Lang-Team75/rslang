@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
+import { setAxiosConfig } from './headers';
 import { SERVER_URL } from './url';
 
 import { UserState } from '../slices/userSlice';
@@ -30,12 +31,6 @@ const userStatistics:UserStatistics = {
     stateLearnedLong:'[]',
   },
 };
-
-const setWordsAxiosConfig = (token?:string): AxiosRequestConfig => ({ headers: {
-  'Authorization': token ? `Bearer ${token}` : '',
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-} });
 
 const getDate = ():string=>{
   const date = new Date();
@@ -90,7 +85,7 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
     await axios.put<UserStatistics>(
       `${SERVER_URL}/users/${user.userId}/statistics`,
       userStatistics,
-      setWordsAxiosConfig(user.token),
+      setAxiosConfig(user.token),
     );
 
   } catch(e:unknown){
@@ -129,7 +124,7 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
     await axios.put<UserStatistics>(
       `${SERVER_URL}/users/${user.userId}/statistics`,
       userStatistics,
-      setWordsAxiosConfig(user.token),
+      setAxiosConfig(user.token),
     );
   } catch (e:unknown) {
     const err = e as AxiosError;
@@ -141,7 +136,7 @@ export const getStatisticsData: GetWordQueryFunction = async (user, flag, allStu
   try {
     const response = await axios.get<UserStatistics>(
       `${SERVER_URL}/users/${user.userId}/statistics`,
-      setWordsAxiosConfig(user.token));
+      setAxiosConfig(user.token));
 
     if(flag === 'newWord') {
       await putNewWordInStatisticsData(user, response.data);
@@ -167,7 +162,7 @@ export const statisticsForStudiedWords:GetStudiedWordFunction = async user=>{
   try {
     const response = await axios.get<IResponseAggregated[]>(
       `${SERVER_URL}/users/${user.userId}/aggregatedWords?wordsPerPage=3600&filter={"$and":[{"userWord.difficulty":"studied"}]}`,
-      setWordsAxiosConfig(user.token));
+      setAxiosConfig(user.token));
     let allStudiedWords = 0;
     if(response.data[0].totalCount.length > 0)
     { allStudiedWords = response.data[0].totalCount[0].count;}
