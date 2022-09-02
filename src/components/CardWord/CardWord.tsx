@@ -12,6 +12,7 @@ import { SoundButton } from '../SoundButton/SoundButton';
 
 import { IDifficulty, IWord } from '@/types/types';
 import { getStudiedWords, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
+import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
@@ -43,6 +44,7 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
     await updateOrCreateUserWordData(user, wordId, wordStatus);
     const studiedWords = await getStudiedWords(user,word.page,word.group);
     studiedWordMessage(studiedWords.length === 20);
+    await statisticsForStudiedWords(user);
   };
 
   const addWordInStudiedData= async ():Promise<void> =>{
@@ -52,7 +54,7 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
     await updateOrCreateUserWordData(user, wordId, wordStatus);
     const studiedWords = await getStudiedWords(user,word.page,word.group);
     studiedWordMessage(studiedWords.length === 20);
-
+    await statisticsForStudiedWords(user);
   };
 
   useEffect(()=>{

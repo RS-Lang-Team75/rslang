@@ -13,6 +13,7 @@ import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
 import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
+import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
@@ -97,13 +98,18 @@ export default function Audioсall () {
     return additionalClass;
   };
 
-  const revealOrNext = () => {
+  const refreshStatistics =async () => {
+    await statisticsForStudiedWords(user);
+  };
+
+  const revealOrNext = async () => {
     if (isAnswerGiven) {
       if (shownWordNumber < wordsForGame.length - 1) {
         setShownWordNumber(n => n + 1);
       } else {
         setShownWordNumber(0);
         setIsGameFinished(true);
+        await refreshStatistics();
       }
       setIsAnswerGiven(false);
       setIsCorrectAnswer(false);
@@ -218,7 +224,12 @@ export default function Audioсall () {
           <GameButton
             text={isAnswerGiven ? 'далее' : 'не знаю'}
             classBtn='nextRound'
-            onClick={revealOrNext}
+            onClick={() => {
+              revealOrNext()
+                .catch(() => {
+                  throw new Error('Cannot show next word');
+                });
+            }}
             simulatedButtonCode="Space"
           />
 

@@ -92,10 +92,6 @@ const postUserWordData: WordQueryFunction = async (
     if (addGameStats && gameName) {
       optional[gameName] = structuredClone(initialGameStats);
       optional[allGames] = structuredClone(initialGameStats);
-      // Object.assign(optional[gameName], initialGameStats);
-      // Object.assign(optional[allGames], initialGameStats);
-      // optional[gameName] = initialGameStats;
-      // optional[allGames] = initialGameStats;
       if (isAnswerCorrect) {
         optional[gameName][correct] = 1;
         optional[allGames][correct] = 1;

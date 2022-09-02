@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
+import { SERVER_URL } from './url';
+
 import { UserState } from '../slices/userSlice';
 
 import { IResponseAggregated, StatisticsByDay, UserStatistics } from '@/types/types';
@@ -19,8 +21,6 @@ type GetWordQueryFunction = (
 type GetStudiedWordFunction = (
   user: UserState
 ) => Promise<void>;
-
-const SERVER_URL = 'https://rslang-team75.herokuapp.com';
 
 const userStatistics:UserStatistics = {
   learnedWords:0,
@@ -94,8 +94,8 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
   } catch(e:unknown){
     const err = e as AxiosError;
     throw new Error(`PUT to studied statistic query error, ${err.message}`);
-
   }
+
 };
 
 export const putNewWordInStatisticsData: PutWordQueryFunction = async (
@@ -142,8 +142,12 @@ export const getStatisticsData: GetWordQueryFunction = async (user, flag, allStu
       `${SERVER_URL}/users/${user.userId}/statistics`,
       setWordsAxiosConfig(user.token));
 
-    if(flag === 'newWord'){await putNewWordInStatisticsData(user, response.data);}
-    if(flag === 'studiedWords'){await putStudiedWordInStatisticsData(user, response.data,allStudiedWords);}
+    if(flag === 'newWord') {
+      await putNewWordInStatisticsData(user, response.data);
+    }
+    if(flag === 'studiedWords') {
+      await putStudiedWordInStatisticsData(user, response.data, allStudiedWords);
+    }
 
   } catch (e: unknown) {
     const err = e as AxiosError;
@@ -163,7 +167,6 @@ export const statisticsForStudiedWords:GetStudiedWordFunction = async user=>{
     const response = await axios.get<IResponseAggregated[]>(
       `${SERVER_URL}/users/${user.userId}/aggregatedWords?wordsPerPage=3600&filter={"$and":[{"userWord.difficulty":"studied"}]}`,
       setWordsAxiosConfig(user.token));
-    console.log(response.data);
     let allStudiedWords = 0;
     if(response.data[0].totalCount.length > 0)
     { allStudiedWords = response.data[0].totalCount[0].count;}
@@ -172,6 +175,6 @@ export const statisticsForStudiedWords:GetStudiedWordFunction = async user=>{
   } catch(e:unknown){
     const err = e as AxiosError;
     throw new Error(`Studied statistic query error, ${err.message}`);
-
   }
+
 };

@@ -12,6 +12,7 @@ import { Button } from '@/components/Button/Button';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
 import { getWordsQuery, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
+import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 
 import './Sprint.pcss';
@@ -175,6 +176,15 @@ export default function Sprint () {
     }
 
   }, [isGameStarted, shownWordNumber, wordsForGame]);
+
+  useEffect(() => {
+    if (isGameFinished) {
+      statisticsForStudiedWords(user)
+        .catch(() => {
+          throw new Error('Cannot show next word');
+        });
+    }
+  }, [isGameFinished, user]);
 
   return(
     <main className='gamesPage'>
