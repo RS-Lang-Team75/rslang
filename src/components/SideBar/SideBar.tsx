@@ -9,7 +9,6 @@ interface SideBarProps {
   onChange:(g:number)=>void;
 }
 
-// TODO refactor switch with object
 export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
@@ -27,13 +26,13 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
     'bg-purple-100'];
 
   const [sectionActive, setSectionActive] = useState<string[][]>([
-    ['bookSection firstSection', (savedGroup === 0 ? sectionsBgColor[0]:'') ],
-    ['bookSection secondSection',(savedGroup === 1 ? sectionsBgColor[1]:'')],
-    ['bookSection thirdSection', (savedGroup === 2 ? sectionsBgColor[2]:'') ],
-    ['bookSection fourthSection', (savedGroup === 3 ? sectionsBgColor[3]:'') ],
-    ['bookSection fifthSection', (savedGroup === 4 ? sectionsBgColor[4]:'') ],
-    ['bookSection sixthSection', (savedGroup === 5 ? sectionsBgColor[5]:'') ],
-    ['bookSection seventhSection', (savedGroup === 6 ? sectionsBgColor[6]:'') ],
+    ['bookSection firstSection', (savedGroup === 0 ? sectionsBgColor[0]:'')],
+    ['bookSection secondSection', (savedGroup === 1 ? sectionsBgColor[1]:'')],
+    ['bookSection thirdSection', (savedGroup === 2 ? sectionsBgColor[2]:'')],
+    ['bookSection fourthSection', (savedGroup === 3 ? sectionsBgColor[3]:'')],
+    ['bookSection fifthSection', (savedGroup === 4 ? sectionsBgColor[4]:'')],
+    ['bookSection sixthSection', (savedGroup === 5 ? sectionsBgColor[5]:'')],
+    ['bookSection seventhSection', (savedGroup === 6 ? sectionsBgColor[6]:'')],
   ]);
 
   const sectionChoose = ({ currentTarget }: MouseEvent | KeyboardEvent)=>{
@@ -43,7 +42,7 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
     const menuItemIndex = sections.findIndex(item=> item === menuItemClass);
 
     setSectionActive(
-      sectionActive.map(item=> item.length>1 ? item.slice(0,1):item)
+      sectionActive.map(item=> item.length > 1 ? item.slice(0,1) : item)
         .map((item, index) => {
           if (index === menuItemIndex){
             item.push(sectionsBgColor[index]);
@@ -74,7 +73,8 @@ export function SideBar ({ onChange }:SideBarProps) : JSX.Element{
             <ul className="space-y-2" role="menu">
               {sectionActive.map((section,index)=>
                 <li key = {sectionsBgColor[index]}>
-                  <div className={section.join(' ')}
+                  <div
+                    className={section.join(' ')}
                     onClick = {sectionChoose}
                     onKeyPress={sectionChoose}
                     role="menuitem"
