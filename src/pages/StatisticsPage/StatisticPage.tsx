@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 
 import { useEffect, useState } from 'react';
 
-import { ChartStatistic } from '@/components/ChartStatistic/ChartStatistic';
+import { ChartStatistic } from '@/components/Charts/ChartStatistic/ChartStatistic';
+import { DoughnutStatistic } from '@/components/Charts/DoughnutStatistic/DoughnutStatistic';
 import { StatisticsByDay, UserStatistics } from '@/types/types';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
@@ -63,13 +64,14 @@ export function StatisticsPage (){
       {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
       {user.userId && <div className='dayStatisticContainer'>
         <div className='dayStatisticBlock'>
-          <p>{newWordsData.length !== 0 ? newWordsData.slice(-1)[0].newWords : 0}</p>
+          <p className='wordsNumber'>{newWordsData.length !== 0 ? newWordsData.slice(-1)[0].newWords : 0}</p>
           <p>Новых слов за сегодня</p>
         </div>
         <div  className='dayStatisticBlock'>
-          <p>{learnedByDayData.length !== 0 ? learnedByDayData.slice(-1)[0].learnedWordsByDay : 0}</p>
+          <p className='wordsNumber'>{learnedByDayData.length !== 0 ? learnedByDayData.slice(-1)[0].learnedWordsByDay : 0}</p>
           <p>Изученных слов за сегодня</p>
         </div>
+        <DoughnutStatistic/>
       </div>}
       {user.userId && <div className='chartContainer'>
         <ChartStatistic learnedLong = {learnedLongData} newWords={newWordsData}/>
