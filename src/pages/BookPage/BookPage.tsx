@@ -9,7 +9,7 @@ import './BookPage.pcss';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
-import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
+import { IResponseAggregated, IWord } from '@/types/types';
 import { getStudiedWords } from '@/utils/queries/cardWordsQueries';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
@@ -20,7 +20,7 @@ export function BookPage () : JSX.Element{
   const savedGroup = Number(localStorage.getItem('currentGroup'));
 
   const [words, setWords] = useState<IWord[]>([]);
-  const [difficultWords, setDifficultWords] = useState<IDifficulty[]>([]);
+  const [difficultWords, setDifficultWords] = useState<IWord[]>([]);
   const [page, setPage] = useState<number>(savedPage || 0);
   const [group, setGroup] = useState<number>(savedGroup || 0);
   const [isGroupSix, setIsGroupSix] = useState<boolean>(false);
@@ -39,11 +39,15 @@ export function BookPage () : JSX.Element{
       },
     };
 
-    const getDataDifficultWords = async (): Promise<void> => {
-      const responseDifficultWord = await axios.get<IDifficulty[]>(
-        `${SERVER_URL}/users/${user.userId}/words`,
+    const getDataDifficultWords = async (pageDif:number, groupDif:number): Promise<void> => {
+      // const responseDifficultWord = await axios.get<IDifficulty[]>(
+      //   `${SERVER_URL}/users/${user.userId}/words`,
+      //   wordsAxiosConfig);
+      const response = await axios.get<IResponseAggregated[]>(
+        `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${groupDif}&filter={"$or":[{"$and":[{"page":${pageDif}},{"userWord.difficulty":"studied"}]},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}`,
         wordsAxiosConfig);
-      setDifficultWords(responseDifficultWord.data);
+      console.log(response.data[0].paginatedResults);
+      setDifficultWords(response.data[0].paginatedResults);
     };
 
     async function fetchWord (p = 0,g = 0 ) {
@@ -53,14 +57,14 @@ export function BookPage () : JSX.Element{
           const response = await axios.get<IResponseAggregated[]>(
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
             wordsAxiosConfig);
-          await getDataDifficultWords();
+          await getDataDifficultWords(p,g);
           setTotalPages(Math.ceil(response.data[0].totalCount[0].count/20)-1);
           setWords(response.data[0].paginatedResults);
         }else{
           const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
           if(g !== 6 ) {setTotalPages(TOTAL_PAGES);}else{setTotalPages(0);}
           if(user.userId){
-            await getDataDifficultWords();
+            await getDataDifficultWords(p,g);
             const studiedWords = await getStudiedWords(user,p,g);
             setPageStudied(studiedWords.length === 20);
           }
@@ -112,7 +116,7 @@ export function BookPage () : JSX.Element{
               className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
               state={{
                 unstudiedWords: words.filter(w =>
-                  !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')),
+                  !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
                 allWordsFromPage: words,
               }}
             >Попробовать Аудиовызов</Link>
@@ -122,7 +126,7 @@ export function BookPage () : JSX.Element{
               className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
               state={{
                 unstudiedWords: words.filter(w =>
-                  !difficultWords.find(dw => dw.wordId === w.id && dw.difficulty === 'studied')),
+                  !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
                 pageFromBook: page,
                 groupFromBook: group,
               }}
