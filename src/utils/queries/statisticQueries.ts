@@ -133,7 +133,6 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
     );
   } catch (e:unknown) {
     const err = e as AxiosError;
-
     throw new Error(`PUT to statistics query error, ${err.message}`);
   }
 };

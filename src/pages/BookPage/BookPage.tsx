@@ -11,6 +11,7 @@ import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
 import { getStudiedWords } from '@/utils/queries/cardWordsQueries';
+import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
 export function BookPage () : JSX.Element{
@@ -20,17 +21,15 @@ export function BookPage () : JSX.Element{
 
   const [words, setWords] = useState<IWord[]>([]);
   const [difficultWords, setDifficultWords] = useState<IDifficulty[]>([]);
-  const [page, setPage] = useState(savedPage || 0);
-  const [group, setGroup] = useState(savedGroup || 0);
-  const [isGroupSix, setIsGroupSix] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [pageStudied, setPageStudied] = useState(false);
+  const [page, setPage] = useState<number>(savedPage || 0);
+  const [group, setGroup] = useState<number>(savedGroup || 0);
+  const [isGroupSix, setIsGroupSix] = useState<boolean>(false);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [pageStudied, setPageStudied] = useState<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
-  const SERVER_URL = 'https://rslang-team75.herokuapp.com';
   const TOTAL_PAGES = 29;
 
-  // TODO: ошибка no-floating-promises не решена
   useEffect(()=>{
     const wordsAxiosConfig: AxiosRequestConfig = {
       headers: {
@@ -69,13 +68,15 @@ export function BookPage () : JSX.Element{
         }
 
       } catch (e:unknown) {
-        const error = e as AxiosError;
-        console.log(error);
+        const err = e as AxiosError;
+        throw new Error(err.message);
       }
 
     }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchWord(page,group);
+
+    fetchWord(page,group).catch(() => {
+      throw new Error('Cannot get words');
+    });;
   },[group, page, user, user.token, user.userId]);
 
   const PAGE_ONE = 0;
