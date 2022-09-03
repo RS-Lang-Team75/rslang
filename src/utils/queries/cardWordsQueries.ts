@@ -198,6 +198,7 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
         } else {
           await postUserWordData(user, wordId, wordStatus);
         }
+        throw new Error('new word');
       }
     } else {
       throw new Error(err.message);
