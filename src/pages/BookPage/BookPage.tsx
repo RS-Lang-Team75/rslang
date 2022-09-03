@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import './BookPage.pcss';
+import { Button } from '@/components/Button/Button';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
@@ -154,6 +155,16 @@ export function BookPage () : JSX.Element{
               key = {word.id || word._id}/>)}
         </div>
       </div>
+      <Button
+        classBtn="btnScrollUp"
+        text='UP'
+        onClick={()=>{
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+          });
+        }}/>
     </main>
 
   );

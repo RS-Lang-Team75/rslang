@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 import './Navigation.pcss';
 import { Button } from '../Button/Button';
