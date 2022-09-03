@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-misused-promises */
+
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 
@@ -10,31 +10,41 @@ import './CardWord.pcss';
 import { Button } from '../Button/Button';
 import { SoundButton } from '../SoundButton/SoundButton';
 
-import { IDifficulty, IWord } from '@/types/types';
+import { IWord } from '@/types/types';
 import { getStudiedWords, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
   word:IWord;
-  difficultWords:IDifficulty[];
+  difficultWords:IWord[];
   studiedWordMessage:(w:boolean)=>void;
 }
 
-export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordProps) : JSX.Element{
-  const [difficult,setDifficult] = useState(false);
-  const [studied,setStudied] = useState(false);
-  const [gameScore,setGameScore] = useState({ correct: 0, wrong: 0 });
-  const user = useSelector((state: RootState) => state.user);
-  const  wordId = word.id || word._id;
+export function CardWord ({
+  word,
+  difficultWords,
+  studiedWordMessage,
+}:CardWordProps): JSX.Element {
 
-  const sectionsBgColor = ['border-gray-500',
+  const user = useSelector((state: RootState) => state.user);
+  const wordId = word.id || word._id;
+
+  const [difficult, setDifficult] = useState<boolean>(false);
+  const [studied, setStudied] = useState<boolean>(false);
+  const [gameScore, setGameScore] = useState({ correct: 0, wrong: 0 });
+  const [userWordData] = useState<IWord | undefined>(
+    difficultWords.find(item => item._id === wordId));
+
+  const sectionsBgColor = [
+    'border-gray-500',
     'border-sky-500',
     'border-green-500',
     'border-yellow-500',
     'border-orange-500',
     'border-red-500',
-    'border-purple-500' ];
+    'border-purple-500',
+  ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
 
   const addWordInDifficultData= async ():Promise<void>=>{
@@ -57,18 +67,26 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
     await statisticsForStudiedWords(user);
   };
 
-  useEffect(()=>{
-    function checkDifficultWords (){
-      const userWordData:IDifficulty[] = difficultWords.filter(item=>item.wordId === wordId);
-      if(userWordData.length !== 0){
-        if(userWordData[0].difficulty==='difficult'){setDifficult(true);}
-        if(userWordData[0].difficulty==='studied'){setStudied(true);}
-        if(userWordData[0].optional){
-          setGameScore(userWordData[0].optional.allGames);};
+  useEffect(() => {
+
+    function checkDifficultWords () {
+      if (difficultWords.length > 0 && userWordData) {
+        if(userWordData.userWord) {
+          const { optional } = userWordData.userWord;
+          if(userWordData.userWord.difficulty==='difficult') {
+            setDifficult(true);
+          }
+          if(userWordData.userWord.difficulty==='studied') {
+            setStudied(true);
+          }
+          if(optional && optional.allGames) {
+            setGameScore(userWordData.userWord.optional.allGames);
+          }
+        }
       }
     }
     checkDifficultWords();
-  },[difficultWords, user.userId, wordId]);
+  },[difficultWords, user.userId, userWordData, wordId]);
 
   return (
     <div className='cardWords'>
@@ -111,14 +129,28 @@ export function CardWord ({ word, difficultWords,studiedWordMessage }:CardWordPr
             text= 'Сложное'
             classBtn={!difficult ? 'difficult': 'difficult difficultChosen'}
             disabled = {difficult}
-            onClick={addWordInDifficultData}
+            onClick={
+              () => {
+                addWordInDifficultData()
+                  .catch(() => {
+                    throw new Error('Cannot add word');
+                  });
+              }
+            }
 
           />
           <Button
             text="Выученное"
             classBtn= {!studied ? 'studied': 'studied studiedChosen'}
             disabled= {studied}
-            onClick={addWordInStudiedData}/>
+            onClick={
+              () => {
+                addWordInStudiedData()
+                  .catch(() => {
+                    throw new Error('Cannot add word');
+                  });
+              }
+            }/>
         </div>
         }
       </div>
