@@ -201,6 +201,7 @@ export default function Audioсall () {
         />
         <Button text='Начать игру'
           classBtn='nextRound'
+          disabled={wordsForGame.length === 0}
           onClick={() => {
             if (wordsForGame.length > 0) {
               setIsGameStarted(true);
