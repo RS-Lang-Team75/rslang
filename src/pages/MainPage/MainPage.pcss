@@ -1,0 +1,19 @@
+.advantageCards {
+  @apply flex gap-4 mx-10 my-10 justify-center lg:flex-wrap sm:flex-col;
+
+  & .advantageCard {
+    @apply flex flex-col basis-1/4 p-4 shadow-md rounded-lg cursor-pointer hover:bg-sky-100
+    lg:basis-[48%];
+
+    & .advantageCardImg {
+      @apply self-center my-5;
+    }
+
+    & .advantageCardTitle {
+      @apply text-sky-600 text-xl font-bold py-3;
+    }
+    & .advantageCardContent {
+      @apply text-sky-900 text-base text-justify;
+    }
+  }
+}
