@@ -221,6 +221,7 @@ export default function Audioсall () {
                   word= {wordsForGame[shownWordNumber]}
                   classBtn='audioBtn'
                   playFirstOnly
+                  playOnMount
                 />
               </div>
               <div
