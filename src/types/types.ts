@@ -17,6 +17,8 @@ export interface IWord{
   userWord?: IDifficulty;
 }
 
+export type GameName = 'audiocall' | 'sprint';
+
 export interface GameStats {
   correct: number;
   wrong: number;
