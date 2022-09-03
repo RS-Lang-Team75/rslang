@@ -80,7 +80,6 @@ export function Navigation (): JSX.Element {
             </div>
             <div className="menuMobileOpen">
               {[
-                ['LOGIN', '/login'],
                 ['Учебник', '/book'],
                 ['Аудиовызов', '/audiocall'],
                 ['Спринт', '/sprint'],
