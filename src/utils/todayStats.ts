@@ -19,7 +19,6 @@ type LocalDailyStatistics = {
   allCorrect: number;
   allWrong: number;
   allPercent: number;
-  allNewWords: number;
   games: {
     audiocall: GameLocalStats;
     sprint: GameLocalStats;
@@ -31,7 +30,6 @@ const InitialDailyStatistics = {
   allCorrect: 0,
   allWrong: 0,
   allPercent: 0,
-  allNewWords: 0,
   games: {
     audiocall: {
       correct: 0,
@@ -79,7 +77,6 @@ export const recordGameStats = (
 
   statistics.allCorrect += correct;
   statistics.allWrong += wrong;
-  statistics.allNewWords += wrong + correct;
   statistics.games[gameName].correct += correct;
   statistics.games[gameName].wrong += wrong;
 
@@ -96,21 +93,6 @@ export const recordGameStats = (
 
   statistics.allPercent = allPercent;
   statistics.games[gameName].correctPercent = gamePercent;
-
-  localStorage.setItem(`${user.userId}stats`, JSON.stringify(statistics));
-};
-
-export const recordWordStats = (
-  user: UserState,
-  isIncrease: boolean,
-) => {
-  const statistics = readAndCheckLocalStats(user);
-
-  if (isIncrease) {
-    statistics.allNewWords += 1;
-  } else {
-    statistics.allNewWords -= 1;
-  }
 
   localStorage.setItem(`${user.userId}stats`, JSON.stringify(statistics));
 };
