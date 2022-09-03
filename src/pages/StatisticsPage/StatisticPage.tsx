@@ -30,7 +30,6 @@ export function StatisticsPage (){
     gameStatistic
       ? JSON.parse(gameStatistic) as LocalDailyStatistics
       : InitialDailyStatistics;
-  console.log(gameStatisticData);
   const { games } = gameStatisticData;
   useEffect(()=>{
 
@@ -71,25 +70,6 @@ export function StatisticsPage (){
     <main>
 
       {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
-      {/* {user.userId && <div className='dayStatisticContainer'>
-        <div className='dayStatisticBlock'>
-          <p className='wordsNumber'>{
-            newWordsData.length !== 0 || noNewWords
-              ? newWordsData.slice(-1)[0].newWords
-              : 0
-          }</p>
-          <p>Новых слов за сегодня</p>
-        </div>
-        <div  className='dayStatisticBlock'>
-          <p className='wordsNumber'>{
-            learnedByDayData.length !== 0 || noLearnedByDay
-              ? learnedByDayData.slice(-1)[0].learnedWordsByDay
-              : 0
-          }</p>
-          <p>Изученных слов за сегодня</p>
-        </div>
-        <DoughnutStatistic/>
-      </div>} */}
       {user.userId &&
      (<CardStatistics
        title='Статистика по всем словам'

@@ -10,6 +10,7 @@ import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IResponseAggregated, IWord } from '@/types/types';
+import { setAxiosConfig } from '@/utils/queries/headers';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
@@ -31,18 +32,11 @@ export function BookPage () : JSX.Element{
   const TOTAL_PAGES = 29;
 
   useEffect(() => {
-    const wordsAxiosConfig: AxiosRequestConfig = {
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
 
     const getDataDifficultWords = async (pageDif:number, groupDif:number): Promise<IWord[]> => {
       const response = await axios.get<IResponseAggregated[]>(
         `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${groupDif}&filter={"$and":[{"page":${pageDif}},{"$or":[{"userWord.difficulty":"studied"},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}]}`,
-        wordsAxiosConfig);
+        setAxiosConfig(user.token));
       return response.data[0].paginatedResults;
     };
 
@@ -54,7 +48,7 @@ export function BookPage () : JSX.Element{
         if (g === 6 && user.userId) {
           const response = await axios.get<IResponseAggregated[]>(
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
-            wordsAxiosConfig);
+            setAxiosConfig(user.token));
 
           const diffWords = response.data[0].paginatedResults;
 
