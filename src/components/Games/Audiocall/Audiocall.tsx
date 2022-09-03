@@ -192,6 +192,7 @@ export default function Audioсall () {
 
   return(
     <main className='gamesPage'>
+
       {!isGameStarted && !isGameFinished &&
       <div className='gameSection'>
         <AudiocallGreetings
@@ -209,20 +210,29 @@ export default function Audioсall () {
           }}/>
       </div>
       }
+
       {!isGameFinished && isGameStarted &&
         <section className='gameSection'>
           {
             wordsForGame.length > 0 &&
             <div className='gameSection'>
 
-              <div
-                className='cardAudio'>
-                <SoundButton
-                  word= {wordsForGame[shownWordNumber]}
-                  classBtn='audioBtn'
-                  playFirstOnly
-                  playOnMount
-                />
+              <div className="upperGamePart">
+                <div className="soundOff">
+                  Sound on/off
+                </div>
+                <div
+                  className='cardAudio'>
+                  <SoundButton
+                    word= {wordsForGame[shownWordNumber]}
+                    classBtn='audioBtn'
+                    playFirstOnly
+                    playOnMount
+                  />
+                </div>
+                <div className="roundCounter">
+                  {`${shownWordNumber}/${roundsNumber}`}
+                </div>
               </div>
               <div
                 className="answerContainer">
@@ -257,7 +267,6 @@ export default function Audioсall () {
             }}
             simulatedButtonCode="Space"
           />
-
         </section>
       }
       {
