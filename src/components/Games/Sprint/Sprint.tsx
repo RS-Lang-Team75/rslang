@@ -14,6 +14,7 @@ import { shuffleArray } from '@/utils/misc';
 import { getWordsQuery, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
+import { recordGameStats } from '@/utils/todayStats';
 
 import './Sprint.pcss';
 
@@ -85,6 +86,13 @@ export default function Sprint () {
     setIsGameStarted(false);
     setIsGameFinished(true);
     setWordsForGame([]);
+    recordGameStats(
+      user,
+      gameName,
+      correctAnswers.length,
+      wrongAnswers.length,
+      0,
+    );
   };
 
   const checkAnswer = (answer: boolean) => {

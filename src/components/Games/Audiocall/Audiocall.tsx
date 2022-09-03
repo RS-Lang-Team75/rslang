@@ -16,6 +16,7 @@ import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardW
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
+import { recordGameStats } from '@/utils/todayStats';
 
 import './Audioсall.pcss';
 
@@ -110,6 +111,13 @@ export default function Audioсall () {
         setShownWordNumber(0);
         setIsGameFinished(true);
         await refreshStatistics();
+        recordGameStats(
+          user,
+          gameName,
+          correctAnswers.length,
+          wrongAnswers.length,
+          0,
+        );
       }
       setIsAnswerGiven(false);
       setIsCorrectAnswer(false);
