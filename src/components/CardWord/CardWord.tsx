@@ -25,20 +25,26 @@ export function CardWord ({
   word,
   difficultWords,
   studiedWordMessage,
-}:CardWordProps) : JSX.Element{
-  const [difficult,setDifficult] = useState<boolean>(false);
-  const [studied,setStudied] = useState<boolean>(false);
-  const [gameScore,setGameScore] = useState({ correct: 0, wrong: 0 });
-  const user = useSelector((state: RootState) => state.user);
-  const  wordId = word.id || word._id;
+}:CardWordProps): JSX.Element {
 
-  const sectionsBgColor = ['border-gray-500',
+  const user = useSelector((state: RootState) => state.user);
+  const wordId = word.id || word._id;
+
+  const [difficult, setDifficult] = useState<boolean>(false);
+  const [studied, setStudied] = useState<boolean>(false);
+  const [gameScore, setGameScore] = useState({ correct: 0, wrong: 0 });
+  const [userWordData] = useState<IWord | undefined>(
+    difficultWords.find(item => item._id === wordId));
+
+  const sectionsBgColor = [
+    'border-gray-500',
     'border-sky-500',
     'border-green-500',
     'border-yellow-500',
     'border-orange-500',
     'border-red-500',
-    'border-purple-500' ];
+    'border-purple-500',
+  ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
 
   const addWordInDifficultData= async ():Promise<void>=>{
@@ -61,20 +67,26 @@ export function CardWord ({
     await statisticsForStudiedWords(user);
   };
 
-  useEffect(()=>{
-    function checkDifficultWords (){
-      const userWordData:IWord[] = difficultWords.filter(item=>item._id === wordId);
-      // console.log('userWordData: ', userWordData);
-      // console.log('wordId: ', wordId);
-      if(userWordData[0].userWord){
-        if(userWordData[0].userWord.difficulty==='difficult'){setDifficult(true);}
-        if(userWordData[0].userWord.difficulty==='studied'){setStudied(true);}
-        if(userWordData[0].userWord.optional){
-          setGameScore(userWordData[0].userWord.optional.allGames);};
+  useEffect(() => {
+
+    function checkDifficultWords () {
+      if (difficultWords.length > 0 && userWordData) {
+        if(userWordData.userWord) {
+          const { optional } = userWordData.userWord;
+          if(userWordData.userWord.difficulty==='difficult') {
+            setDifficult(true);
+          }
+          if(userWordData.userWord.difficulty==='studied') {
+            setStudied(true);
+          }
+          if(optional && optional.allGames) {
+            setGameScore(userWordData.userWord.optional.allGames);
+          }
+        }
       }
     }
     checkDifficultWords();
-  },[difficultWords, user.userId, wordId]);
+  },[difficultWords, user.userId, userWordData, wordId]);
 
   return (
     <div className='cardWords'>
