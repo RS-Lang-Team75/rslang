@@ -1,0 +1,21 @@
+.dayStatisticContainer {
+  @apply my-10 mx-auto text-center w-5/6;
+  & .dayStatisticTitle {
+    @apply my-2 text-2xl font-bold text-sky-900;
+  }
+  & .dayStatisticWrapper {
+    @apply mx-auto grid grid-rows-2 grid-flow-col  content-center justify-center gap-x-10
+  sm:gap-0;
+
+    & .dayStatisticBlock {
+      @apply flex flex-col items-center text-center col-span-2 self-center text-sky-700;
+
+      & .wordsNumber {
+        @apply text-3xl font-bold text-sky-900;
+      }
+    }
+    & .doughnutStatistic {
+      @apply row-span-2 w-[200px];
+    }
+  }
+}

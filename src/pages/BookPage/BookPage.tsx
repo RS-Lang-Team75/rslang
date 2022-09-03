@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IDifficulty, IResponseAggregated, IWord } from '@/types/types';
 import { getStudiedWords } from '@/utils/queries/cardWordsQueries';
+import { setAxiosConfig } from '@/utils/queries/headers';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
@@ -31,18 +32,10 @@ export function BookPage () : JSX.Element{
   const TOTAL_PAGES = 29;
 
   useEffect(()=>{
-    const wordsAxiosConfig: AxiosRequestConfig = {
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
-
     const getDataDifficultWords = async (): Promise<void> => {
       const responseDifficultWord = await axios.get<IDifficulty[]>(
         `${SERVER_URL}/users/${user.userId}/words`,
-        wordsAxiosConfig);
+        setAxiosConfig(user.token));
       setDifficultWords(responseDifficultWord.data);
     };
 
@@ -52,7 +45,7 @@ export function BookPage () : JSX.Element{
         if(g === 6 && user.userId){
           const response = await axios.get<IResponseAggregated[]>(
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
-            wordsAxiosConfig);
+            setAxiosConfig(user.token));
           await getDataDifficultWords();
           setTotalPages(Math.ceil(response.data[0].totalCount[0].count/20)-1);
           setWords(response.data[0].paginatedResults);
