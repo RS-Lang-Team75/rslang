@@ -32,7 +32,7 @@ const userStatistics:UserStatistics = {
   },
 };
 
-const getDate = ():string=>{
+export const getDate = ():string=>{
   const date = new Date();
   return`${date.getFullYear()} ${date.toDateString().substring(4, 7)} ${date.getDate()}`;
 };

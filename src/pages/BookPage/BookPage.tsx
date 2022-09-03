@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
