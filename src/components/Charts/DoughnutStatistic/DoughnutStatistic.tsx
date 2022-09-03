@@ -1,6 +1,8 @@
 import 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
 
+import { useEffect, useState } from 'react';
+
 import './DoughnutStatistic.pcss';
 
 interface DoughnutStatisticProps {
@@ -15,7 +17,11 @@ export function DoughnutStatistic ({
   wrong,
 }:DoughnutStatisticProps) : JSX.Element{
 
-  const statisticsData = [correct, wrong];
+  const [statisticsData,setStatisticsData] = useState<number[]>([correct, wrong]);
+
+  useEffect(()=>{
+    setStatisticsData([correct,wrong]);
+  },[correct, wrong]);
 
   const data = {
     labels: ['Верных', 'Неверных'],

@@ -107,6 +107,8 @@ export function StatisticsPage (){
        textDownLine = 'Изученных слов за сегодня'
        correct = {gameStatisticData.allCorrect}
        wrong = {gameStatisticData.allWrong}
+       numPercent = {gameStatisticData.allPercent}
+       textPercent = 'верных ответов'
      />)}
       {user.userId &&
       (<div className='flex flex-nowrap sm:flex-col'>
@@ -118,6 +120,8 @@ export function StatisticsPage (){
           textDownLine = 'Неверных ответов'
           correct = {games.audiocall.correct}
           wrong= {games.audiocall.wrong}
+          numPercent = {games.audiocall.correctPercent}
+          textPercent = 'верных ответов'
         />
         <CardStatistics
           title='Игра "Спринт"'
@@ -127,6 +131,8 @@ export function StatisticsPage (){
           textDownLine = 'Неверных ответов'
           correct = {games.sprint.correct}
           wrong= {games.sprint.wrong}
+          numPercent = {games.sprint.correctPercent}
+          textPercent = 'верных ответов'
         />
       </div>)}
       {user.userId && <div className='chartContainer'>
