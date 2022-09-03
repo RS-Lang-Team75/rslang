@@ -28,6 +28,9 @@ export function ChartStatistic ({ learnedLong,newWords  }:ChartStatisticProps) :
       },
     },
     scales: {
+      x:{
+        display: false,
+      },
       y: {
         type: 'linear' as const,
         display: true,
@@ -74,6 +77,5 @@ export function ChartStatistic ({ learnedLong,newWords  }:ChartStatisticProps) :
     <div className='w-full'>
       <Line options={options} data={userData}/>
     </div>
-    // <div>Hello</div>
   );
 }
