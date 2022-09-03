@@ -22,7 +22,7 @@ export function Navigation (): JSX.Element {
     dispatch(saveToken(''));
     dispatch(saveUserId(''));
     dispatch(saveRefreshToken(''));
-    localStorage.clear();
+    localStorage.setItem('client-info', '');
   };
 
   return(

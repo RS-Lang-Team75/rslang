@@ -11,7 +11,7 @@ import './LoginPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
-import { saveName, saveRefreshToken, saveToken, saveUserId } from '@/utils/slices/userSlice';
+import { saveName, saveRefreshToken, saveToken, saveUserId, saveAll } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
@@ -70,10 +70,12 @@ export function LoginPage (){
       if (isLoginMode) {
         try {
           const response = await signIn(details);
-          dispatch(saveName(response.name));
-          dispatch(saveToken(response.token));
-          dispatch(saveUserId(response.userId));
-          dispatch(saveRefreshToken(response.refreshToken));
+          dispatch(saveAll({
+            name: response.name,
+            token: response.token,
+            userId: response.userId,
+            refreshToken: response.refreshToken,
+          }));
         } catch {
           setIsLoginFailed(true);
         }
@@ -95,7 +97,7 @@ export function LoginPage (){
     dispatch(saveToken(''));
     dispatch(saveUserId(''));
     dispatch(saveRefreshToken(''));
-    localStorage.clear();
+    localStorage.setItem('client-info', '');
   };
 
   return(
@@ -182,7 +184,10 @@ export function LoginPage (){
             text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
             classBtn="form__login-btn"
             onClick={e => {
-              submitHandler(e).catch(err => console.log(err));
+              submitHandler(e)
+                .catch(() => {
+                  throw new Error('cannot login');
+                });
             }}
           />
           <div className="form__sign-container">
