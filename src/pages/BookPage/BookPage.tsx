@@ -10,7 +10,6 @@ import { CardWord } from '@/components/CardWord/CardWord';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IResponseAggregated, IWord } from '@/types/types';
-import { getStudiedWords } from '@/utils/queries/cardWordsQueries';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
@@ -28,9 +27,10 @@ export function BookPage () : JSX.Element{
   const [pageStudied, setPageStudied] = useState<boolean>(false);
 
   const user = useSelector((state: RootState) => state.user);
+  const PAGE_ONE = 0;
   const TOTAL_PAGES = 29;
 
-  useEffect(()=>{
+  useEffect(() => {
     const wordsAxiosConfig: AxiosRequestConfig = {
       headers: {
         'Authorization': `Bearer ${user.token}`,
@@ -39,33 +39,42 @@ export function BookPage () : JSX.Element{
       },
     };
 
-    const getDataDifficultWords = async (pageDif:number, groupDif:number): Promise<void> => {
-      // const responseDifficultWord = await axios.get<IDifficulty[]>(
-      //   `${SERVER_URL}/users/${user.userId}/words`,
-      //   wordsAxiosConfig);
+    const getDataDifficultWords = async (pageDif:number, groupDif:number): Promise<IWord[]> => {
       const response = await axios.get<IResponseAggregated[]>(
-        `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${groupDif}&filter={"$or":[{"$and":[{"page":${pageDif}},{"userWord.difficulty":"studied"}]},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}`,
+        `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${groupDif}&filter={"$and":[{"page":${pageDif}},{"$or":[{"userWord.difficulty":"studied"},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}]}`,
         wordsAxiosConfig);
-      console.log(response.data[0].paginatedResults);
-      setDifficultWords(response.data[0].paginatedResults);
+      return response.data[0].paginatedResults;
     };
 
-    async function fetchWord (p = 0,g = 0 ) {
+    async function fetchWord (p = 0, g = 0) {
       try {
-        if (g === 6 ){setIsGroupSix(true);}
-        if(g === 6 && user.userId){
+        if (g === 6) {
+          setIsGroupSix(true);
+        }
+        if (g === 6 && user.userId) {
           const response = await axios.get<IResponseAggregated[]>(
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
             wordsAxiosConfig);
-          await getDataDifficultWords(p,g);
-          setTotalPages(Math.ceil(response.data[0].totalCount[0].count/20)-1);
-          setWords(response.data[0].paginatedResults);
-        }else{
+
+          const diffWords = response.data[0].paginatedResults;
+
+          setTotalPages(Math.ceil(response.data[0].totalCount[0].count / 20) - 1);
+
+          setDifficultWords(diffWords);
+          setWords(diffWords);
+          setPageStudied(false);
+        }
+        else {
           const response = await axios.get<IWord[]>(`${SERVER_URL}/words?page=${p}&group=${g}`);
-          if(g !== 6 ) {setTotalPages(TOTAL_PAGES);}else{setTotalPages(0);}
-          if(user.userId){
-            await getDataDifficultWords(p,g);
-            const studiedWords = await getStudiedWords(user,p,g);
+          if (g !== 6) {
+            setTotalPages(TOTAL_PAGES);
+          } else {
+            setTotalPages(0);
+          }
+          if (user.userId) {
+            const wordsInProgress = await getDataDifficultWords(p, g);
+            setDifficultWords(wordsInProgress);
+            const studiedWords = wordsInProgress.filter(item => item.userWord?.difficulty === 'studied');
             setPageStudied(studiedWords.length === 20);
           }
           setWords(response.data);
@@ -80,16 +89,16 @@ export function BookPage () : JSX.Element{
 
     fetchWord(page,group).catch(() => {
       throw new Error('Cannot get words');
-    });;
-  },[group, page, user, user.token, user.userId]);
-
-  const PAGE_ONE = 0;
+    });
+  }, [group, page, user, user.token, user.userId]);
 
   const  handleChangeGroup = (value:number)=>{
     setIsGroupSix(false);
     setPage(PAGE_ONE);
     setGroup(value);
-    if (value === 6 ){setIsGroupSix(true);}
+    if (value === 6 ) {
+      setIsGroupSix(true);
+    }
     localStorage.setItem('currentGroup', value.toString());
     localStorage.setItem('currentPage', PAGE_ONE.toString());
   };
@@ -105,13 +114,18 @@ export function BookPage () : JSX.Element{
 
   return(
     <main className='bookPageMain'>
-      <Pagination handlePages={handlePages} page = {page} totalPages={totalPages}/>
+      <Pagination
+        handlePages={handlePages}
+        page={page}
+        totalPages={totalPages}
+      />
       <div className='PageMainContent'>
 
         <aside className="stickyContainer">
           <div className="asideMenuContainer">
             <SideBar onChange={handleChangeGroup}/>
-            <Link key='audiocallLink'
+            <Link
+              key='audiocallLink'
               to='/audiocall'
               className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
               state={{
@@ -121,12 +135,13 @@ export function BookPage () : JSX.Element{
               }}
             >Попробовать Аудиовызов</Link>
 
-            <Link key='sprintLink'
+            <Link
+              key='sprintLink'
               to='/sprint'
               className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
               state={{
                 unstudiedWords: words.filter(w =>
-                  !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
+                  !difficultWords.find(dw => dw._id === (w.id || w._id) && dw.userWord?.difficulty === 'studied')),
                 pageFromBook: page,
                 groupFromBook: group,
               }}
@@ -137,11 +152,12 @@ export function BookPage () : JSX.Element{
         <div className='wordsContainer'>
           {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
           {user.userId && pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165;Поздравляю!!!&#128165; <br/> Все слова на этой странице изучены!!!</h2>}
-          {words.map(word=> <CardWord
-            word={word}
-            difficultWords = {difficultWords}
-            studiedWordMessage = {handleChangeStudiedWordMessage}
-            key = {word.id || word._id}/>)}
+          {words.map(word =>
+            <CardWord
+              word={word}
+              difficultWords={difficultWords}
+              studiedWordMessage={handleChangeStudiedWordMessage}
+              key = {word.id || word._id}/>)}
         </div>
       </div>
     </main>
