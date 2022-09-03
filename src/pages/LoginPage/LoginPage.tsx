@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import React, { FormEvent, useState } from 'react';
 
@@ -11,7 +12,7 @@ import './LoginPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
-import { saveName, saveRefreshToken, saveToken, saveUserId, saveAll } from '@/utils/slices/userSlice';
+import { saveAll } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
@@ -89,15 +90,6 @@ export function LoginPage (){
         }
       }
     }
-  };
-
-  const logout = (e: FormEvent): void => {
-    e.preventDefault();
-    dispatch(saveName(''));
-    dispatch(saveToken(''));
-    dispatch(saveUserId(''));
-    dispatch(saveRefreshToken(''));
-    localStorage.setItem('client-info', '');
   };
 
   return(
@@ -202,11 +194,12 @@ export function LoginPage (){
         </div>}
 
         {user.name &&
-        <Button
-          text='Выйти'
-          classBtn="form__login-btn"
-          onClick={logout}
-        />}
+        <Link
+          key='linkToBook'
+          to='/book'
+          className='form__login-btn'
+        >Начать учиться!
+        </Link>}
       </form>
     </main>
   );
