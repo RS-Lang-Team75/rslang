@@ -12,6 +12,10 @@
       @apply text-gray-400 bg-transparent hover:bg-transparent active:border-gray-400;
     }
   }
+
+  & .cardAudio {
+    @apply scale-150 p-3 rounded-full border-2 border-gray-500 mb-6;
+  }
 }
 
 .gameName {
@@ -30,4 +34,12 @@
 
 .givenAnswer {
   @apply bg-sky-400;
+}
+
+.answerCorrect {
+  @apply text-green-700;
+}
+
+.answerIncorrect {
+  @apply text-red-700;
 }
