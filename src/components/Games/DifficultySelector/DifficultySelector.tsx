@@ -26,7 +26,7 @@ export function DifficultySelector (props: IDiffSelector){
   };
 
   return(
-    <section>
+    <section className='difficultySelectorContainer'>
       <h4  className='selectorHeader'>Выбери уровень сложности:</h4>
       <div className="difficultySelector">
         <Button
