@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import AudioсallAnswers from '../AudiocallAnswers/AudiocallAnswers';
 import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
@@ -45,6 +45,8 @@ export default function Audioсall () {
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
+  const [bestStreak, setBestStreak] = useState<number>(0);
+  const currentStreakRef = useRef<number>(0);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
@@ -64,38 +66,48 @@ export default function Audioсall () {
     setChosenGroup(group + 1);
   };
 
+  const checkStreak = (isCorrect: boolean): void => {
+    if (isCorrect) {
+      currentStreakRef.current += 1;
+    } else {
+      currentStreakRef.current = 0;
+    }
+    if (currentStreakRef.current > bestStreak) {
+      setBestStreak(currentStreakRef.current);
+    }
+  };
+
   const checkAnswer = (wordIndex: number): string => {
     const currentWord = wordsForGame[shownWordNumber];
     let additionalClass = '';
-    if (!isAnswerGiven) {
-      if (possibleAnswers[wordIndex-1] === currentWord.wordTranslate) {
-        setIsCorrectAnswer(true);
-        setCorrectAnswers([...correctAnswers, currentWord]);
-        additionalClass = 'bg-green-400';
-        updateOrCreateUserWordData(
-          user,
-          currentWord.id,
-          'studied',
-          true,
-          gameName,
-          true,
-        ).catch(() => {throw new Error('Cannot update or create word');});
-      }
-      else {
-        setIsCorrectAnswer(false);
-        setWrongAnswers([...wrongAnswers, currentWord]);
-        additionalClass = 'bg-red-400';
-        updateOrCreateUserWordData(
-          user,
-          currentWord.id,
-          'learning',
-          true,
-          gameName,
-          false,
-        ).catch(() => {throw new Error('Cannot update or create word');});
-      }
-      setIsAnswerGiven(true);
+    let answer: boolean;
+
+    if (possibleAnswers[wordIndex-1] === currentWord.wordTranslate) {
+      answer = true;
+      setCorrectAnswers([...correctAnswers, currentWord]);
+      additionalClass = 'bg-green-400';
     }
+    else {
+      answer = false;
+      setWrongAnswers([...wrongAnswers, currentWord]);
+      additionalClass = 'bg-red-400';
+    }
+
+    const wordStatus = answer ? 'studied' : 'learning';
+
+    setIsCorrectAnswer(answer);
+    checkStreak(answer);
+    setIsAnswerGiven(true);
+
+    updateOrCreateUserWordData(
+      user,
+      currentWord.id,
+      wordStatus,
+      true,
+      gameName,
+      answer,
+    ).catch(() => {throw new Error('Cannot update or create word');});
+
     return additionalClass;
   };
 
@@ -116,7 +128,7 @@ export default function Audioсall () {
           gameName,
           correctAnswers.length,
           wrongAnswers.length,
-          0,
+          bestStreak,
         );
       }
       setIsAnswerGiven(false);
