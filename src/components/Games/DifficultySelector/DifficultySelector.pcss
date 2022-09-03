@@ -4,23 +4,23 @@
 
 .difficultySelector {
   @apply flex justify-center flex-wrap;
-}
 
-.selectorBtnWrap {
-  @apply w-12 h-12 border-b m-2 uppercase rounded-full bg-sky-700 text-sky-200 font-medium;
-  &:hover {
-    @apply bg-sky-200 text-sky-900;
-  } 
-
-  &:active {
-    @apply bg-sky-900 text-sky-200;
+  & .selectorBtnWrap {
+    @apply w-12 h-12 border-b m-2 uppercase rounded-full bg-sky-700 text-sky-200 font-medium;
+    &:hover {
+      @apply bg-sky-200 text-sky-900;
+    } 
+  
+    &:active {
+      @apply bg-sky-900 text-sky-200;
+    }
+  
+    .btn {
+      @apply w-full h-full p-2;
+    }
   }
-
-  .btn {
-    @apply w-full h-full p-2;
+  
+  & .chosenDiff {
+    @apply bg-green-600 active:bg-green-900 hover:bg-green-600;
   }
-}
-
-.chosenDiff {
-  @apply bg-green-600 active:bg-green-900 hover:bg-green-400;
 }

@@ -29,66 +29,54 @@ export function DifficultySelector (props: IDiffSelector){
     <section>
       <h4  className='selectorHeader'>Выбери уровень сложности:</h4>
       <div className="difficultySelector">
-        <div
-          className={chosenGroup === 1 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='A1'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(0)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
-        <div
-          className={chosenGroup === 2 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='A2'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(1)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
-        <div
-          className={chosenGroup === 3 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='B1'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(2)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
-        <div
-          className={chosenGroup === 4 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='B2'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(3)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
-        <div
-          className={chosenGroup === 5 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='C1'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(4)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
-        <div
-          className={chosenGroup === 6 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}>
-          <Button
-            text='C2'
-            classBtn='btn'
-            onClick={() => {
-              chosePageAndGroup(5)
-                .catch(throwErrorMessage);
-            }}/>
-        </div>
+        <Button
+          text='A1'
+          classBtn={chosenGroup === 1 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(0)
+              .catch(throwErrorMessage);
+          }}/>
+
+        <Button
+          text='A2'
+          classBtn={chosenGroup === 2 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(1)
+              .catch(throwErrorMessage);
+          }}/>
+
+        <Button
+          text='B1'
+          classBtn={chosenGroup === 3 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(2)
+              .catch(throwErrorMessage);
+          }}/>
+
+        <Button
+          text='B2'
+          classBtn={chosenGroup === 4 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(3)
+              .catch(throwErrorMessage);
+          }}/>
+
+        <Button
+          text='C1'
+          classBtn={chosenGroup === 5 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(4)
+              .catch(throwErrorMessage);
+          }}/>
+
+        <Button
+          text='C2'
+          classBtn={chosenGroup === 6 ? 'selectorBtnWrap chosenDiff' : 'selectorBtnWrap'}
+          onClick={() => {
+            chosePageAndGroup(5)
+              .catch(throwErrorMessage);
+          }}/>
+
       </div>
     </section>
   );
