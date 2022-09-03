@@ -192,11 +192,6 @@ export default function Audioсall () {
 
   return(
     <main className='gamesPage'>
-      <div className="gameSection">
-        <h2>Audiocall</h2>
-        <h2>User: {user.name}</h2>
-        <h3>ID: {user.userId}</h3>
-      </div>
       {!isGameStarted && !isGameFinished &&
       <div className='gameSection'>
         <AudiocallGreetings
