@@ -62,6 +62,10 @@ export default function Sprint () {
 
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
+  const [bestStreak, setBestStreak] = useState<number>(0);
+
+  const currentStreakRef = useRef<number>(0);
+  const newWordsNumberRef = useRef<number>(0);
 
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
@@ -91,33 +95,51 @@ export default function Sprint () {
       gameName,
       correctAnswers.length,
       wrongAnswers.length,
-      0,
+      bestStreak,
+      newWordsNumberRef.current,
     );
   };
 
+  const checkStreak = (isCorrect: boolean): void => {
+    if (isCorrect) {
+      currentStreakRef.current += 1;
+    } else {
+      currentStreakRef.current = 0;
+    }
+    if (currentStreakRef.current > bestStreak) {
+      setBestStreak(currentStreakRef.current);
+    }
+  };
+
   const checkAnswer = (answer: boolean) => {
+    let isCorrect: boolean;
+
     if (sprintWord.isAnswerCorrect === answer) {
       setCorrectAnswers(a => [...a, wordsForGame[shownWordNumber]]);
-      updateOrCreateUserWordData(
-        user,
-        wordsForGame[shownWordNumber].id,
-        'studied',
-        true,
-        gameName,
-        true,
-      ).catch(() => {throw new Error('Cannot update or create word');});
+      isCorrect = true;
     } else {
       setWrongAnswers(a => [...a, wordsForGame[shownWordNumber]]);
-      updateOrCreateUserWordData(
-        user,
-        wordsForGame[shownWordNumber].id,
-        'learning',
-        true,
-        gameName,
-        true,
-      ).catch(() => {throw new Error('Cannot update or create word');});
+      isCorrect = false;
     }
+
+    const wordStatus = isCorrect ? 'studied' : 'learning';
+    checkStreak(isCorrect);
+
     setShownWordNumber(n => n + 1);
+
+    updateOrCreateUserWordData(
+      user,
+      wordsForGame[shownWordNumber].id,
+      wordStatus,
+      true,
+      gameName,
+      isCorrect,
+    ).catch(e => {
+      const error = e as Error;
+      if (error.message === 'new word') {
+        newWordsNumberRef.current += 1;
+      }
+    });
   };
 
   const gameReset = () => {

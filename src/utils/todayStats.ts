@@ -12,6 +12,7 @@ type GameLocalStats = {
   wrong: number;
   correctPercent: number;
   bestStreak: number;
+  newWords: number;
 };
 
 type LocalDailyStatistics = {
@@ -25,7 +26,7 @@ type LocalDailyStatistics = {
   };
 };
 
-const InitialDailyStatistics = {
+export const InitialDailyStatistics = {
   date: '',
   allCorrect: 0,
   allWrong: 0,
@@ -36,12 +37,14 @@ const InitialDailyStatistics = {
       wrong: 0,
       correctPercent: 0,
       bestStreak: 0,
+      newWords: 0,
     },
     sprint: {
       correct: 0,
       wrong: 0,
       correctPercent: 0,
       bestStreak: 0,
+      newWords: 0,
     },
   },
 };
@@ -72,6 +75,7 @@ export const recordGameStats = (
   correct: number,
   wrong: number,
   bestStreak: number,
+  newWords: number,
 ) => {
   const statistics = readAndCheckLocalStats(user);
 
@@ -79,6 +83,7 @@ export const recordGameStats = (
   statistics.allWrong += wrong;
   statistics.games[gameName].correct += correct;
   statistics.games[gameName].wrong += wrong;
+  statistics.games[gameName].newWords += newWords;
 
   const game = statistics.games[gameName];
 

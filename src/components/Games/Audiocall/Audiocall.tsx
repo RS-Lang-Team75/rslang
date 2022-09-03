@@ -46,7 +46,9 @@ export default function Audioсall () {
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
   const [wrongAnswers, setWrongAnswers] = useState<IWord[]>([]);
   const [bestStreak, setBestStreak] = useState<number>(0);
+
   const currentStreakRef = useRef<number>(0);
+  const newWordsNumberRef = useRef<number>(0);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
@@ -106,7 +108,12 @@ export default function Audioсall () {
       true,
       gameName,
       answer,
-    ).catch(() => {throw new Error('Cannot update or create word');});
+    ).catch(e => {
+      const error = e as Error;
+      if (error.message === 'new word') {
+        newWordsNumberRef.current += 1;
+      }
+    });
 
     return additionalClass;
   };
@@ -129,6 +136,7 @@ export default function Audioсall () {
           correctAnswers.length,
           wrongAnswers.length,
           bestStreak,
+          newWordsNumberRef.current,
         );
       }
       setIsAnswerGiven(false);
