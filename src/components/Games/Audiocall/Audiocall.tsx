@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
 import AudioсallAnswers from '../AudiocallAnswers/AudiocallAnswers';
-import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
+import AudiocallGreetings from '../AudiocallGreetings/AudiocallGreetings';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 
@@ -198,12 +198,12 @@ export default function Audioсall () {
         <h3>ID: {user.userId}</h3>
       </div>
       {!isGameStarted && !isGameFinished &&
-      <>
-        {!isStartedFromBook &&
-        <DifficultySelector
+      <div className='gameSection'>
+        <AudiocallGreetings
+          isStartedFromBook={isStartedFromBook}
           returnRandomWords={returnRandomWords}
           chosenGroup={chosenGroup}
-        />}
+        />
         <Button text='Начать игру'
           classBtn='nextRound'
           onClick={() => {
@@ -211,7 +211,7 @@ export default function Audioсall () {
               setIsGameStarted(true);
             }
           }}/>
-      </>
+      </div>
       }
       {!isGameFinished && isGameStarted &&
         <section className='gameSection'>
