@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import './BookPage.pcss';
 import { Button } from '@/components/Button/Button';
 import { CardWord } from '@/components/CardWord/CardWord';
+import { CircularLoader } from '@/components/CircularLoader/CircularLoader';
 import { Footer } from '@/components/Footer/Footer';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
@@ -15,7 +16,6 @@ import { IResponseAggregated, IWord } from '@/types/types';
 import { setAxiosConfig } from '@/utils/queries/headers';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
-import { CircularLoader } from '@/components/CircularLoader/CircularLoader';
 
 export function BookPage () : JSX.Element{
 
@@ -194,6 +194,7 @@ export function BookPage () : JSX.Element{
 
         </div>
 
+        {words.length > 0 &&
         <div className='btnStickyContainer'>
           <Button
             classBtn="btnScrollUp"
@@ -206,6 +207,7 @@ export function BookPage () : JSX.Element{
               });
             } } />
         </div>
+        }
 
       </main>
       <Footer />
