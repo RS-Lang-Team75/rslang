@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 
 import { useEffect, useState } from 'react';
@@ -30,7 +30,9 @@ export function StatisticsPage (){
     gameStatistic
       ? JSON.parse(gameStatistic) as LocalDailyStatistics
       : InitialDailyStatistics;
+
   const { games } = gameStatisticData;
+
   useEffect(()=>{
 
     const getStatistics = async () => {
@@ -63,14 +65,27 @@ export function StatisticsPage (){
 
       } catch (e:unknown) {
         const err = e as AxiosError;
-        throw new Error(`GET statisticsPage query error, ${err.message}`);
+        if (err.response) {
+          const res = err.response as AxiosResponse;
+          if (res.status === 404) {
+            // setLearnedLongData([]);
+            // setLearnedByDayData([]);
+            // setNewWordsData([]);
+            setLearnedLongData([{ date:`${today}`, learnedWordsLong:0 }]);
+            setLearnedByDayData([{ date:`${today}`, learnedWordsByDay:0 }]);
+            setNewWordsData([{ date:`${today}`, newWords:0 }]);
+          }
+        }
+        else {
+          throw new Error(`GET statisticsPage query error, ${err.message}`);
+        }
       }
-
     };
 
     getStatistics().catch(() => {
       throw new Error('Cannot get statistics');
     });
+
   },[today, user]);
 
   return(
