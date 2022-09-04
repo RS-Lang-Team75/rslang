@@ -146,6 +146,7 @@ export function StatisticsPage (){
         />
       </div>)}
         {user.userId && <div className='chartContainer'>
+          <h2 className='chartTitle'>Прогресс</h2>
           <ChartStatistic learnedLong = {learnedLongData} newWords={newWordsData}/>
         </div>}
 

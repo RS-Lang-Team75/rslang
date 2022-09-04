@@ -1,8 +1,6 @@
 import 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 
-import React from 'react';
-
 import './ChartStatistic.pcss';
 import { StatisticsByDay } from '@/types/types';
 
@@ -20,13 +18,6 @@ export function ChartStatistic ({ learnedLong,newWords  }:ChartStatisticProps) :
       intersect: false,
     },
     stacked: false,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Прогресс',
-        fontSize: 40,
-      },
-    },
     scales: {
       x:{
         display: false,
@@ -74,7 +65,7 @@ export function ChartStatistic ({ learnedLong,newWords  }:ChartStatisticProps) :
   };
 
   return (
-    <div className='w-full'>
+    <div className='chartStatistic'>
       <Line options={options} data={userData}/>
     </div>
   );
