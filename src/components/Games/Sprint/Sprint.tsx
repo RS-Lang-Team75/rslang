@@ -4,9 +4,11 @@ import { useLocation } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Countdown from '../Countdown/Countdown';
-import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
+import { HiddenSoundFX } from '../HiddenSounds/HiddenSoundFX';
+import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
+import SprintGreetings from '../SprintGreetings/SprintGreetings';
 
 import { Button } from '@/components/Button/Button';
 import { IWord } from '@/types/types';
@@ -76,6 +78,13 @@ export default function Sprint () {
 
   const user = useSelector((state: RootState) => state.user);
 
+  const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+
+  const soundToggle = (): void => {
+    setIsSoundOn(s => !s);
+  };
+
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
     const randomWords = await getWordsQuery(page, group);
     setPageWords(randomWords);
@@ -121,7 +130,7 @@ export default function Sprint () {
       setWrongAnswers(a => [...a, wordsForGame[shownWordNumber]]);
       isCorrect = false;
     }
-
+    setIsCorrectAnswer(isCorrect);
     const wordStatus = isCorrect ? 'studied' : 'learning';
     checkStreak(isCorrect);
 
@@ -146,7 +155,6 @@ export default function Sprint () {
     setIsGameFinished(false);
     setCorrectAnswers([]);
     setWrongAnswers([]);
-    setWordsForGame([]);
     setShownWordNumber(0);
     setChosenGroup(0);
   };
@@ -218,20 +226,18 @@ export default function Sprint () {
 
   return(
     <main className='gamesPage'>
+
       <div className="gameSection">
-        <h2>Sprint</h2>
-        <h2>User: {user.name}</h2>
-        <h3>ID: {user.userId}</h3>
         {!isGameStarted && !isGameFinished &&
           <>
-            {!isStartedFromBook &&
-              <DifficultySelector
-                returnRandomWords={returnRandomWords}
-                chosenGroup={chosenGroup}
-              />
-            }
+            <SprintGreetings
+              isStartedFromBook={isStartedFromBook}
+              returnRandomWords={returnRandomWords}
+              chosenGroup={chosenGroup}
+            />
             <Button text='Начать игру'
               classBtn='nextRound'
+              disabled={wordsForGame.length === 0}
               onClick={() => {
                 if (wordsForGame.length > 0) {
                   setIsGameStarted(true);
@@ -239,14 +245,36 @@ export default function Sprint () {
               }}/>
           </>
         }
+
         {wordsForGame.length > 0 && isGameStarted &&
           <>
-            <Countdown onTimerEnd={onTimerEnd} />
-            <div className="flex justify-center gap-5">
-              <div>{sprintWord.wordEnglish}</div>
-              <div>ЭТО</div>
-              <div>{sprintWord.wordTranslation}</div>
-              <div>?????</div>
+            {shownWordNumber > 0 &&
+                <HiddenSoundFX
+                  isAnswerCorrect={isCorrectAnswer}
+                  isSoundOn={isSoundOn}
+                  wordNumber={shownWordNumber}
+                />
+            }
+            <div className="upperGamePart">
+              <SoundFXControl
+                isSoundOn={isSoundOn}
+                soundControlCallback={soundToggle}
+              />
+              <Countdown onTimerEnd={onTimerEnd} />
+              <div className="roundCounter" />
+            </div>
+            <div className='sprintWordsContainer'>
+              <div
+                className='sprintWord'>
+                {sprintWord.wordEnglish}
+              </div>
+              <div>это</div>
+              <div
+                className='sprintWord'>
+                {sprintWord.wordTranslation}
+              </div>
+              <div
+                className='sprintWord'>?</div>
             </div>
             <div className="answerButtonsContainer">
               <GameButton
@@ -262,7 +290,8 @@ export default function Sprint () {
             </div>
           </>
         }
-        {isGameFinished &&
+      </div>
+      {isGameFinished &&
           <section className='flex flex-col justify-center'>
             <h2>Game is finished!</h2>
             <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
@@ -271,7 +300,6 @@ export default function Sprint () {
               onClick={gameReset}
             />
           </section>}
-      </div>
     </main>
   );
 }

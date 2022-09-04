@@ -10,14 +10,23 @@
   @apply flex justify-center;
 }
 
+.sprintWordsContainer {
+  @apply flex justify-center items-baseline gap-2 h-fit my-8;
+
+  & .sprintWord {
+    @apply text-3xl text-sky-800 h-fit;
+  }
+}
+
+
 .answerBtn{
   @apply block border-2 mx-0 uppercase py-2 px-6 my-2 rounded-full active:border-transparent;
 }
 
 .leftBtn {
-  @apply border-red-500 active:bg-red-500 rounded-r-none hover:bg-red-200;
+  @apply w-32 border-red-500 active:bg-red-500 rounded-r-none hover:bg-red-200;
 }
 
 .rightBtn {
-  @apply border-green-500 active:bg-green-500 rounded-l-none hover:bg-green-200;
+  @apply w-32 border-green-500 active:bg-green-500 rounded-l-none hover:bg-green-200;
 }
