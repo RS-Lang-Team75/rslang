@@ -31,7 +31,7 @@ export function MainPage (){
           <div className='advantageCard'>
             <Games className='advantageCardImg'/>
             <h3 className='advantageCardTitle'>Игры</h3>
-            <p className='advantageCardContent'>Порой, изучать слова может быть скучным! На этот случай мы предлагаем Вам на выбор две игры увлекательные игры,
+            <p className='advantageCardContent'>Порой, изучать слова может быть скучно! На этот случай мы предлагаем Вам на выбор две увлекательные игры,
                которые помогут вам натренировать запоминание слов, а так же восприятие слов на слух.
             </p>
           </div>
@@ -39,7 +39,7 @@ export function MainPage (){
             <Statistic className='advantageCardImg'/>
             <h3 className='advantageCardTitle'>Статистика</h3>
             <p className='advantageCardContent'>Изучение новых слов, это долгий процесс и очень важно видеть свой прогресс, чтобы не потерять мотивацию.
-              Мы предлагаем Вам отслеживать свой прогресс в разделе статистики
+              Мы предлагаем Вам отслеживать свой прогресс в разделе статистики.
             </p>
           </div>
         </div>
