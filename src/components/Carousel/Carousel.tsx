@@ -4,6 +4,10 @@ import { MutableRefObject, useRef, useState } from 'react';
 
 import ArrowBack from '@/assets/icons/arrow-back.svg';
 import ArrowForward from '@/assets/icons/arrow-forward.svg';
+import Beach from '@/assets/images/beach.jpg';
+import Clouds from '@/assets/images/clouds.jpg';
+import Hand from '@/assets/images/hand.jpeg';
+import Road from '@/assets/images/road.jpg';
 
 import './Carousel.pcss';
 
@@ -19,11 +23,11 @@ export function Carousel (): JSX.Element  {
   const [index, setIndex] = useState(0);
   const imgLink:ImgLink={
     '0':{
-      linkImg:'https://img1.goodfon.ru/wallpaper/nbig/0/f7/ssha-nevada-doroga-pustynya.jpg',
+      linkImg: Road,
       text:'Весь мир открыт для тебя...',
     },
     '1':{
-      linkImg:'https://kartinkin.net/uploads/posts/2021-07/thumbs/1625164206_50-kartinkin-com-p-fon-nebo-s-oblakami-krasivie-foni-51.jpg',
+      linkImg: Clouds,
       text:'Изучай английский вместе с нами...',
     },
     '2':{
@@ -31,11 +35,11 @@ export function Carousel (): JSX.Element  {
       text:'Покоряй новые вершины...',
     },
     '3':{
-      linkImg:'https://www.genivity.com/wp-content/uploads/2018/07/roman-kraft-266787-unsplash-1080x675.jpg',
+      linkImg: Hand,
       text:'Мы поможем тебе на этом пути...',
     },
     '4':{
-      linkImg:'https://img2.goodfon.ru/wallpaper/nbig/b/61/summer-beach-sea-shore-6733.jpg',
+      linkImg: Beach,
       text:'Осуществи свою мечту!',
     },
 
