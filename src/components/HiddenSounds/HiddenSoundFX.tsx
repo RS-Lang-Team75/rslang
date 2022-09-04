@@ -28,7 +28,7 @@ export function HiddenSoundFX (props: IHiddenSoundFx): JSX.Element {
   return(
     <div>
       <audio>
-        <track src={correctSound} kind="captions"/>
+        <track src={isAnswerCorrect ? correctSound : wrongSound} kind="captions"/>
       </audio>
     </div>
   );
