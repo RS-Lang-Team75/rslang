@@ -32,7 +32,7 @@ const userStatistics:UserStatistics = {
   },
 };
 
-const getDate = ():string=>{
+export const getDate = ():string=>{
   const date = new Date();
   return`${date.getFullYear()} ${date.toDateString().substring(4, 7)} ${date.getDate()}`;
 };
@@ -73,7 +73,9 @@ export const putStudiedWordInStatisticsData: PutWordQueryFunction = async (
         date: today,
         learnedWordsLong: allStudiedWords,
       });
-      let studiedWordsByDay = allStudiedWords - (lastSign.learnedWordsByDay as number);
+      const sumPrevLearnedWords = stateStudiedWordsByDayParse
+        .reduce(( prev, cur ) => cur.learnedWordsByDay ? prev + +cur.learnedWordsByDay :0 , 0);
+      let studiedWordsByDay = allStudiedWords - sumPrevLearnedWords;
       if ( studiedWordsByDay <= 0 ) {
         studiedWordsByDay = 0;
       }

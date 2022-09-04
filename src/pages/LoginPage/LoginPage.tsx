@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import React, { FormEvent, useState } from 'react';
 
@@ -12,7 +13,7 @@ import { Button } from '@/components/Button/Button';
 import { Footer } from '@/components/Footer/Footer';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
-import { saveName, saveRefreshToken, saveToken, saveUserId } from '@/utils/slices/userSlice';
+import { saveAll } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
@@ -71,10 +72,12 @@ export function LoginPage (){
       if (isLoginMode) {
         try {
           const response = await signIn(details);
-          dispatch(saveName(response.name));
-          dispatch(saveToken(response.token));
-          dispatch(saveUserId(response.userId));
-          dispatch(saveRefreshToken(response.refreshToken));
+          dispatch(saveAll({
+            name: response.name,
+            token: response.token,
+            userId: response.userId,
+            refreshToken: response.refreshToken,
+          }));
         } catch {
           setIsLoginFailed(true);
         }
@@ -88,15 +91,6 @@ export function LoginPage (){
         }
       }
     }
-  };
-
-  const logout = (e: FormEvent): void => {
-    e.preventDefault();
-    dispatch(saveName(''));
-    dispatch(saveToken(''));
-    dispatch(saveUserId(''));
-    dispatch(saveRefreshToken(''));
-    localStorage.clear();
   };
 
   return(
@@ -192,14 +186,16 @@ export function LoginPage (){
             </div>
           </div>}
 
-          {user.name &&
-          <Button
-            text='Выйти'
-            classBtn="form__login-btn"
-            onClick={logout} />}
-        </form>
-      </main>
-      <Footer />
-    </>
+        {user.name &&
+        <Link
+          key='linkToBook'
+          to='/book'
+          className='form__login-btn'
+        >Начать учиться!
+        </Link>}
+      </form>
+    </main>
+    <Footer />
+  </>
   );
 }

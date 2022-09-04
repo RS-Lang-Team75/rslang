@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 import './Navigation.pcss';
 import { Button } from '../Button/Button';
@@ -22,7 +22,7 @@ export function Navigation (): JSX.Element {
     dispatch(saveToken(''));
     dispatch(saveUserId(''));
     dispatch(saveRefreshToken(''));
-    localStorage.clear();
+    localStorage.setItem('client-info', '');
   };
 
   return(
@@ -80,7 +80,6 @@ export function Navigation (): JSX.Element {
             </div>
             <div className="menuMobileOpen">
               {[
-                ['LOGIN', '/login'],
                 ['Учебник', '/book'],
                 ['Аудиовызов', '/audiocall'],
                 ['Спринт', '/sprint'],

@@ -47,7 +47,6 @@ export interface StatisticsStates{
   stateLearnedLong:string;
 }
 export interface StatisticsByDay{
-  // [key:string]:number|number;
   date?:string;
   learnedWordsByDay?: number;
   newWords?: number;

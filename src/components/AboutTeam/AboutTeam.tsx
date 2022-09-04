@@ -9,7 +9,7 @@ import './AboutTeam.pcss';
 export function AboutTeam () : JSX.Element{
   return (
     <>
-      <h2 className='teamHeader'>Our team</h2>
+      <h2 className='teamHeader'>Наша команда</h2>
 
       <div className='wrapperAboutTeam'>
         {/* card1 */}

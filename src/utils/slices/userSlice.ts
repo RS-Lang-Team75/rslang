@@ -4,21 +4,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
-  message: string;
   token: string;
   refreshToken: string;
   userId: string;
   name: string;
 }
-
-const storedUser: UserState = JSON.parse(localStorage.getItem('client-info') as string) as UserState;
+const localSaveData = localStorage.getItem('client-info');
+const storedUser = localSaveData ? (JSON.parse(localSaveData) as UserState) : undefined;
 
 const saveLocal = (state: UserState) => {
   localStorage.setItem('client-info', JSON.stringify(state));
 };
 
 const initialState: UserState = storedUser || {
-  message: '',
   token: '',
   refreshToken: '',
   userId: '',
@@ -29,6 +27,13 @@ export const userSlice = createSlice({
   name: 'userToken',
   initialState,
   reducers: {
+    saveAll: (state, action: PayloadAction<UserState>) => {
+      state.token = action.payload.token;
+      state.name = action.payload.name;
+      state.userId = action.payload.userId;
+      state.refreshToken = action.payload.refreshToken;
+      saveLocal(state);
+    },
     saveToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       saveLocal(state);
@@ -48,6 +53,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { saveToken, saveRefreshToken, saveName, saveUserId } = userSlice.actions;
+export const { saveToken, saveRefreshToken, saveName, saveUserId, saveAll } = userSlice.actions;
 
 export default userSlice.reducer;

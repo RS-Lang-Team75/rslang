@@ -15,7 +15,7 @@ type GameLocalStats = {
   newWords: number;
 };
 
-type LocalDailyStatistics = {
+export type LocalDailyStatistics = {
   date: string;
   allCorrect: number;
   allWrong: number;

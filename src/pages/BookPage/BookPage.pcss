@@ -1,5 +1,5 @@
 .bookPageMain {
-  @apply flex flex-col;
+  @apply flex flex-col relative;
 
   & .PageMainContent {
     @apply flex justify-evenly mx-5 gap-5 md:flex-col md:gap-1;
@@ -17,7 +17,7 @@
 .gameLink {
   @apply block text-center my-5 bg-sky-700 rounded-2xl px-3 py-2 md:py-4 text-sky-200 font-medium;
 
-  &:hover{
+  &:hover {
     @apply bg-sky-200 text-sky-800;
   }
 }
@@ -37,4 +37,12 @@
 
 .messageCongratulation {
   @apply flex justify-center mx-auto my-4 px-4 text-2xl text-sky-800 text-center uppercase;
+}
+.btnStickyContainer {
+  @apply bottom-0 z-40 sticky flex justify-end;
+
+  & .btnScrollUp {
+    @apply block w-14 h-14 !bg-sky-600 py-2 rounded-2xl
+   hover:bg-sky-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-1;
+  }
 }

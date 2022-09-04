@@ -1,16 +1,18 @@
 /* eslint-disable no-underscore-dangle */
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 
 import './BookPage.pcss';
+import { Button } from '@/components/Button/Button';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { Footer } from '@/components/Footer/Footer';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IResponseAggregated, IWord } from '@/types/types';
+import { setAxiosConfig } from '@/utils/queries/headers';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
 
@@ -32,18 +34,11 @@ export function BookPage () : JSX.Element{
   const TOTAL_PAGES = 29;
 
   useEffect(() => {
-    const wordsAxiosConfig: AxiosRequestConfig = {
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
 
     const getDataDifficultWords = async (pageDif:number, groupDif:number): Promise<IWord[]> => {
       const response = await axios.get<IResponseAggregated[]>(
         `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${groupDif}&filter={"$and":[{"page":${pageDif}},{"$or":[{"userWord.difficulty":"studied"},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}]}`,
-        wordsAxiosConfig);
+        setAxiosConfig(user.token));
       return response.data[0].paginatedResults;
     };
 
@@ -55,11 +50,16 @@ export function BookPage () : JSX.Element{
         if (g === 6 && user.userId) {
           const response = await axios.get<IResponseAggregated[]>(
             `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${p}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
-            wordsAxiosConfig);
+            setAxiosConfig(user.token));
 
           const diffWords = response.data[0].paginatedResults;
+          const totalCountWords = response.data[0].totalCount[0];
 
-          setTotalPages(Math.ceil(response.data[0].totalCount[0].count / 20) - 1);
+          setTotalPages(
+            totalCountWords
+              ? Math.ceil(totalCountWords.count / 20) - 1
+              : 0,
+          );
 
           setDifficultWords(diffWords);
           setWords(diffWords);
@@ -88,8 +88,20 @@ export function BookPage () : JSX.Element{
 
     }
 
-    fetchWord(page,group).catch(() => {
-      throw new Error('Cannot get words');
+    fetchWord(page,group).catch((e:unknown) => {
+      const err = e as AxiosError;
+      if (err.response) {
+        const res = err.response as AxiosResponse;
+        if (res.status === 404) {
+          setTotalPages(0);
+          setDifficultWords([]);
+          setWords([]);
+          setPageStudied(false);
+        }
+      }
+      else {
+        throw new Error(`Cannot get words, ${err.message}`);
+      }
     });
   }, [group, page, user, user.token, user.userId]);
 
@@ -158,8 +170,23 @@ export function BookPage () : JSX.Element{
               key={word.id || word._id} />)}
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
+      <div className='btnStickyContainer'>
+        <Button
+          classBtn="btnScrollUp"
+          text='UP'
+          onClick={()=>{
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'smooth',
+            });
+          }}/>
+      </div>
+
+    </main>
+    
+    <Footer />
     </>
   );
 }
