@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -52,8 +52,13 @@ export function BookPage () : JSX.Element{
             setAxiosConfig(user.token));
 
           const diffWords = response.data[0].paginatedResults;
+          const totalCountWords = response.data[0].totalCount[0];
 
-          setTotalPages(Math.ceil(response.data[0].totalCount[0].count / 20) - 1);
+          setTotalPages(
+            totalCountWords
+              ? Math.ceil(totalCountWords.count / 20) - 1
+              : 0,
+          );
 
           setDifficultWords(diffWords);
           setWords(diffWords);
@@ -82,8 +87,20 @@ export function BookPage () : JSX.Element{
 
     }
 
-    fetchWord(page,group).catch(() => {
-      throw new Error('Cannot get words');
+    fetchWord(page,group).catch((e:unknown) => {
+      const err = e as AxiosError;
+      if (err.response) {
+        const res = err.response as AxiosResponse;
+        if (res.status === 404) {
+          setTotalPages(0);
+          setDifficultWords([]);
+          setWords([]);
+          setPageStudied(false);
+        }
+      }
+      else {
+        throw new Error(`Cannot get words, ${err.message}`);
+      }
     });
   }, [group, page, user, user.token, user.userId]);
 
