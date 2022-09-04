@@ -217,5 +217,8 @@ export const getStudiedWords  = async (user:UserState, wordPage:number, wordGrou
     const err = e as AxiosError;
     throw new Error(err.message);
   }
-
 };
+
+export const getDifficultWords = async (user: UserState, page: number) => axios.get<IResponseAggregated[]>(
+  `${SERVER_URL}/users/${user.userId}/aggregatedWords?page=${page}&filter={"$and":[{"userWord.difficulty":"difficult"}]}`,
+  setAxiosConfig(user.token));
