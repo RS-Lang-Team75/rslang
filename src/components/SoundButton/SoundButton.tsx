@@ -86,6 +86,7 @@ export function SoundButton (props: SoundButtonProps) {
         throw new Error('problem playing audio');
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [word]);
 
   return (
