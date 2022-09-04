@@ -4,12 +4,14 @@ import Games from '@/assets/icons/games.svg';
 import Statistic from '@/assets/icons/statistic.svg';
 import { AboutTeam } from '@/components/AboutTeam/AboutTeam';
 import { Carousel } from '@/components/Carousel/Carousel';
+import { Footer } from '@/components/Footer/Footer';
 
 import './MainPage.pcss';
 
 export function MainPage (){
 
   return(
+  <>
     <main >
       <Carousel/>
       <section className='my-20'>
@@ -46,5 +48,7 @@ export function MainPage (){
       </section>
       <AboutTeam/>
     </main>
+    <Footer />
+  </>
   );
 }

@@ -4,11 +4,13 @@ import { useLocation } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
 import AudioсallAnswers from '../AudiocallAnswers/AudiocallAnswers';
-import { DifficultySelector } from '../DifficultySelector/DifficultySelector';
+import AudiocallGreetings from '../AudiocallGreetings/AudiocallGreetings';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
+import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
 
 import { Button } from '@/components/Button/Button';
+import { HiddenSoundFX } from '@/components/Games/HiddenSounds/HiddenSoundFX';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
@@ -57,6 +59,8 @@ export default function Audioсall () {
 
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+
+  const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
 
   const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
@@ -147,7 +151,7 @@ export default function Audioсall () {
     }
   };
 
-  const gameReset = () => {
+  const gameReset = (): void => {
     setIsGameFinished(false);
     setIsGameStarted(false);
     setIsAnswerGiven(false);
@@ -155,6 +159,10 @@ export default function Audioсall () {
     setWrongAnswers([]);
     setShownWordNumber(0);
     setChosenGroup(0);
+  };
+
+  const soundToggle = (): void => {
+    setIsSoundOn(s => !s);
   };
 
   useEffect(() => {
@@ -192,40 +200,53 @@ export default function Audioсall () {
 
   return(
     <main className='gamesPage'>
-      <div className="gameSection">
-        <h2>Audiocall</h2>
-        <h2>User: {user.name}</h2>
-        <h3>ID: {user.userId}</h3>
-      </div>
+
       {!isGameStarted && !isGameFinished &&
-      <>
-        {!isStartedFromBook &&
-        <DifficultySelector
+      <div className='gameSection'>
+        <AudiocallGreetings
+          isStartedFromBook={isStartedFromBook}
           returnRandomWords={returnRandomWords}
           chosenGroup={chosenGroup}
-        />}
+        />
         <Button text='Начать игру'
           classBtn='nextRound'
+          disabled={wordsForGame.length === 0}
           onClick={() => {
             if (wordsForGame.length > 0) {
               setIsGameStarted(true);
             }
           }}/>
-      </>
+      </div>
       }
+
       {!isGameFinished && isGameStarted &&
         <section className='gameSection'>
           {
             wordsForGame.length > 0 &&
             <div className='gameSection'>
 
-              <div
-                className='cardAudio'>
-                <SoundButton
-                  word= {wordsForGame[shownWordNumber]}
-                  classBtn='audioBtn'
-                  playFirstOnly
+              {isAnswerGiven &&
+                <HiddenSoundFX
+                  isAnswerCorrect={isCorrectAnswer}
+                  isSoundOn={isSoundOn}
+                />}
+              <div className="upperGamePart">
+                <SoundFXControl
+                  isSoundOn={isSoundOn}
+                  soundControlCallback={soundToggle}
                 />
+                <div
+                  className='cardAudio'>
+                  <SoundButton
+                    word= {wordsForGame[shownWordNumber]}
+                    classBtn='audioBtn'
+                    playFirstOnly
+                    playOnMount
+                  />
+                </div>
+                <div className="roundCounter">
+                  {`${shownWordNumber + 1}/${roundsNumber}`}
+                </div>
               </div>
               <div
                 className="answerContainer">
@@ -260,16 +281,14 @@ export default function Audioсall () {
             }}
             simulatedButtonCode="Space"
           />
-
         </section>
       }
       {
         isGameFinished &&
-        <section className='flex flex-col justify-center'>
-          <h2>Game is finished!</h2>
+        <section className='endGame'>
           <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
           <Button text='Начать сначала'
-            classBtn='nextRound'
+            classBtn='restartBtn'
             onClick={gameReset}/>
         </section>}
     </main>

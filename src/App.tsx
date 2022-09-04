@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { Footer } from './components/Footer/Footer';
 import Audioсall from './components/Games/Audiocall/Audiocall';
 import Sprint from './components/Games/Sprint/Sprint';
 import { Navigation } from './components/Navigation/Navigation';
@@ -22,7 +21,6 @@ export const App = (): JSX.Element =>  (
       <Route path='/team' element={<TeamPage/>} />
       <Route path='/login' element={<LoginPage/>} />
     </Routes>
-    <Footer/>
   </div>
 
 );

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { CardStatistics } from '@/components/CardStatistics/CardStatistics';
 import { ChartStatistic } from '@/components/Charts/ChartStatistic/ChartStatistic';
+import { Footer } from '@/components/Footer/Footer';
 import { StatisticsByDay, UserStatistics } from '@/types/types';
 import { setAxiosConfig } from '@/utils/queries/headers';
 import { getDate } from '@/utils/queries/statisticQueries';
@@ -95,6 +96,7 @@ export function StatisticsPage (){
   },[today, user]);
 
   return(
+<>
     <main>
 
       {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
@@ -148,5 +150,7 @@ export function StatisticsPage (){
       </div>}
 
     </main>
+    <Footer />
+  </>
   );
 }

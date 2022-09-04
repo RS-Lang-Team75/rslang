@@ -1,27 +1,13 @@
 .answerBtnContainer {
   @apply flex justify-center flex-wrap my-5;
+
+  & .answerBtn {
+    @apply border uppercase px-3 py-2 my-2 mx-2 rounded-full text-center cursor-pointer transition-all duration-300;
+  }
+
+  & .activeAnswerBtn {
+    @apply hover:bg-sky-200 active:bg-sky-400 border-gray-400;
+  }
 }
 
-.answerBtn {
-  @apply border uppercase px-5 py-2 my-2 rounded-full text-center cursor-pointer m-3;
-}
 
-.activeAnswerBtn {
-  @apply hover:bg-sky-200 active:bg-sky-400;
-}
-
-.answerContainer {
-  @apply h-10 my-3 uppercase text-2xl;
-}
-
-.answerImg {
-  @apply w-40 h-40 bg-cover bg-no-repeat bg-center my-auto rounded-full;
-}
-
-.answerCorrect {
-  @apply text-green-700;
-}
-
-.answerIncorrect {
-  @apply text-red-700;
-}

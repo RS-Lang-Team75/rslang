@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 
 import AudioSvg from '@/assets/icons/audio.svg';
 import StopSvg from '@/assets/icons/stop.svg';
@@ -10,11 +10,12 @@ interface SoundButtonProps{
   word:IWord;
   classBtn : string;
   playFirstOnly?: boolean;
+  playOnMount?: boolean;
 }
 
 export function SoundButton (props: SoundButtonProps) {
 
-  const { word, classBtn, playFirstOnly } = props;
+  const { word, classBtn, playFirstOnly, playOnMount } = props;
 
   const SERVER_URL = 'https://rslang-team75.herokuapp.com';
   const firstSound = `${SERVER_URL}/${word.audio}`;
@@ -31,13 +32,15 @@ export function SoundButton (props: SoundButtonProps) {
   // const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(allSoundsLinks[0]);
   // const [playNum, setPlayNum] = useState(0);
 
-  function playAudio (){
+  const playAudio = async () => {
     const audio = (vidRef as MutableRefObject<HTMLAudioElement>).current;
     audio.volume = 0.7;
-    if(playingRef.current){
+    if(playingRef.current) {
       audio.src = allSoundsLinks[playNumRef.current];
       audio.load();
-      audio.play().catch(e => console.log(e));
+      await audio.play().catch(() => {
+        throw new Error('problem playing audio');
+      });
     }else{
       audio.pause();
       // playingRef.current=true;
@@ -52,7 +55,7 @@ export function SoundButton (props: SoundButtonProps) {
       // TODO: для useState
       // setPlaying(true);
       // setPlayNum(p=>p+1);
-    }else{
+    } else {
       playNumRef.current = 0;
       playingRef.current=false;
       // TODO: для useState
@@ -62,14 +65,29 @@ export function SoundButton (props: SoundButtonProps) {
 
     // setCurrentlyPlayingSong(allSoundsLinks[playNum]);
 
-    playAudio();
+    playAudio().catch(() => {
+      throw new Error('problem playing audio');
+    });;
   };
 
-  function activatePlayer (){
+  const activatePlayer = () => {
     setPlaying(false);
     playingRef.current = !playingRef.current;
-    playAudio();
-  }
+    playAudio().catch(() => {
+      throw new Error('problem playing audio');
+    });;
+  };
+
+  useEffect(() => {
+    if (playOnMount) {
+      playingRef.current = true;
+      setPlaying(false);
+      playAudio().catch(() => {
+        throw new Error('problem playing audio');
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [word]);
 
   return (
     <div
