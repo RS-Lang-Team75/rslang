@@ -9,6 +9,7 @@ import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 
 import { Button } from '@/components/Button/Button';
+import { HiddenSoundCorrect, HiddenSoundWrong } from '@/components/HiddenSounds/HiddenSounds';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
@@ -229,9 +230,11 @@ export default function Audioсall () {
                     playFirstOnly
                     playOnMount
                   />
+                  {isAnswerGiven && isCorrectAnswer && <HiddenSoundCorrect />}
+                  {isAnswerGiven && !isCorrectAnswer && <HiddenSoundWrong />}
                 </div>
                 <div className="roundCounter">
-                  {`${shownWordNumber}/${roundsNumber}`}
+                  {`${shownWordNumber + 1}/${roundsNumber}`}
                 </div>
               </div>
               <div
