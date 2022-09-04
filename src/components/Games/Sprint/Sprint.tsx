@@ -14,7 +14,7 @@ import SprintGreetings from '../SprintGreetings/SprintGreetings';
 import { Button } from '@/components/Button/Button';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
-import { getWordsQuery, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
+import { getDifficultWords, getStudiedWords, getWordsQuery, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 import { recordGameStats } from '@/utils/todayStats';
@@ -51,14 +51,15 @@ export default function Sprint () {
   };
 
   const PageAndGroupRef = useRef<PageAndGroup>({
-    page: stateFromBook ? stateFromBook.pageFromBook + 1 : 0,
+    page: stateFromBook ? stateFromBook.pageFromBook - 1 : 0,
     group: stateFromBook ? stateFromBook.groupFromBook : 0,
   });
 
   const gameName = 'sprint';
   const addWordsDelta = 3;
 
-  const [chosenGroup, setChosenGroup] = useState<number>(0);
+  const [chosenGroup, setChosenGroup] = useState<number>(
+    stateFromBook ? stateFromBook.groupFromBook : 0);
 
   const [initialPageWords] = useState<IWord[]>(unstudiedWords || []);
 
@@ -71,6 +72,7 @@ export default function Sprint () {
 
   const currentStreakRef = useRef<number>(0);
   const newWordsNumberRef = useRef<number>(0);
+  const isGetWordsHappen = useRef<boolean>(false);
 
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
@@ -88,16 +90,6 @@ export default function Sprint () {
     setIsSoundOn(s => !s);
   };
 
-  const returnRandomWords = async (page: number, group: number): Promise<void> => {
-    const randomWords = await getWordsQuery(page, group);
-    setPageWords(randomWords);
-    PageAndGroupRef.current = {
-      page: page < 29 ? page + 1 : 0,
-      group,
-    };
-    setChosenGroup(group + 1);
-  };
-
   const onTimerEnd = () => {
     setIsGameStarted(false);
     setIsGameFinished(true);
@@ -110,6 +102,27 @@ export default function Sprint () {
       bestStreak,
       newWordsNumberRef.current,
     );
+  };
+
+  const returnRandomWords = async (page: number, group: number): Promise<void> => {
+    PageAndGroupRef.current = {
+      page: page - 1,
+      group,
+    };
+    if (page >= 0) {
+      if (group === 6) {
+        const difficultWords = await getDifficultWords(user, page);
+        setPageWords(difficultWords.data[0].paginatedResults);
+      } else {
+        let randomWords = await getWordsQuery(page, group);
+        if (user.userId) {
+          const studiedWords = await getStudiedWords(user, page, group);
+          randomWords = randomWords.filter(w => !studiedWords.find(sw => sw._id === w.id));
+        };
+        setPageWords(randomWords);
+      }
+      isGetWordsHappen.current = true;
+    }
   };
 
   const checkStreak = (isCorrect: boolean): void => {
@@ -152,6 +165,9 @@ export default function Sprint () {
         newWordsNumberRef.current += 1;
       }
     });
+    if (shownWordNumber === wordsForGame.length - 1) {
+      onTimerEnd();
+    }
   };
 
   const gameReset = () => {
@@ -179,7 +195,7 @@ export default function Sprint () {
   }, [pageWords, isGameFinished, isGameStarted]);
 
   useEffect(() => {
-    let isGetWordsHappen = false;
+    isGetWordsHappen.current = false;
     const prepareWord = () => {
       const dice = Math.random();
 
@@ -210,13 +226,13 @@ export default function Sprint () {
             throw new Error(err);
           }
         });
-      isGetWordsHappen = true;
     }
 
-    if (wordsForGame.length > 0 && !isGetWordsHappen) {
+    if (wordsForGame.length > 0 && !isGetWordsHappen.current) {
       prepareWord();
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGameStarted, shownWordNumber, wordsForGame]);
 
   useEffect(() => {
