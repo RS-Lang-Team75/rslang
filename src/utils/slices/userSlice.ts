@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
+import { getNewTokens } from '../queries/userQueries';
+
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
@@ -11,12 +13,34 @@ export interface UserState {
 }
 const localSaveData = localStorage.getItem('client-info');
 const storedUser = localSaveData ? (JSON.parse(localSaveData) as UserState) : undefined;
+let newStoredUser: UserState | undefined;
 
 const saveLocal = (state: UserState) => {
   localStorage.setItem('client-info', JSON.stringify(state));
 };
 
-const initialState: UserState = storedUser || {
+if (storedUser && storedUser?.refreshToken) {
+  getNewTokens(storedUser).then(res => {
+    if (storedUser.token) {
+      newStoredUser = structuredClone(storedUser);
+      Object.defineProperties(newStoredUser, {
+        token: {
+          writable: true,
+          value: res.token,
+        },
+        refreshToken: {
+          writable: true,
+          value: res.refreshToken,
+        },
+      });
+      saveLocal(newStoredUser);
+    }
+  }).catch(() => {
+    throw new Error('Failed to refresh tokens');
+  });
+}
+
+const initialState: UserState = newStoredUser || storedUser || {
   token: '',
   refreshToken: '',
   userId: '',
