@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -59,7 +60,9 @@ export default function Sprint () {
 
   const [chosenGroup, setChosenGroup] = useState<number>(0);
 
-  const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
+  const [initialPageWords] = useState<IWord[]>(unstudiedWords || []);
+
+  const [pageWords, setPageWords] = useState<IWord[]>(initialPageWords);
   const [wordsForGame, setWordsForGame] = useState<IWord[]>([]);
 
   const [correctAnswers, setCorrectAnswers] = useState<IWord[]>([]);
@@ -80,6 +83,8 @@ export default function Sprint () {
 
   const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
+
+  console.log(pageWords);
 
   const soundToggle = (): void => {
     setIsSoundOn(s => !s);
@@ -138,7 +143,7 @@ export default function Sprint () {
 
     updateOrCreateUserWordData(
       user,
-      wordsForGame[shownWordNumber].id,
+      (wordsForGame[shownWordNumber].id || wordsForGame[shownWordNumber]._id),
       wordStatus,
       true,
       gameName,
@@ -157,6 +162,7 @@ export default function Sprint () {
     setWrongAnswers([]);
     setShownWordNumber(0);
     setChosenGroup(0);
+    setPageWords(initialPageWords);
   };
 
   useEffect(() => {
@@ -227,7 +233,7 @@ export default function Sprint () {
   return(
     <main className='gamesPage'>
 
-      <div className="gameSection">
+      {!isGameFinished && <div className="gameSection">
         {!isGameStarted && !isGameFinished &&
           <>
             <SprintGreetings
@@ -290,13 +296,12 @@ export default function Sprint () {
             </div>
           </>
         }
-      </div>
+      </div>}
       {isGameFinished &&
-          <section className='flex flex-col justify-center'>
-            <h2>Game is finished!</h2>
+          <section className='endGame'>
             <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
             <Button text='Начать сначала'
-              classBtn='nextRound'
+              classBtn='restartBtn'
               onClick={gameReset}
             />
           </section>}
