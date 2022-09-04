@@ -15,6 +15,7 @@ import { IResponseAggregated, IWord } from '@/types/types';
 import { setAxiosConfig } from '@/utils/queries/headers';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
+import { CircularLoader } from '@/components/CircularLoader/CircularLoader';
 
 export function BookPage () : JSX.Element{
 
@@ -109,6 +110,7 @@ export function BookPage () : JSX.Element{
     setIsGroupSix(false);
     setPage(PAGE_ONE);
     setGroup(value);
+    setWords([]);
     if (value === 6 ) {
       setIsGroupSix(true);
     }
@@ -118,6 +120,7 @@ export function BookPage () : JSX.Element{
 
   const handlePages = (value:number) => {
     setPage(value);
+    setWords([]);
     localStorage.setItem('currentPage', value.toString());
   };
 
@@ -176,6 +179,10 @@ export function BookPage () : JSX.Element{
             <h2 className='messageCongratulation'>
               &#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!
             </h2>}
+
+            {words.length === 0 &&
+              <CircularLoader />
+            }
 
             {words.map(word => <CardWord
               word={word}
