@@ -7,9 +7,10 @@ import AudioсallAnswers from '../AudiocallAnswers/AudiocallAnswers';
 import AudiocallGreetings from '../AudiocallGreetings/AudiocallGreetings';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
+import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
 
 import { Button } from '@/components/Button/Button';
-import { HiddenSoundCorrect, HiddenSoundWrong } from '@/components/HiddenSounds/HiddenSounds';
+import { HiddenSoundFX } from '@/components/HiddenSounds/HiddenSoundFX';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
@@ -58,6 +59,9 @@ export default function Audioсall () {
 
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+
+  const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
+  const isSoundOnRef = useRef<boolean>(true);
 
   const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
@@ -148,7 +152,7 @@ export default function Audioсall () {
     }
   };
 
-  const gameReset = () => {
+  const gameReset = (): void => {
     setIsGameFinished(false);
     setIsGameStarted(false);
     setIsAnswerGiven(false);
@@ -156,6 +160,11 @@ export default function Audioсall () {
     setWrongAnswers([]);
     setShownWordNumber(0);
     setChosenGroup(0);
+  };
+
+  const soundToggle = (): void => {
+    setIsSoundOn(s => !s);
+    isSoundOnRef.current = !(isSoundOnRef.current);
   };
 
   useEffect(() => {
@@ -218,10 +227,16 @@ export default function Audioсall () {
             wordsForGame.length > 0 &&
             <div className='gameSection'>
 
+              {isAnswerGiven &&
+                <HiddenSoundFX
+                  isAnswerCorrect={isCorrectAnswer}
+                  isSoundOn={isSoundOn}
+                />}
               <div className="upperGamePart">
-                <div className="soundOff">
-                  Sound on/off
-                </div>
+                <SoundFXControl
+                  isSoundOn={isSoundOn}
+                  soundControlCallback={soundToggle}
+                />
                 <div
                   className='cardAudio'>
                   <SoundButton
@@ -230,8 +245,6 @@ export default function Audioсall () {
                     playFirstOnly
                     playOnMount
                   />
-                  {isAnswerGiven && isCorrectAnswer && <HiddenSoundCorrect />}
-                  {isAnswerGiven && !isCorrectAnswer && <HiddenSoundWrong />}
                 </div>
                 <div className="roundCounter">
                   {`${shownWordNumber + 1}/${roundsNumber}`}
