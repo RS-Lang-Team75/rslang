@@ -26,10 +26,16 @@ export function StatisticsPage (){
   const user = useSelector((state: RootState) => state.user);
 
   const gameStatistic = localStorage.getItem(`${user.userId}stats`);
+
+  const gameStatisticParse:LocalDailyStatistics =
+      gameStatistic
+        ? JSON.parse(gameStatistic) as LocalDailyStatistics
+        : InitialDailyStatistics;
+
   const gameStatisticData:LocalDailyStatistics =
-    gameStatistic
-      ? JSON.parse(gameStatistic) as LocalDailyStatistics
-      : InitialDailyStatistics;
+  gameStatisticParse.date === today
+    ? gameStatisticParse
+    : InitialDailyStatistics;
 
   const { games } = gameStatisticData;
 
