@@ -132,8 +132,11 @@ export function CardWord ({
             onClick={
               () => {
                 addWordInDifficultData()
-                  .catch(() => {
-                    throw new Error('Cannot add word');
+                  .catch(e => {
+                    const err = e as Error;
+                    if(err.message !== 'new word'){
+                      throw new Error('Cannot add word');
+                    }
                   });
               }
             }
@@ -146,8 +149,11 @@ export function CardWord ({
             onClick={
               () => {
                 addWordInStudiedData()
-                  .catch(() => {
-                    throw new Error('Cannot add word');
+                  .catch(e => {
+                    const err = e as Error;
+                    if(err.message !== 'new word'){
+                      throw new Error('Cannot add word');
+                    }
                   });
               }
             }/>
