@@ -60,6 +60,7 @@ export default function Sprint () {
 
   const [chosenGroup, setChosenGroup] = useState<number>(
     stateFromBook ? stateFromBook.groupFromBook : 0);
+  const [initialPage] = useState(stateFromBook ? stateFromBook.pageFromBook : 0);
 
   const [initialPageWords] = useState<IWord[]>(unstudiedWords || []);
 
@@ -94,6 +95,7 @@ export default function Sprint () {
     setIsGameStarted(false);
     setIsGameFinished(true);
     setWordsForGame([]);
+    PageAndGroupRef.current.page = initialPage - 1;
     recordGameStats(
       user,
       gameName,
@@ -233,7 +235,7 @@ export default function Sprint () {
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGameStarted, shownWordNumber, wordsForGame]);
+  }, [isGameStarted, shownWordNumber]);
 
   useEffect(() => {
     if (isGameFinished) {
