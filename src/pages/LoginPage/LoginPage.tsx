@@ -9,6 +9,7 @@ import UserIcon from '../../assets/icons/user-icon.svg';
 import './LoginPage.pcss';
 
 import { Button } from '@/components/Button/Button';
+import { Footer } from '@/components/Footer/Footer';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
 import { saveName, saveRefreshToken, saveToken, saveUserId } from '@/utils/slices/userSlice';
@@ -99,110 +100,106 @@ export function LoginPage (){
   };
 
   return(
-    <main className="login">
-      <form className="form">
-        {isLoginMode ?
-          <>
-            <h2 className="form__header">Привет{user.name && `, ${user.name}`}! </h2>
-            <p className="form__sub-header">Рады, что ты с нами!</p>
-          </> :
-          <>
-            <h2 className="form__header">Давай знакомиться! </h2>
-            <p className="form__sub-header" />
-          </>
-        }
-        {!user.name &&
-        <div>
-          {!isLoginMode &&
-          <>
-            <div className={`form__input-container ${(!isNameValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
-              <UserIcon />
-              <input
-                id="name"
-                onChange={e => setDetails({ ...details, name: e.target.value })}
-                onBlur={validateName}
+    <>
+      <main className="login">
+        <form className="form">
+          {isLoginMode ?
+            <>
+              <h2 className="form__header">Привет{user.name && `, ${user.name}`}! </h2>
+              <p className="form__sub-header">Рады, что ты с нами!</p>
+            </> :
+            <>
+              <h2 className="form__header">Давай знакомиться! </h2>
+              <p className="form__sub-header" />
+            </>}
+          {!user.name &&
+          <div>
+            {!isLoginMode &&
+              <>
+                <div className={`form__input-container ${(!isNameValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
+                  <UserIcon />
+                  <input
+                    id="name"
+                    onChange={e => setDetails({ ...details, name: e.target.value })}
+                    onBlur={validateName}
+                    onFocus={() => {
+                      setIsNameValid(true);
+                      setIsLoginFailed(false);
+                    } }
+                    value={details.name}
+                    className="form__input"
+                    type="text"
+                    name="name"
+                    placeholder="Имя" />
+                </div>
+                <div className='form__error'>
+                  {!isNameValid && <p className='form__error-message'>Имя не должно быть пустым</p>}
+                </div>
+              </>}
+            <div className={`form__input-container ${(!isEmailValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
+              <EmailIcon />
+              <input id="email"
+                value={details.email}
+                onChange={e => {
+                  setDetails({ ...details, email: e.target.value });
+                } }
                 onFocus={() => {
-                  setIsNameValid(true);
+                  setIsEmailValid(true);
                   setIsLoginFailed(false);
-                }}
-                value={details.name}
+                } }
+                onBlur={validateEmail}
                 className="form__input"
-                type="text"
-                name="name"
-                placeholder="Имя"
-              />
+                type="email"
+                name="email"
+                placeholder="Email" />
             </div>
             <div className='form__error'>
-              {!isNameValid && <p className='form__error-message'>Имя не должно быть пустым</p>}
+              {!isEmailValid && <p className='form__error-message'>Пожалуйста, введи корректный e-mail</p>}
             </div>
-          </>
-          }
-          <div className={`form__input-container ${(!isEmailValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
-            <EmailIcon />
-            <input id="email"
-              value={details.email}
-              onChange={e => {
-                setDetails({ ...details, email: e.target.value });
-              }}
-              onFocus={() => {
-                setIsEmailValid(true);
-                setIsLoginFailed(false);
-              }}
-              onBlur={validateEmail}
-              className="form__input"
-              type="email"
-              name="email"
-              placeholder="Email"
-            />
-          </div>
-          <div className='form__error'>
-            {!isEmailValid && <p className='form__error-message'>Пожалуйста, введи корректный e-mail</p>}
-          </div>
-          <div className={`form__input-container ${(!isPasswordValid || isLoginFailed)? 'form__input-container_invalid' : ''}`}>
-            <LockIcon />
-            <input className="form__input"
-              value={details.password}
-              onChange={e => setDetails({ ...details, password: e.target.value })}
-              onFocus={() => {
-                setIsPasswordValid(true);
-                setIsLoginFailed(false);
-              }}
-              onBlur={validatePassword}
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Пароль"
-            />
-          </div>
-          <div className='form__error'>
-            {!isPasswordValid && <p className='form__error-message'>Пароль должен быть не короче 8 символов</p>}
-            {isLoginFailed && <p className='form__error-message'>Что-то пошло не так, проверь введенные данные</p>}
-          </div>
-          <Button
-            text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
-            classBtn="form__login-btn"
-            onClick={e => {
-              submitHandler(e).catch(err => console.log(err));
-            }}
-          />
-          <div className="form__sign-container">
+            <div className={`form__input-container ${(!isPasswordValid || isLoginFailed) ? 'form__input-container_invalid' : ''}`}>
+              <LockIcon />
+              <input className="form__input"
+                value={details.password}
+                onChange={e => setDetails({ ...details, password: e.target.value })}
+                onFocus={() => {
+                  setIsPasswordValid(true);
+                  setIsLoginFailed(false);
+                } }
+                onBlur={validatePassword}
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Пароль" />
+            </div>
+            <div className='form__error'>
+              {!isPasswordValid && <p className='form__error-message'>Пароль должен быть не короче 8 символов</p>}
+              {isLoginFailed && <p className='form__error-message'>Что-то пошло не так, проверь введенные данные</p>}
+            </div>
             <Button
-              text={isLoginMode ? 'Создать аккаунт?' : 'Уже есть аккаунт?'}
-              onClick={() => {
-                setIsLoginMode(m => !m);
-                clearForm();
-              }}
-              classBtn='form__sign-up-btn'/>
-          </div>
-        </div>}
+              text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
+              classBtn="form__login-btn"
+              onClick={e => {
+                submitHandler(e).catch(err => console.log(err));
+              } } />
+            <div className="form__sign-container">
+              <Button
+                text={isLoginMode ? 'Создать аккаунт?' : 'Уже есть аккаунт?'}
+                onClick={() => {
+                  setIsLoginMode(m => !m);
+                  clearForm();
+                } }
+                classBtn='form__sign-up-btn' />
+            </div>
+          </div>}
 
-        {user.name &&
-        <Button
-          text='Выйти'
-          classBtn="form__login-btn"
-          onClick={logout}
-        />}
-      </form>
-    </main>
+          {user.name &&
+          <Button
+            text='Выйти'
+            classBtn="form__login-btn"
+            onClick={logout} />}
+        </form>
+      </main>
+      <Footer />
+    </>
   );
 }

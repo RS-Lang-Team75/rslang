@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 import './BookPage.pcss';
 import { CardWord } from '@/components/CardWord/CardWord';
+import { Footer } from '@/components/Footer/Footer';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { SideBar } from '@/components/SideBar/SideBar';
 import { IResponseAggregated, IWord } from '@/types/types';
@@ -113,54 +114,52 @@ export function BookPage () : JSX.Element{
   };
 
   return(
-    <main className='bookPageMain'>
-      <Pagination
-        handlePages={handlePages}
-        page={page}
-        totalPages={totalPages}
-      />
-      <div className='PageMainContent'>
+    <>
+      <main className='bookPageMain'>
+        <Pagination
+          handlePages={handlePages}
+          page={page}
+          totalPages={totalPages} />
+        <div className='PageMainContent'>
 
-        <aside className="stickyContainer">
-          <div className="asideMenuContainer">
-            <SideBar onChange={handleChangeGroup}/>
-            <Link
-              key='audiocallLink'
-              to='/audiocall'
-              className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
-              state={{
-                unstudiedWords: words.filter(w =>
-                  !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
-                allWordsFromPage: words,
-              }}
-            >Попробовать Аудиовызов</Link>
+          <aside className="stickyContainer">
+            <div className="asideMenuContainer">
+              <SideBar onChange={handleChangeGroup} />
+              <Link
+                key='audiocallLink'
+                to='/audiocall'
+                className={pageStudied ? 'gameLink disabledLink' : 'gameLink'}
+                state={{
+                  unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
+                  allWordsFromPage: words,
+                }}
+              >Попробовать Аудиовызов</Link>
 
-            <Link
-              key='sprintLink'
-              to='/sprint'
-              className={pageStudied ? 'gameLink disabledLink' :'gameLink' }
-              state={{
-                unstudiedWords: words.filter(w =>
-                  !difficultWords.find(dw => dw._id === (w.id || w._id) && dw.userWord?.difficulty === 'studied')),
-                pageFromBook: page,
-                groupFromBook: group,
-              }}
-            >Попробовать Спринт</Link>
-          </div>
-        </aside>
+              <Link
+                key='sprintLink'
+                to='/sprint'
+                className={pageStudied ? 'gameLink disabledLink' : 'gameLink'}
+                state={{
+                  unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === (w.id || w._id) && dw.userWord?.difficulty === 'studied')),
+                  pageFromBook: page,
+                  groupFromBook: group,
+                }}
+              >Попробовать Спринт</Link>
+            </div>
+          </aside>
 
-        <div className='wordsContainer'>
-          {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
-          {user.userId && pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165;Поздравляю!!!&#128165; <br/> Все слова на этой странице изучены!!!</h2>}
-          {words.map(word =>
-            <CardWord
+          <div className='wordsContainer'>
+            {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
+            {user.userId && pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!</h2>}
+            {words.map(word => <CardWord
               word={word}
               difficultWords={difficultWords}
               studiedWordMessage={handleChangeStudiedWordMessage}
-              key = {word.id || word._id}/>)}
+              key={word.id || word._id} />)}
+          </div>
         </div>
-      </div>
-    </main>
-
+      </main>
+      <Footer />
+    </>
   );
 }
