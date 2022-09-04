@@ -6,11 +6,12 @@ import wrongSound from '@/assets/sounds/wrong.mp3';
 interface IHiddenSoundFx {
   isAnswerCorrect: boolean;
   isSoundOn: boolean;
+  wordNumber?: number;
 }
 
 export function HiddenSoundFX (props: IHiddenSoundFx): JSX.Element {
 
-  const { isAnswerCorrect, isSoundOn } = props;
+  const { isAnswerCorrect, isSoundOn, wordNumber } = props;
 
   useEffect(() => {
     const sound = new Audio(isAnswerCorrect ? correctSound : wrongSound);
@@ -22,7 +23,7 @@ export function HiddenSoundFX (props: IHiddenSoundFx): JSX.Element {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAnswerCorrect]);
+  }, [isAnswerCorrect, wordNumber]);
 
   return(
     <div>
