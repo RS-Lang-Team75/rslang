@@ -10,7 +10,7 @@ import { GameResults } from '../GameResults/GameResults';
 import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
 
 import { Button } from '@/components/Button/Button';
-import { HiddenSoundFX } from '@/components/HiddenSounds/HiddenSoundFX';
+import { HiddenSoundFX } from '@/components/Games/HiddenSounds/HiddenSoundFX';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
 import { IWord } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
