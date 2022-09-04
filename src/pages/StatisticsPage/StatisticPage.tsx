@@ -40,17 +40,24 @@ export function StatisticsPage (){
           `${SERVER_URL}/users/${user.userId}/statistics`,
           setAxiosConfig(user.token));
 
+        const { optional } = response.data;
         const learnedLongParse:StatisticsByDay[] =
-        JSON.parse(response.data.optional.stateLearnedLong) as StatisticsByDay[];
+        optional.stateLearnedLong
+          ? JSON.parse(optional.stateLearnedLong) as StatisticsByDay[]
+          : [];
         setLearnedLongData(learnedLongParse);
 
         const learnedByDayParse:StatisticsByDay[] =
-        JSON.parse(response.data.optional.stateLearnedByDay) as StatisticsByDay[];
+        optional.stateLearnedByDay
+          ? JSON.parse(optional.stateLearnedByDay) as StatisticsByDay[]
+          : [];
         setLearnedByDayData(learnedByDayParse);
         setNoLearnedByDay(learnedByDayParse.slice(-1)[0]?.date === today);
 
         const newWordsDataParse:StatisticsByDay[] =
-        JSON.parse(response.data.optional.stateNewWords) as StatisticsByDay[];
+        optional.stateNewWords
+          ?  JSON.parse(optional.stateNewWords) as StatisticsByDay[]
+          :[];
         setNewWordsData(newWordsDataParse);
         setNoNewWords(newWordsDataParse.slice(-1)[0]?.date === today);
 
@@ -74,13 +81,13 @@ export function StatisticsPage (){
      (<CardStatistics
        title='Статистика по всем словам'
        numUpLine = {
-         newWordsData.length !== 0 || noNewWords
+         noNewWords
            ? newWordsData.slice(-1)[0].newWords
            : 0
        }
        textUpLine = 'Новых слов за сегодня'
        numDownLine = {
-         learnedByDayData.length !== 0 || noLearnedByDay
+         noLearnedByDay
            ? learnedByDayData.slice(-1)[0].learnedWordsByDay
            : 0
        }
