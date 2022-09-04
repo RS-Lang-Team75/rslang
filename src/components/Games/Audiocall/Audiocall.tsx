@@ -287,11 +287,10 @@ export default function Audioсall () {
       }
       {
         isGameFinished &&
-        <section className='flex flex-col justify-center'>
-          <h2>Game is finished!</h2>
+        <section className='endGame'>
           <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
           <Button text='Начать сначала'
-            classBtn='nextRound'
+            classBtn='restartBtn'
             onClick={gameReset}/>
         </section>}
     </main>

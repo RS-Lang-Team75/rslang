@@ -1,28 +1,41 @@
-.gameResultsSection {
-  @apply divide-y-2;
+.gameResults {
 
-  & .wrongAnswers {
-    @apply mb-4;
+  @apply flex flex-col items-center;
+
+  & .congratulations {
+    @apply text-2xl my-4 text-center;
+  }
+
+  & .resultsHeader {
+    @apply text-center text-lg;
+  }
+
+  & .gameResultsSection {
+    @apply overflow-y-auto divide-y-2 bg-white px-20 my-5 py-3 rounded-xl border-2 border-gray-300;
+    max-height: 500px;
+  
+    & .wrongAnswers {
+      @apply mb-4;
+    }
+  }
+  
+  & .headerContainer {
+    @apply flex items-center mb-2 mt-4;
+  
+    & .header {
+      @apply text-xl;
+    }
+  
+    & .indicator {
+      @apply h-7 w-7 p-1 ml-2 rounded-full text-center text-sm;
+    }
+  
+    & .correct {
+      @apply bg-green-500 text-white; 
+    }
+  
+    & .wrong {
+      @apply bg-red-500 text-white;
+    }
   }
 }
-
-.headerContainer {
-  @apply flex items-center mb-2 mt-4;
-
-  & .header {
-    @apply text-xl;
-  }
-
-  & .indicator {
-    @apply h-7 w-7 p-1 ml-2 rounded-full text-center text-sm;
-  }
-
-  & .correct {
-    @apply bg-green-500 text-white; 
-  }
-
-  & .wrong {
-    @apply bg-red-500 text-white;
-  }
-}
-

@@ -14,9 +14,25 @@ export function GameResults (props: IGameResults){
 
   const { correctAnswers, wrongAnswers } = props;
 
+  let congratulations = 'Отлично, так держать! 😇';
+
+  const correct = correctAnswers.length;
+  const wrong = wrongAnswers.length;
+
+  if (wrong >= correct) {
+    congratulations = 'Ты можешь лучше! Повтори слова и попробуй еще раз 😅';
+  }
+  if (wrong > 0 && correct > wrong) {
+    congratulations = 'Неплохо! Но повторить слова не помешает 😉';
+  }
   return(
-    <section>
-      <h4  className='selectorHeader'>Твои результаты:</h4>
+    <section
+      className='gameResults'
+    >
+      <h2 className='congratulations'>
+        {congratulations}
+      </h2>
+      <h4  className='resultsHeader'>Твои результаты:</h4>
       <section className="gameResultsSection">
         <div className="wrongAnswers">
           <div className="headerContainer">
