@@ -84,8 +84,6 @@ export default function Sprint () {
   const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState<boolean>(false);
 
-  console.log(pageWords);
-
   const soundToggle = (): void => {
     setIsSoundOn(s => !s);
   };
