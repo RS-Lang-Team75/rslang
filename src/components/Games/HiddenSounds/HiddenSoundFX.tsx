@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
-import correctSound from '../../assets/sounds/correct.mp3';
-
+import correctSound from '@/assets/sounds/correct.mp3';
 import wrongSound from '@/assets/sounds/wrong.mp3';
 
 interface IHiddenSoundFx {
