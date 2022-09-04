@@ -41,9 +41,9 @@ export function GameResults (props: IGameResults){
               {wrongAnswers.length}
             </div>
           </div>
-          {wrongAnswers.map(w =>
+          {wrongAnswers.map((w,i) =>
             <GameResultLine
-              key={w.id}
+              key={`${w.id}${Math.floor(i*Math.random() * 100)}`}
               word={w}/>)}
         </div>
         <div className="correctAnswers">
