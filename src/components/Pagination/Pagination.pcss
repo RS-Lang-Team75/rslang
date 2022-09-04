@@ -2,14 +2,14 @@
   @apply flex my-2 justify-center items-center gap-1;
 
   & .prevBtn {
-    @apply flex  border-b my-2 uppercase rounded-lg px-3 py-2 text-sky-200 font-medium bg-sky-400 disabled:bg-sky-100;
+    @apply flex  border-b my-2 uppercase rounded-lg px-3 py-2 text-sky-200 font-medium bg-sky-400 disabled:bg-sky-100 transition-all duration-300;
 
     &:not([disabled]):hover {
       @apply bg-sky-200 text-sky-800 cursor-pointer;
     }
   }
   & .nextBtn {
-    @apply flex border-b my-2 uppercase rounded-lg px-3 py-2 text-sky-200 font-medium bg-sky-400 disabled:bg-sky-100;
+    @apply flex border-b my-2 uppercase rounded-lg px-3 py-2 text-sky-200 font-medium bg-sky-400 disabled:bg-sky-100 transition-all duration-300;
     &:not([disabled]):hover {
       @apply bg-sky-200 text-sky-800 cursor-pointer;
     }
@@ -19,7 +19,7 @@
   }
   & .lastBtn,
   .firstBtn {
-    @apply flex border-b my-2 uppercase rounded-lg px-3 py-2 font-medium bg-sky-400 disabled:bg-sky-100;
+    @apply flex border-b my-2 uppercase rounded-lg px-3 py-2 font-medium bg-sky-400 disabled:bg-sky-100 transition-all duration-300;
     &:not([disabled]):hover {
       @apply bg-sky-200 text-sky-800 cursor-pointer;
     }
