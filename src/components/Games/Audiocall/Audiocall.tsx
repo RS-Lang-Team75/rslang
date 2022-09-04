@@ -61,7 +61,6 @@ export default function Audioсall () {
   const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
 
   const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
-  const isSoundOnRef = useRef<boolean>(true);
 
   const [possibleAnswers, setPossibleAnswers] = useState<string[]>([]);
 
@@ -164,7 +163,6 @@ export default function Audioсall () {
 
   const soundToggle = (): void => {
     setIsSoundOn(s => !s);
-    isSoundOnRef.current = !(isSoundOnRef.current);
   };
 
   useEffect(() => {
