@@ -13,7 +13,7 @@ import { Button } from '@/components/Button/Button';
 import { Footer } from '@/components/Footer/Footer';
 import { UserCredentials } from '@/types/userTypes';
 import { createUser, signIn } from '@/utils/queries/userQueries';
-import { saveAll } from '@/utils/slices/userSlice';
+import { saveAll, UserState } from '@/utils/slices/userSlice';
 import { RootState } from '@/utils/store/store';
 
 export function LoginPage (){
@@ -72,12 +72,14 @@ export function LoginPage (){
       if (isLoginMode) {
         try {
           const response = await signIn(details);
-          dispatch(saveAll({
+          const userData: UserState = {
             name: response.name,
             token: response.token,
             userId: response.userId,
             refreshToken: response.refreshToken,
-          }));
+          };
+
+          dispatch(saveAll(userData));
         } catch {
           setIsLoginFailed(true);
         }
@@ -173,7 +175,10 @@ export function LoginPage (){
               text={isLoginMode ? 'Войти' : 'Создать аккаунт'}
               classBtn="form__login-btn"
               onClick={e => {
-                submitHandler(e).catch(err => console.log(err));
+                submitHandler(e)
+                  .catch(() => {
+                    throw new Error('Login error');
+                  });
               } } />
             <div className="form__sign-container">
               <Button
@@ -186,16 +191,16 @@ export function LoginPage (){
             </div>
           </div>}
 
-        {user.name &&
+          {user.name &&
         <Link
           key='linkToBook'
           to='/book'
           className='form__login-btn'
         >Начать учиться!
         </Link>}
-      </form>
-    </main>
-    <Footer />
-  </>
+        </form>
+      </main>
+      <Footer />
+    </>
   );
 }

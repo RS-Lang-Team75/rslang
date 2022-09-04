@@ -96,11 +96,11 @@ export function StatisticsPage (){
   },[today, user]);
 
   return(
-<>
-    <main>
+    <>
+      <main>
 
-      {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
-      {user.userId &&
+        {!user.userId && <h1 className='message'>Статистика доступна только для авторизированных пользователей</h1>}
+        {user.userId &&
      (<CardStatistics
        title='Статистика по всем словам'
        numUpLine = {
@@ -120,7 +120,7 @@ export function StatisticsPage (){
        numPercent = {gameStatisticData.allPercent}
        textPercent = 'верных ответов'
      />)}
-      {user.userId &&
+        {user.userId &&
       (<div className='flex flex-nowrap sm:flex-col'>
         <CardStatistics
           title='Игра "Аудиовызов"'
@@ -145,12 +145,12 @@ export function StatisticsPage (){
           textPercent = 'верных ответов'
         />
       </div>)}
-      {user.userId && <div className='chartContainer'>
-        <ChartStatistic learnedLong = {learnedLongData} newWords={newWordsData}/>
-      </div>}
+        {user.userId && <div className='chartContainer'>
+          <ChartStatistic learnedLong = {learnedLongData} newWords={newWordsData}/>
+        </div>}
 
-    </main>
-    <Footer />
-  </>
+      </main>
+      <Footer />
+    </>
   );
 }

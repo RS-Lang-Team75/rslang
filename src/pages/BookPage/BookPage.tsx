@@ -127,15 +127,19 @@ export function BookPage () : JSX.Element{
 
   return(
     <>
-      <main className='bookPageMain'>
+      <main
+        className='bookPageMain'>
+
         <Pagination
           handlePages={handlePages}
           page={page}
           totalPages={totalPages} />
+
         <div className='PageMainContent'>
 
           <aside className="stickyContainer">
             <div className="asideMenuContainer">
+
               <SideBar onChange={handleChangeGroup} />
               <Link
                 key='audiocallLink'
@@ -145,7 +149,8 @@ export function BookPage () : JSX.Element{
                   unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
                   allWordsFromPage: words,
                 }}
-              >Попробовать Аудиовызов</Link>
+              >Попробовать Аудиовызов
+              </Link>
 
               <Link
                 key='sprintLink'
@@ -156,37 +161,47 @@ export function BookPage () : JSX.Element{
                   pageFromBook: page,
                   groupFromBook: group,
                 }}
-              >Попробовать Спринт</Link>
+              >Попробовать Спринт
+              </Link>
+
             </div>
           </aside>
 
           <div className='wordsContainer'>
-            {!user.userId && isGroupSix && <h1 className='message'>Возможность добавления сложных слов доступна только для авторизированных пользователей</h1>}
-            {user.userId && pageStudied && !isGroupSix && <h2 className='messageCongratulation'>&#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!</h2>}
+            {!user.userId && isGroupSix &&
+            <h1 className='message'>
+              Возможность добавления сложных слов доступна только для авторизированных пользователей
+            </h1>}
+            {user.userId && pageStudied && !isGroupSix &&
+            <h2 className='messageCongratulation'>
+              &#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!
+            </h2>}
+
             {words.map(word => <CardWord
               word={word}
               difficultWords={difficultWords}
               studiedWordMessage={handleChangeStudiedWordMessage}
               key={word.id || word._id} />)}
-          </div>
-        </div>
-      </div>
-      <div className='btnStickyContainer'>
-        <Button
-          classBtn="btnScrollUp"
-          text='UP'
-          onClick={()=>{
-            window.scrollTo({
-              top: 0,
-              left: 0,
-              behavior: 'smooth',
-            });
-          }}/>
-      </div>
 
-    </main>
-    
-    <Footer />
+          </div>
+
+        </div>
+
+        <div className='btnStickyContainer'>
+          <Button
+            classBtn="btnScrollUp"
+            text='UP'
+            onClick={() => {
+              window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth',
+              });
+            } } />
+        </div>
+
+      </main>
+      <Footer />
     </>
   );
 }
