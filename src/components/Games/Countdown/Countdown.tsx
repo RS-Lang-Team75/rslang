@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import TimerSvg from '@/assets/icons/timer.svg';
+
 import './Countdown.pcss';
 
 interface ICountdown {
   onTimerEnd: () => void;
 }
-export default function Countdown (props: ICountdown) {
+
+export default function Countdown (props: ICountdown): JSX.Element {
 
   const { onTimerEnd } = props;
 
@@ -61,8 +64,15 @@ export default function Countdown (props: ICountdown) {
   }, []);
 
   return(
-    <section className='Timer'>
-      <div>{timer}</div>
+    <section className='timer'>
+
+      <TimerSvg />
+
+      <div
+        className='countdown'>
+        {timer}
+      </div>
+
     </section>
   );
 }
