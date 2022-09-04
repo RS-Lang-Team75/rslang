@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 
 import './GameResults.pcss';
@@ -43,7 +44,7 @@ export function GameResults (props: IGameResults){
           </div>
           {wrongAnswers.map((w,i) =>
             <GameResultLine
-              key={`${w.id}${Math.floor(i*Math.random() * 100)}`}
+              key={`${(w.id || w._id)}${Math.floor(i*Math.random() * 100)}`}
               word={w}/>)}
         </div>
         <div className="correctAnswers">
@@ -55,7 +56,7 @@ export function GameResults (props: IGameResults){
           </div>
           {correctAnswers.map((w,i) =>
             <GameResultLine
-              key={`${w.id}${Math.floor(i*Math.random() * 100)}`}
+              key={`${(w.id || w._id)}${Math.floor(i*Math.random() * 100)}`}
               word={w}/>)}
         </div>
       </section>
