@@ -11,6 +11,7 @@ interface CardMemberProps {
   memberRole:string;
   gitHubLink:string;
   telegramSvg:string;
+  cardText:string;
 }
 
 export function CardMember ({
@@ -18,7 +19,9 @@ export function CardMember ({
   memberName,
   memberRole,
   gitHubLink,
-  telegramSvg }:CardMemberProps) : JSX.Element{
+  telegramSvg,
+  cardText,
+}:CardMemberProps) : JSX.Element{
   return (
 
     <div className="card">
@@ -30,9 +33,7 @@ export function CardMember ({
         <div className="cardMemberName">{memberName}</div>
         <div className="cardMemberRole">{memberRole}</div>
         <p className="cardText">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-       Voluptatibus quia, nulla! Maiores et perferendis eaque,
-       exercitationem praesentium nihil.
+          {cardText}
         </p>
       </div>
       <div className="cardFooter">
