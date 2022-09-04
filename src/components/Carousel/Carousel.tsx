@@ -1,10 +1,11 @@
 import { flushSync } from 'react-dom';
 
-import React, { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
+
+import ArrowBack from '@/assets/icons/arrow-back.svg';
+import ArrowForward from '@/assets/icons/arrow-forward.svg';
 
 import './Carousel.pcss';
-import ArrowLeft from '../../assets/images/left-arrow.png';
-import ArrowRight from '../../assets/images/right-arrow.png';
 
 interface ImgLink {
   [key: string]: {
@@ -105,22 +106,14 @@ export function Carousel (): JSX.Element  {
         className ='sliderArrowRight'
         onClick={()=>buttonNext()}
         aria-hidden="true">
-        <img
-          className ='sliderArrow'
-          src={ArrowRight}
-          alt='arrow right'
-        />
+        <ArrowForward/>
       </div>
 
       <div
         className ='sliderArrowLeft'
         onClick={()=>buttonPrev()}
         aria-hidden="true">
-        <img
-          className ='sliderArrow'
-          src={ArrowLeft}
-          alt='arrow right'
-        />
+        <ArrowBack/>
       </div>
     </div>
   );
