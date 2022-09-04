@@ -172,16 +172,19 @@ export function BookPage () : JSX.Element{
               key = {word.id || word._id}/>)}
         </div>
       </div>
-      <Button
-        classBtn="btnScrollUp"
-        text='UP'
-        onClick={()=>{
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth',
-          });
-        }}/>
+      <div className='btnStickyContainer'>
+        <Button
+          classBtn="btnScrollUp"
+          text='UP'
+          onClick={()=>{
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: 'smooth',
+            });
+          }}/>
+      </div>
+
     </main>
 
   );
