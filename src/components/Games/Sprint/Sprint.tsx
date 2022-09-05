@@ -98,14 +98,16 @@ export default function Sprint () {
     setWordsForGame([]);
     PageAndGroupRef.current.page = initialPage - 1;
     currentStreakRef.current = 0;
-    recordGameStats(
-      user,
-      gameName,
-      correctAnswers.length,
-      wrongAnswers.length,
-      bestStreak,
-      newWordsNumberRef.current,
-    );
+    if (user.userId) {
+      recordGameStats(
+        user,
+        gameName,
+        correctAnswers.length,
+        wrongAnswers.length,
+        bestStreak,
+        newWordsNumberRef.current,
+      );
+    }
   };
 
   const returnRandomWords = async (page: number, group: number): Promise<void> => {
@@ -243,7 +245,7 @@ export default function Sprint () {
   }, [isGameStarted, shownWordNumber]);
 
   useEffect(() => {
-    if (isGameFinished) {
+    if (isGameFinished && user.userId) {
       statisticsForStudiedWords(user)
         .catch(() => {});
     }
