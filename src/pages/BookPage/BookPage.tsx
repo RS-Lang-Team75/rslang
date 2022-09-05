@@ -181,7 +181,7 @@ export function BookPage () : JSX.Element{
               &#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!
             </h2>}
 
-            {words.length === 0 &&
+            {!isGroupSix && words.length === 0 &&
               <CircularLoader />
             }
 
