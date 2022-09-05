@@ -139,15 +139,17 @@ export default function Audioсall () {
       } else {
         setShownWordNumber(0);
         setIsGameFinished(true);
-        await refreshStatistics();
-        recordGameStats(
-          user,
-          gameName,
-          correctAnswers.length,
-          wrongAnswers.length,
-          bestStreak,
-          newWordsNumberRef.current,
-        );
+        if (user.userId){
+          await refreshStatistics();
+          recordGameStats(
+            user,
+            gameName,
+            correctAnswers.length,
+            wrongAnswers.length,
+            bestStreak,
+            newWordsNumberRef.current,
+          );
+        }
       }
       setIsAnswerGiven(false);
       setIsCorrectAnswer(false);
