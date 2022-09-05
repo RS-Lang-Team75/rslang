@@ -11,20 +11,20 @@ import { Button } from '../Button/Button';
 import { SoundButton } from '../SoundButton/SoundButton';
 
 import { IWord } from '@/types/types';
-import { getStudiedWords, updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
+import { updateOrCreateUserWordData } from '@/utils/queries/cardWordsQueries';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { RootState } from '@/utils/store/store';
 
 interface CardWordProps {
   word:IWord;
   difficultWords:IWord[];
-  studiedWordMessage:(w:boolean)=>void;
+  refreshWordsData: () => Promise<void>;
 }
 
 export function CardWord ({
   word,
   difficultWords,
-  studiedWordMessage,
+  refreshWordsData,
 }:CardWordProps): JSX.Element {
 
   const user = useSelector((state: RootState) => state.user);
@@ -33,8 +33,6 @@ export function CardWord ({
   const [difficult, setDifficult] = useState<boolean>(false);
   const [studied, setStudied] = useState<boolean>(false);
   const [gameScore, setGameScore] = useState({ correct: 0, wrong: 0 });
-  const [userWordData] = useState<IWord | undefined>(
-    difficultWords.find(item => item._id === wordId));
 
   const sectionsBgColor = [
     'border-gray-500',
@@ -47,46 +45,46 @@ export function CardWord ({
   ];
   const cardIndicate = ['cardHeader', sectionsBgColor[word.group]];
 
-  const addWordInDifficultData= async ():Promise<void>=>{
+  const addWordInDifficultData = async ():Promise<void>=>{
     const wordStatus = 'difficult';
-    setDifficult(true);
-    setStudied(false);
     await updateOrCreateUserWordData(user, wordId, wordStatus);
-    const studiedWords = await getStudiedWords(user,word.page,word.group);
-    studiedWordMessage(studiedWords.length === 20);
+    await refreshWordsData();
     await statisticsForStudiedWords(user);
   };
 
   const addWordInStudiedData= async ():Promise<void> =>{
     const wordStatus = 'studied';
-    setDifficult(false);
-    setStudied(true);
     await updateOrCreateUserWordData(user, wordId, wordStatus);
-    const studiedWords = await getStudiedWords(user,word.page,word.group);
-    studiedWordMessage(studiedWords.length === 20);
+    await refreshWordsData();
     await statisticsForStudiedWords(user);
   };
 
   useEffect(() => {
+    const userWordData = difficultWords.find(item => item._id === wordId);
 
     function checkDifficultWords () {
-      if (difficultWords.length > 0 && userWordData) {
-        if(userWordData.userWord) {
+      if (userWordData) {
+        if (userWordData.userWord) {
+
           const { optional } = userWordData.userWord;
-          if(userWordData.userWord.difficulty==='difficult') {
+
+          if (userWordData.userWord.difficulty === 'difficult') {
             setDifficult(true);
+            setStudied(false);
           }
-          if(userWordData.userWord.difficulty==='studied') {
+          if (userWordData.userWord.difficulty === 'studied') {
             setStudied(true);
+            setDifficult(false);
           }
-          if(optional && optional.allGames) {
+          if (optional && optional.allGames) {
             setGameScore(userWordData.userWord.optional.allGames);
           }
         }
       }
     }
+
     checkDifficultWords();
-  },[difficultWords, user.userId, userWordData, wordId]);
+  },[difficultWords, user.userId, wordId]);
 
   return (
     <div className='cardWords'>
