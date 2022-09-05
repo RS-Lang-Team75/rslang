@@ -9,22 +9,28 @@ import { IWord } from '@/types/types';
 interface IGameResults {
   correctAnswers: IWord[];
   wrongAnswers: IWord[];
+  bestStreak?:number;
 }
 
 export function GameResults (props: IGameResults){
 
-  const { correctAnswers, wrongAnswers } = props;
+  const { correctAnswers, wrongAnswers, bestStreak } = props;
 
-  let congratulations = 'Отлично, так держать! 😇';
+  let congratulations = 'Неплохо! Но повторить слова не помешает 😉';
+  let bestStreakCongrats = '';
 
   const correct = correctAnswers.length;
   const wrong = wrongAnswers.length;
 
+  if (bestStreak) {
+    bestStreakCongrats = `Лучшая серия правильных ответов: ${bestStreak} ❇`;
+  }
+
   if (wrong >= correct) {
     congratulations = 'Ты можешь лучше! Повтори слова и попробуй еще раз 😅';
   }
-  if (wrong > 0 && correct > wrong) {
-    congratulations = 'Неплохо! Но повторить слова не помешает 😉';
+  if (correct / wrong > 0.8) {
+    congratulations = 'Отлично, так держать! 😇';
   }
   return(
     <section
@@ -32,6 +38,9 @@ export function GameResults (props: IGameResults){
     >
       <h2 className='congratulations'>
         {congratulations}
+      </h2>
+      <h2 className='resultsHeader'>
+        {bestStreakCongrats}
       </h2>
       <h4  className='resultsHeader'>Твои результаты:</h4>
       <section className="gameResultsSection">

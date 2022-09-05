@@ -11,11 +11,15 @@
 }
 
 .sprintWordsContainer {
-  @apply flex justify-center items-baseline gap-2 h-fit my-8;
+  @apply flex justify-center items-baseline gap-2 h-fit my-8 sm:flex-col sm:items-center;
 
   & .sprintWord {
     @apply text-3xl text-sky-800 h-fit;
   }
+}
+
+.currentStreak {
+  @apply flex justify-center flex-wrap text-3xl text-center h-10 my-10 mx-10 gap-2;
 }
 
 
