@@ -96,6 +96,7 @@ export default function Sprint () {
     setIsGameFinished(true);
     setWordsForGame([]);
     PageAndGroupRef.current.page = initialPage - 1;
+    currentStreakRef.current = 0;
     recordGameStats(
       user,
       gameName,
@@ -243,9 +244,7 @@ export default function Sprint () {
   useEffect(() => {
     if (isGameFinished) {
       statisticsForStudiedWords(user)
-        .catch(() => {
-          throw new Error('Cannot show next word');
-        });
+        .catch(() => {});
     }
   }, [isGameFinished, user]);
 
@@ -288,6 +287,14 @@ export default function Sprint () {
               <Countdown onTimerEnd={onTimerEnd} />
               <div className="roundCounter" />
             </div>
+            <div className="currentStreak">
+              {Array(currentStreakRef.current).fill('❇').map(i =>
+                <div
+                  key={Math.random()*10000}
+                  className='streakStars'
+                >{i}
+                </div>)}
+            </div>
             <div className='sprintWordsContainer'>
               <div
                 className='sprintWord'>
@@ -318,7 +325,11 @@ export default function Sprint () {
       </div>}
       {isGameFinished &&
           <section className='endGame'>
-            <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+            <GameResults
+              correctAnswers={correctAnswers}
+              wrongAnswers={wrongAnswers}
+              bestStreak={bestStreak}
+            />
             <Button text='Начать сначала'
               classBtn='restartBtn'
               onClick={gameReset}
