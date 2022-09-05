@@ -8,6 +8,7 @@ import AudiocallGreetings from '../AudiocallGreetings/AudiocallGreetings';
 import { GameButton } from '../GameButton/GameButton';
 import { GameResults } from '../GameResults/GameResults';
 import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
+import { Streak } from '../Streak/Streak';
 
 import { Button } from '@/components/Button/Button';
 import { HiddenSoundFX } from '@/components/Games/HiddenSounds/HiddenSoundFX';
@@ -266,6 +267,9 @@ export default function Audioсall () {
                 style={isAnswerGiven ?
                   { backgroundImage: `url(${SERVER_URL}/${wordsForGame[shownWordNumber].image})` } : {} }
               />
+              <Streak
+                currentStreak={currentStreakRef.current}
+              />
               <AudioсallAnswers
                 answers={possibleAnswers}
                 shownWordNumber={shownWordNumber}
@@ -289,7 +293,11 @@ export default function Audioсall () {
       {
         isGameFinished &&
         <section className='endGame'>
-          <GameResults correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+          <GameResults
+            correctAnswers={correctAnswers}
+            wrongAnswers={wrongAnswers}
+            bestStreak={bestStreak}
+          />
           <Button text='Начать сначала'
             classBtn='restartBtn'
             onClick={gameReset}/>
