@@ -173,24 +173,28 @@ export const updateOrCreateUserWordData: WordQueryPutPostFunction= async (
   isAnswerCorrect?,
 ): Promise<boolean>  => {
   try {
-    const userWordData = (await axios.get<IDifficulty>(
-      `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
-      setAxiosConfig(user.token),
-    )).data;
-    if (addGameStats) {
-      await putWordInDifficultData(
-        user,
-        wordId,
-        wordStatus,
-        userWordData,
-        addGameStats,
-        gameName,
-        isAnswerCorrect,
-      );
-    } else {
-      await putWordInDifficultData(user, wordId, wordStatus, userWordData);
+    if (user.userId) {
+      const userWordData = (await axios.get<IDifficulty>(
+        `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
+        setAxiosConfig(user.token),
+      )).data;
+      if (addGameStats) {
+        await putWordInDifficultData(
+          user,
+          wordId,
+          wordStatus,
+          userWordData,
+          addGameStats,
+          gameName,
+          isAnswerCorrect,
+        );
+      } else {
+        await putWordInDifficultData(user, wordId, wordStatus, userWordData);
+      }
+      return true;
     }
-    return true;
+
+    return false;
   } catch (e: unknown) {
     const err = e as AxiosError;
     if (err.response) {
