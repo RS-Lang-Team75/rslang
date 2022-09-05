@@ -161,12 +161,14 @@ export default function Sprint () {
       true,
       gameName,
       isCorrect,
-    ).catch(e => {
-      const error = e as Error;
-      if (error.message === 'new word') {
+    ).then(res => {
+      if (!res){
         newWordsNumberRef.current += 1;
       }
+    }).catch(() => {
+      throw new Error('Cannot update or create user word');
     });
+
     if (shownWordNumber === wordsForGame.length - 1) {
       onTimerEnd();
     }
