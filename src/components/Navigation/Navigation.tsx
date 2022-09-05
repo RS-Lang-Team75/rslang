@@ -58,7 +58,7 @@ export function Navigation (): JSX.Element {
 
           </div>
 
-          <div className={isNavOpen ? 'showMenuNav' : 'hideMenuNav'}>
+          <div className={isNavOpen ? 'menuNav showMenuNav' : 'menuNav hideMenuNav'}>
             <div
               className="crossIcon"
               onClick={() => setIsNavOpen(false)}

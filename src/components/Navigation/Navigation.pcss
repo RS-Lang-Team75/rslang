@@ -34,8 +34,12 @@
   @apply block h-0.5 w-8 animate-pulse bg-sky-200;
 }
 
+.menuNav {
+  @apply transition-all duration-500;
+}
+
 .hideMenuNav {
-  @apply hidden;
+  @apply absolute min-w-[320px] h-screen top-0 right-[-100%] bg-sky-800 z-10 flex flex-col justify-evenly align-middle text-center;
 }
 .showMenuNav {
   @apply absolute min-w-[320px] h-screen top-0 right-0 bg-sky-800 z-10 flex flex-col justify-evenly align-middle text-center;
