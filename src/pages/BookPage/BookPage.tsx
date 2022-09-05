@@ -105,7 +105,7 @@ export function BookPage () : JSX.Element{
         throw new Error(`Cannot get words, ${err.message}`);
       }
     });
-  }, [group, page, user, user.token, user.userId]);
+  }, [group, page, user, user.token, user.userId, difficultWords.length]);
 
   const  handleChangeGroup = (value:number)=>{
     setIsGroupSix(false);
