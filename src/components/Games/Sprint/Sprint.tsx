@@ -10,6 +10,7 @@ import { GameResults } from '../GameResults/GameResults';
 import { HiddenSoundFX } from '../HiddenSounds/HiddenSoundFX';
 import { SoundFXControl } from '../SoundFXControl/SoundFXControl';
 import SprintGreetings from '../SprintGreetings/SprintGreetings';
+import { Streak } from '../Streak/Streak';
 
 import { Button } from '@/components/Button/Button';
 import { IWord } from '@/types/types';
@@ -287,14 +288,9 @@ export default function Sprint () {
               <Countdown onTimerEnd={onTimerEnd} />
               <div className="roundCounter" />
             </div>
-            <div className="currentStreak">
-              {Array(currentStreakRef.current).fill('❇').map(i =>
-                <div
-                  key={Math.random()*10000}
-                  className='streakStars'
-                >{i}
-                </div>)}
-            </div>
+            <Streak
+              currentStreak={currentStreakRef.current}
+            />
             <div className='sprintWordsContainer'>
               <div
                 className='sprintWord'>
