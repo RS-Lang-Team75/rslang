@@ -11,6 +11,8 @@ interface CardStatisticsProps {
   wrong:number;
   numPercent:number;
   textPercent:string;
+  numSeries?:number;
+  textSeries?:string;
 }
 
 export function CardStatistics ({
@@ -23,6 +25,8 @@ export function CardStatistics ({
   wrong,
   numPercent,
   textPercent,
+  numSeries,
+  textSeries,
 }:CardStatisticsProps) : JSX.Element{
   return (
     <div className='dayStatisticContainer'>
@@ -39,6 +43,10 @@ export function CardStatistics ({
         <div  className='dayStatisticBlock'>
           <p className='wordsNumber'>{numPercent} % </p>
           <p>{textPercent}</p>
+        </div>
+        <div  className='dayStatisticBlock'>
+          <p className='wordsNumber'>{numSeries} </p>
+          <p>{textSeries}</p>
         </div>
         <DoughnutStatistic className = "doughnutStatistic" correct={correct} wrong={wrong}/>
       </div>

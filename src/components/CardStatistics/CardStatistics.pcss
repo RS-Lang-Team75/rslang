@@ -1,21 +1,21 @@
 .dayStatisticContainer {
   @apply my-10 mx-auto text-center w-5/6;
   & .dayStatisticTitle {
-    @apply my-2 text-2xl font-bold text-sky-900;
+    @apply my-2 text-2xl font-bold text-sky-900 sm:text-lg;
   }
   & .dayStatisticWrapper {
-    @apply mx-auto grid py-10 grid-rows-3 grid-flow-col  content-center justify-center gap-x-10 shadow-lg rounded-lg
-  sm:gap-0;
+    @apply mx-auto grid py-5 gap-y-3 grid-rows-4 grid-flow-col  content-center justify-center gap-x-10 shadow-lg rounded-lg
+  sm:gap-0 sm:flex sm:flex-col sm:items-center;
 
     & .dayStatisticBlock {
-      @apply flex flex-col items-center text-center col-span-2 self-center text-sky-700;
+      @apply flex flex-col  items-center text-center col-span-2 self-center text-sky-700 whitespace-normal;
 
       & .wordsNumber {
-        @apply text-3xl font-bold text-sky-900;
+        @apply text-3xl font-bold text-sky-900 sm:text-lg;
       }
     }
     & .doughnutStatistic {
-      @apply row-span-3 w-[200px];
+      @apply row-span-4 w-[200px];
     }
   }
 }
