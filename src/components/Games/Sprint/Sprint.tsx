@@ -125,6 +125,7 @@ export default function Sprint () {
       }
       isGetWordsHappen.current = true;
     }
+    setChosenGroup(group + 1);
   };
 
   const checkStreak = (isCorrect: boolean): void => {
