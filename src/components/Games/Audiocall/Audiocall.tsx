@@ -280,9 +280,7 @@ export default function Audioсall () {
             classBtn='nextRound'
             onClick={() => {
               revealOrNext()
-                .catch(() => {
-                  throw new Error('Cannot show next word');
-                });
+                .catch(() => {});
             }}
             simulatedButtonCode="Space"
           />
