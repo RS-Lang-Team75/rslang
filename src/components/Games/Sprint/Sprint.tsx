@@ -57,7 +57,7 @@ export default function Sprint () {
   });
 
   const gameName = 'sprint';
-  const addWordsDelta = 3;
+  const addWordsDelta = 5;
 
   const [chosenGroup, setChosenGroup] = useState<number>(
     stateFromBook ? stateFromBook.groupFromBook : 0);
@@ -119,10 +119,10 @@ export default function Sprint () {
         setPageWords(difficultWords.data[0].paginatedResults);
       } else {
         let randomWords = await getWordsQuery(page, group);
-        if (user.userId) {
+        if (user.userId && isStartedFromBook) {
           const studiedWords = await getStudiedWords(user, page, group);
           randomWords = randomWords.filter(w => !studiedWords.find(sw => sw._id === w.id));
-        };
+        }
         setPageWords(randomWords);
       }
       isGetWordsHappen.current = true;
