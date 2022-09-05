@@ -17,7 +17,7 @@ export function DifficultySelector (props: IDiffSelector){
   } = props;
 
   const chosePageAndGroup = async (groupNumber: number) => {
-    const randomPage = Math.round(Math.random() * 30);
+    const randomPage = Math.floor(Math.random() * 30);
     await returnRandomWords(randomPage, groupNumber);
   };
 
