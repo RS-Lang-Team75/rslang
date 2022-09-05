@@ -118,10 +118,10 @@ export function StatisticsPage (){
        correct = {gameStatisticData.allCorrect}
        wrong = {gameStatisticData.allWrong}
        numPercent = {gameStatisticData.allPercent}
-       textPercent = 'верных ответов по всем играм'
+       textPercent = 'Верных ответов по всем играм'
      />)}
         {user.userId &&
-      (<div className='flex flex-nowrap sm:flex-col'>
+      (<div className='flex flex-nowrap xl:flex-col gap-2 mx-4'>
         <CardStatistics
           title='Игра "Аудиовызов"'
           numUpLine = {games.audiocall.correct}
@@ -131,9 +131,9 @@ export function StatisticsPage (){
           correct = {games.audiocall.correct}
           wrong= {games.audiocall.wrong}
           numPercent = {games.audiocall.correctPercent}
-          textPercent = 'верных ответов'
+          textPercent = 'Верных ответов'
           numSeries = {games.audiocall.bestStreak}
-          textSeries = 'самая длинная серия правильных ответов'
+          textSeries = 'Самая длинная серия правильных ответов'
         />
         <CardStatistics
           title='Игра "Спринт"'
@@ -144,9 +144,9 @@ export function StatisticsPage (){
           correct = {games.sprint.correct}
           wrong= {games.sprint.wrong}
           numPercent = {games.sprint.correctPercent}
-          textPercent = 'верных ответов'
+          textPercent = 'Верных ответов'
           numSeries = {games.sprint.bestStreak}
-          textSeries = 'самая длинная серия правильных ответов'
+          textSeries = 'Самая длинная серия правильных ответов'
         />
       </div>)}
         {user.userId && <div className='chartContainer'>
