@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import './BookPage.pcss';
+import UP from '@/assets/icons/arrow-up.svg';
 import { Button } from '@/components/Button/Button';
 import { CardWord } from '@/components/CardWord/CardWord';
 import { CircularLoader } from '@/components/CircularLoader/CircularLoader';
@@ -180,7 +181,7 @@ export function BookPage () : JSX.Element{
               &#128165; Поздравляю!!!&#128165; <br /> Все слова на этой странице изучены!!!
             </h2>}
 
-            {words.length === 0 &&
+            {!isGroupSix && words.length === 0 &&
               <CircularLoader />
             }
 
@@ -198,17 +199,18 @@ export function BookPage () : JSX.Element{
         <div className='btnStickyContainer'>
           <Button
             classBtn="btnScrollUp"
-            text='UP'
+            text=''
             onClick={() => {
               window.scrollTo({
                 top: 0,
                 left: 0,
                 behavior: 'smooth',
               });
-            } } />
+            } } >
+            <UP className="inline"/>
+          </Button>
         </div>
         }
-
       </main>
       <Footer />
     </>

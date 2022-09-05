@@ -28,6 +28,15 @@ type WordQueryFunction = (
   isAnswerCorrect?: boolean,
 ) => Promise<void>;
 
+type WordQueryPutPostFunction = (
+  user: UserState,
+  wordId: string,
+  wordStatus: string,
+  addGameStats?: boolean,
+  gameName?: string,
+  isAnswerCorrect?: boolean,
+) => Promise<boolean>;
+
 const answer = {
   correct: 'correct',
   wrong: 'wrong',
@@ -155,7 +164,7 @@ export const putWordInDifficultData: UpdateWordQueryFunction = async (
 
 };
 
-export const updateOrCreateUserWordData: WordQueryFunction = async (
+export const updateOrCreateUserWordData: WordQueryPutPostFunction= async (
   user,
   wordId,
   wordStatus,
@@ -181,6 +190,7 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
     } else {
       await putWordInDifficultData(user, wordId, wordStatus, userWordData);
     }
+    return true;
   } catch (e: unknown) {
     const err = e as AxiosError;
     if (err.response) {
@@ -198,11 +208,12 @@ export const updateOrCreateUserWordData: WordQueryFunction = async (
         } else {
           await postUserWordData(user, wordId, wordStatus);
         }
-        throw new Error('new word');
+        return false;
       }
     } else {
       throw new Error(err.message);
     }
+    return false;
   }
 };
 

@@ -114,11 +114,11 @@ export function StatisticsPage (){
            ? learnedByDayData.slice(-1)[0].learnedWordsByDay
            : 0
        }
-       textDownLine = 'Изученных слов за сегодня'
+       textDownLine = 'Выученных слов за сегодня'
        correct = {gameStatisticData.allCorrect}
        wrong = {gameStatisticData.allWrong}
        numPercent = {gameStatisticData.allPercent}
-       textPercent = 'верных ответов'
+       textPercent = 'верных ответов по всем играм'
      />)}
         {user.userId &&
       (<div className='flex flex-nowrap sm:flex-col'>
