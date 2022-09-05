@@ -36,11 +36,15 @@ export default function Audioсall () {
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
-  const roundsNumber = unstudiedWords.length < 10 ? 10 : unstudiedWords.length;
 
   const [chosenGroup, setChosenGroup] = useState<number>(0);
 
-  const [pageWords, setPageWords] = useState<IWord[]>(unstudiedWords || []);
+  const [initialPageWords] = useState<IWord[]>(unstudiedWords || []);
+
+  const roundsNumber =
+    (initialPageWords.length === 0 || initialPageWords.length > 10) ? 10 : initialPageWords.length;
+
+  const [pageWords, setPageWords] = useState<IWord[]>(initialPageWords);
   const [pageWordsFromBook] = useState<IWord[]>(allWordsFromBookPage);
   const [isStartedFromBook] = useState<boolean>(pageWords.length > 0);
 
