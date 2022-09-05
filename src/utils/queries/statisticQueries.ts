@@ -141,6 +141,7 @@ export const putNewWordInStatisticsData: PutWordQueryFunction = async (
     }
     else {
       (lastSign.newWords as number) += 1;
+      // (lastSign.newWords as number) = 3;
     }
 
     optional.stateNewWords = JSON.stringify(stateNewWordsParse);
