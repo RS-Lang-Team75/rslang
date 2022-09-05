@@ -132,6 +132,8 @@ export function StatisticsPage (){
           wrong= {games.audiocall.wrong}
           numPercent = {games.audiocall.correctPercent}
           textPercent = 'верных ответов'
+          numSeries = {games.audiocall.bestStreak}
+          textSeries = 'самая длинная серия правильных ответов'
         />
         <CardStatistics
           title='Игра "Спринт"'
@@ -143,6 +145,8 @@ export function StatisticsPage (){
           wrong= {games.sprint.wrong}
           numPercent = {games.sprint.correctPercent}
           textPercent = 'верных ответов'
+          numSeries = {games.sprint.bestStreak}
+          textSeries = 'самая длинная серия правильных ответов'
         />
       </div>)}
         {user.userId && <div className='chartContainer'>
