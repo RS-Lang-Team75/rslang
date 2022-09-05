@@ -1,0 +1,50 @@
+.bookPageMain {
+  @apply flex flex-col relative;
+
+  & .PageMainContent {
+    @apply flex justify-evenly mx-5 gap-5 md:flex-col md:gap-1;
+  }
+}
+
+.stickyContainer {
+  @apply w-40 md:w-full;
+}
+.asideMenuContainer {
+  @apply sticky;
+  top: 115px;
+}
+
+.gameLink {
+  @apply block text-center my-5 bg-sky-700 rounded-2xl px-3 py-2 md:py-4 text-sky-200 font-medium transition-all duration-300;
+
+  &:hover {
+    @apply bg-sky-200 text-sky-800;
+  }
+}
+
+.disabledLink {
+  @apply opacity-40;
+  pointer-events: none;
+}
+
+.wordsContainer {
+  @apply flex-auto max-w-4xl;
+}
+
+.message {
+  @apply flex justify-center mx-auto mt-8 px-4 text-3xl text-sky-800 text-center;
+}
+
+.messageCongratulation {
+  @apply flex justify-center mx-auto my-4 px-4 text-2xl text-sky-800 text-center uppercase;
+}
+.btnStickyContainer {
+  @apply bottom-0 z-40 sticky flex justify-end;
+
+  & .btnScrollUp {
+    @apply block w-14 h-14 !bg-sky-700 py-2 rounded-2xl transition-all duration-300 text-sky-200 font-semibold mb-1;
+    &:hover {
+      @apply !bg-sky-200 text-sky-800 -translate-y-1;
+    }
+  }
+}

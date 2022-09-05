@@ -1,0 +1,78 @@
+/* * {
+  outline: 1px solid red;
+} */
+
+.cardWords {
+  @apply w-full min-h-[256px] flex my-4 pr-4 rounded-2xl shadow-lg bg-white overflow-hidden
+  sm:flex-col sm:text-center sm:items-center sm:align-middle sm:pr-0 sm:rounded-b-none;
+
+  & .imgInCard {
+    @apply w-64 bg-cover bg-center bg-no-repeat sm:w-full sm:h-64;
+  }
+  & .imgInCardAutorisate {
+    @apply w-64 bg-cover bg-center rounded-l-2xl
+    sm:rounded-t-2xl sm:rounded-bl-none sm:w-full sm:h-64;
+  }
+  & .cardContent {
+    @apply flex flex-col flex-1 pl-5 text-sky-700
+    lg:pl-2
+    sm:w-full sm:px-2;
+
+    & .cardHeader {
+      @apply flex gap-4 mt-1 sm:flex-col border-l-4 sm:border-4 sm:rounded-md;
+
+      & .cardAudio {
+        @apply md:m-auto md:h-10;
+      }
+
+      & .cardWordPart {
+        @apply flex flex-col;
+
+        & .cardWord {
+          @apply flex justify-center items-center sm:flex-col;
+
+          & .cardWordOnEnglish,
+          .cardWordOnTranscription {
+            @apply px-2;
+          }
+          & .cardWordOnEnglish {
+            @apply text-sky-900;
+          }
+          & .cardWordOnEnglish {
+            @apply text-2xl font-bold;
+          }
+        }
+        & .cardWordOnRussian {
+          @apply text-lg px-2 text-sky-600;
+        }
+      }
+    }
+  }
+
+  & .cardMeaning,
+  .cardExample {
+    @apply py-2 text-sky-700 sm:text-left;
+  }
+  & .cardButton {
+    @apply flex justify-end px-2 gap-3;
+
+    & .difficult,
+    .studied {
+      @apply block w-full bg-sky-600 mt-5 py-2 rounded-2xl transition-all duration-500 text-white font-semibold mb-2;
+
+      &:not([disabled]):hover {
+        @apply bg-sky-700 -translate-y-1 cursor-pointer;
+      }
+    }
+    & .difficultChosen {
+      @apply bg-red-600 hover:bg-red-600;
+    }
+    & .studiedChosen {
+      @apply bg-green-600 hover:bg-green-600;
+    }
+  }
+}
+.cardMeaningRussian,
+.cardExampleRussian {
+  @apply text-gray-400 italic;
+}

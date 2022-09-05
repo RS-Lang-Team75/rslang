@@ -1,0 +1,36 @@
+.gamesPage {
+  @apply flex flex-col items-center justify-center;
+}
+
+.gameSection {
+  @apply flex flex-col align-middle items-center justify-center;
+}
+
+.answerButtonsContainer {
+  @apply flex justify-center;
+}
+
+.sprintWordsContainer {
+  @apply flex justify-center items-baseline gap-2 h-fit my-8 sm:flex-col sm:items-center;
+
+  & .sprintWord {
+    @apply text-3xl text-sky-800 h-fit;
+  }
+}
+
+.currentStreak {
+  @apply flex justify-center flex-wrap text-3xl text-center h-10 my-10 mx-10 gap-2;
+}
+
+
+.answerBtn{
+  @apply block border-2 mx-0 uppercase py-2 px-6 my-2 rounded-full active:border-transparent;
+}
+
+.leftBtn {
+  @apply w-32 border-red-500 active:bg-red-500 rounded-r-none hover:bg-red-200;
+}
+
+.rightBtn {
+  @apply w-32 border-green-500 active:bg-green-500 rounded-l-none hover:bg-green-200;
+}
