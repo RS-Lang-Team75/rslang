@@ -125,8 +125,18 @@ export function BookPage () : JSX.Element{
     localStorage.setItem('currentPage', value.toString());
   };
 
-  const handleChangeStudiedWordMessage = (value:boolean)=>{
-    setPageStudied(value);
+  const handleRefreshWords = async (): Promise<void> => {
+
+    const response = await axios.get<IResponseAggregated[]>(
+      `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${group}&filter={"$and":[{"page":${page}},{"$or":[{"userWord.difficulty":"studied"},{"userWord.difficulty":"difficult"},{"userWord.difficulty":"learning"}]}]}`,
+      setAxiosConfig(user.token));
+
+    const wordsInProgress = response.data[0].paginatedResults;
+    setDifficultWords(wordsInProgress);
+
+    const studiedWords = wordsInProgress.filter(w => w.userWord?.difficulty === 'studied');
+    setPageStudied(studiedWords.length === 20);
+
   };
 
   return(
@@ -188,7 +198,7 @@ export function BookPage () : JSX.Element{
             {words.map(word => <CardWord
               word={word}
               difficultWords={difficultWords}
-              studiedWordMessage={handleChangeStudiedWordMessage}
+              refreshWordsData={handleRefreshWords}
               key={word.id || word._id} />)}
 
           </div>
