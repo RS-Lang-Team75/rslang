@@ -171,7 +171,7 @@ export const updateOrCreateUserWordData: WordQueryPutPostFunction= async (
   addGameStats?,
   gameName?,
   isAnswerCorrect?,
-) => {
+): Promise<boolean>  => {
   try {
     const userWordData = (await axios.get<IDifficulty>(
       `${SERVER_URL}/users/${user.userId}/words/${wordId}`,
