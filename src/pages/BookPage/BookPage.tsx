@@ -158,7 +158,7 @@ export function BookPage () : JSX.Element{
               <Link
                 key='audiocallLink'
                 to='/audiocall'
-                className={pageStudied ? 'gameLink disabledLink' : 'gameLink'}
+                className={(pageStudied || words.length === 0) ? 'gameLink disabledLink' : 'gameLink'}
                 state={{
                   unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
                   allWordsFromPage: words,
@@ -169,7 +169,7 @@ export function BookPage () : JSX.Element{
               <Link
                 key='sprintLink'
                 to='/sprint'
-                className={pageStudied ? 'gameLink disabledLink' : 'gameLink'}
+                className={(pageStudied || words.length === 0) ? 'gameLink disabledLink' : 'gameLink'}
                 state={{
                   unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === (w.id || w._id) && dw.userWord?.difficulty === 'studied')),
                   pageFromBook: page,
