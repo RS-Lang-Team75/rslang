@@ -162,6 +162,8 @@ export function BookPage () : JSX.Element{
                 state={{
                   unstudiedWords: words.filter(w => !difficultWords.find(dw => dw._id === w.id && dw.userWord?.difficulty === 'studied')),
                   allWordsFromPage: words,
+                  pageFromBook: page,
+                  groupFromBook: group,
                 }}
               >Попробовать Аудиовызов
               </Link>

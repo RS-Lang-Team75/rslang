@@ -19,6 +19,11 @@ export interface IWord{
 
 export type GameName = 'audiocall' | 'sprint';
 
+export interface PageAndGroup {
+  page: number;
+  group: number;
+}
+
 export interface GameStats {
   correct: number;
   wrong: number;
@@ -51,4 +56,11 @@ export interface StatisticsByDay{
   learnedWordsByDay?: number;
   newWords?: number;
   learnedWordsLong?:number;
+}
+
+export interface StateFromBook {
+  unstudiedWords: IWord[];
+  pageFromBook: number;
+  groupFromBook: number;
+  allWordsFromPage: IWord[];
 }

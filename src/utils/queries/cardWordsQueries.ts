@@ -221,6 +221,19 @@ export const updateOrCreateUserWordData: WordQueryPutPostFunction= async (
   }
 };
 
+export const getUserWords  = async (user:UserState, page:number, group:number):Promise<IWord[]> => {
+  try {
+    const response = await axios.get<IResponseAggregated[]>(
+      `${SERVER_URL}/users/${user.userId}/aggregatedWords?group=${group}&filter={"$and":[{"page":${page}}]}`,
+      setAxiosConfig(user.token));
+    return response.data[0].paginatedResults;
+  }
+  catch (e:unknown) {
+    const err = e as AxiosError;
+    throw new Error(err.message);
+  }
+};
+
 export const getStudiedWords  = async (user:UserState, wordPage:number, wordGroup:number):Promise<IWord[]> => {
   try {
     const response = await axios.get<IResponseAggregated[]>(

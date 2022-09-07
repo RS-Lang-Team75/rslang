@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -13,9 +14,9 @@ import { Streak } from '../Streak/Streak';
 import { Button } from '@/components/Button/Button';
 import { HiddenSoundFX } from '@/components/Games/HiddenSounds/HiddenSoundFX';
 import { SoundButton } from '@/components/SoundButton/SoundButton';
-import { IWord } from '@/types/types';
+import { IWord, PageAndGroup, StateFromBook } from '@/types/types';
 import { shuffleArray } from '@/utils/misc';
-import { updateOrCreateUserWordData, getWordsQuery } from '@/utils/queries/cardWordsQueries';
+import { updateOrCreateUserWordData, getWordsQuery, getDifficultWords, getUserWords } from '@/utils/queries/cardWordsQueries';
 import { statisticsForStudiedWords } from '@/utils/queries/statisticQueries';
 import { SERVER_URL } from '@/utils/queries/url';
 import { RootState } from '@/utils/store/store';
@@ -23,27 +24,26 @@ import { recordGameStats } from '@/utils/todayStats';
 
 import './Audioсall.pcss';
 
-interface AudiocallFromBookState {
-  unstudiedWords: IWord[];
-  allWordsFromPage: IWord[];
-}
-
 export default function Audioсall () {
 
   const words = useLocation();
-  const stateFromBook = words.state ? (words.state as AudiocallFromBookState) : undefined;
+  const stateFromBook = words.state ? (words.state as StateFromBook) : undefined;
   const unstudiedWords = stateFromBook ? stateFromBook.unstudiedWords : [];
   const allWordsFromBookPage = stateFromBook ? stateFromBook.allWordsFromPage : [];
 
   const gameName = 'audiocall';
   const answerOptionsPerRound = 5;
 
+  const PageAndGroupRef = useRef<PageAndGroup>({
+    page: stateFromBook ? stateFromBook.pageFromBook - 1 : 0,
+    group: stateFromBook ? stateFromBook.groupFromBook : 0,
+  });
+
   const [chosenGroup, setChosenGroup] = useState<number>(0);
 
   const [initialPageWords] = useState<IWord[]>(unstudiedWords || []);
 
-  const roundsNumber =
-    (initialPageWords.length === 0 || initialPageWords.length > 10) ? 10 : initialPageWords.length;
+  const [maxRounds, setMaxRounds] = useState<number>(10);
 
   const [pageWords, setPageWords] = useState<IWord[]>(initialPageWords);
   const [pageWordsFromBook] = useState<IWord[]>(allWordsFromBookPage);
@@ -56,6 +56,7 @@ export default function Audioсall () {
 
   const currentStreakRef = useRef<number>(0);
   const newWordsNumberRef = useRef<number>(0);
+  const isGetWordsHappen = useRef<boolean>(false);
 
   const [shownWordNumber, setShownWordNumber] = useState<number>(0);
 
@@ -112,7 +113,7 @@ export default function Audioсall () {
 
     updateOrCreateUserWordData(
       user,
-      currentWord.id,
+      currentWord.id || currentWord._id,
       wordStatus,
       true,
       gameName,
@@ -174,15 +175,44 @@ export default function Audioсall () {
   };
 
   useEffect(() => {
-    if (pageWords.length > 0 && !isGameFinished) {
+
+    const getMoreWords = async ({ page, group }:PageAndGroup): Promise<void> => {
+      PageAndGroupRef.current = {
+        page: page - 1,
+        group,
+      };
+      if (page >= 0) {
+        if (group === 6) {
+          const difficultWords = await getDifficultWords(user, page);
+          setPageWords([...pageWords, ...difficultWords.data[0].paginatedResults]);
+        } else {
+          let randomWords = await getUserWords(user, page, group);
+          randomWords = randomWords.filter(w => w.userWord?.difficulty !== 'studied');
+
+          setPageWords([...pageWords,  ...randomWords]);
+        }
+        isGetWordsHappen.current = true;
+      }
+      setChosenGroup(group + 1);
+    };
+
+    if (pageWords.length >= maxRounds && !isGameFinished) {
       const generateWordsForGame = (): void => {
         const shuffledPageWords = shuffleArray(pageWords);
-        const randomWordsForGame = shuffledPageWords.slice(0, roundsNumber);
+        const randomWordsForGame = shuffledPageWords.slice(0, maxRounds);
         setWordsForGame(randomWordsForGame);
       };
       generateWordsForGame();
     }
-  }, [pageWords, isGameFinished, roundsNumber]);
+    if (pageWords.length > 0 && pageWords.length < maxRounds) {
+      getMoreWords(PageAndGroupRef.current).then(() => {
+        if (PageAndGroupRef.current.page < 0 && !isGetWordsHappen.current) {
+          setMaxRounds(pageWords.length);
+        }
+      }).catch(e => console.log(e));
+    }
+    isGetWordsHappen.current = false;
+  }, [pageWords, isGameFinished, user, maxRounds]);
 
   useEffect(() => {
 
@@ -253,7 +283,7 @@ export default function Audioсall () {
                   />
                 </div>
                 <div className="roundCounter">
-                  {`${shownWordNumber + 1}/${roundsNumber}`}
+                  {`${shownWordNumber + 1}/${maxRounds}`}
                 </div>
               </div>
               <div
