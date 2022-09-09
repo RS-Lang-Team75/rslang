@@ -7,11 +7,14 @@
 
 * [Technical task](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang/rslang.md)
 
-Used PNPM libraries:
+* [Boilerplate made by Aliaksei Koran](https://github.com/alexey-koran/bundlers-boilerplates/tree/react-typescript)
+
+Used NPM libraries:
 * react-router-dom
 * react-redux
 * axios
 * chart.js
+* react-chartjs-2
 
 Tools:
 * Webpack
