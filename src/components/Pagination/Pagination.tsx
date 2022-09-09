@@ -1,4 +1,4 @@
-import React, {  useRef } from 'react';
+import {  useRef } from 'react';
 
 import { Button } from '../Button/Button';
 
@@ -15,9 +15,6 @@ export function Pagination ({ handlePages, page, totalPages }:PaginationProps) :
   const pagePagRef = useRef(page);
   const hasPrev =  page > 0;
   const hasNext = pagePagRef.current < totalPages || page===0 && totalPages!==0 ;
-  // console.log('pagePagRef.current: ', pagePagRef.current);
-  // console.log('page: ', page);
-  // console.log('totalPages: ', totalPages);
 
   function handleClickPlus () {
     if (hasNext) {
