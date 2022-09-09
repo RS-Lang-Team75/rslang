@@ -1,5 +1,4 @@
 import { useState, MouseEvent, KeyboardEvent } from 'react';
-import 'flowbite';
 
 import './SideBar.pcss';
 

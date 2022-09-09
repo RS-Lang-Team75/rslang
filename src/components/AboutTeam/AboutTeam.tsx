@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Artem from '@/assets/images/Artem.jpg';
 import NadezhdaImg from '@/assets/images/Nadezhda.jpg';
 import { CardMember } from '@/components/CardMember/CardMember';
