@@ -38,7 +38,9 @@ export function StatisticsPage (){
     ? gameStatisticParse
     : InitialDailyStatistics;
 
-  const { games } = gameStatisticData;
+  const { games:{
+    audiocall,
+    sprint } } = gameStatisticData;
 
   useEffect(()=>{
 
@@ -49,23 +51,28 @@ export function StatisticsPage (){
           `${SERVER_URL}/users/${user.userId}/statistics`,
           setAxiosConfig(user.token));
 
-        const { optional } = response.data;
+        const { optional:{
+          stateLearnedLong,
+          stateLearnedByDay,
+          stateNewWords,
+        } } = response.data;
+
         const learnedLongParse:StatisticsByDay[] =
-        optional.stateLearnedLong
-          ? JSON.parse(optional.stateLearnedLong) as StatisticsByDay[]
+        stateLearnedLong
+          ? JSON.parse(stateLearnedLong) as StatisticsByDay[]
           : [];
         setLearnedLongData(learnedLongParse);
 
         const learnedByDayParse:StatisticsByDay[] =
-        optional.stateLearnedByDay
-          ? JSON.parse(optional.stateLearnedByDay) as StatisticsByDay[]
+        stateLearnedByDay
+          ? JSON.parse(stateLearnedByDay) as StatisticsByDay[]
           : [];
         setLearnedByDayData(learnedByDayParse);
         setNoLearnedByDay(learnedByDayParse.slice(-1)[0]?.date === today);
 
         const newWordsDataParse:StatisticsByDay[] =
-        optional.stateNewWords
-          ?  JSON.parse(optional.stateNewWords) as StatisticsByDay[]
+        stateNewWords
+          ?  JSON.parse(stateNewWords) as StatisticsByDay[]
           :[];
         setNewWordsData(newWordsDataParse);
         setNoNewWords(newWordsDataParse.slice(-1)[0]?.date === today);
@@ -75,9 +82,6 @@ export function StatisticsPage (){
         if (err.response) {
           const res = err.response as AxiosResponse;
           if (res.status === 404) {
-            // setLearnedLongData([]);
-            // setLearnedByDayData([]);
-            // setNewWordsData([]);
             setLearnedLongData([{ date:`${today}`, learnedWordsLong:0 }]);
             setLearnedByDayData([{ date:`${today}`, learnedWordsByDay:0 }]);
             setNewWordsData([{ date:`${today}`, newWords:0 }]);
@@ -124,28 +128,28 @@ export function StatisticsPage (){
       (<div className='flex flex-nowrap xl:flex-col gap-2 mx-4'>
         <CardStatistics
           title='Игра "Аудиовызов"'
-          numUpLine = {games.audiocall.correct}
+          numUpLine = {audiocall.correct}
           textUpLine  ='Верных ответов'
-          numDownLine = {games.audiocall.wrong}
+          numDownLine = {audiocall.wrong}
           textDownLine = 'Неверных ответов'
-          correct = {games.audiocall.correct}
-          wrong= {games.audiocall.wrong}
-          numPercent = {games.audiocall.correctPercent}
+          correct = {audiocall.correct}
+          wrong= {audiocall.wrong}
+          numPercent = {audiocall.correctPercent}
           textPercent = 'Верных ответов'
-          numSeries = {games.audiocall.bestStreak}
+          numSeries = {audiocall.bestStreak}
           textSeries = 'Самая длинная серия правильных ответов'
         />
         <CardStatistics
           title='Игра "Спринт"'
-          numUpLine = {games.sprint.correct}
+          numUpLine = {sprint.correct}
           textUpLine  ='Верных ответов'
-          numDownLine = {games.sprint.wrong}
+          numDownLine = {sprint.wrong}
           textDownLine = 'Неверных ответов'
-          correct = {games.sprint.correct}
-          wrong= {games.sprint.wrong}
-          numPercent = {games.sprint.correctPercent}
+          correct = {sprint.correct}
+          wrong= {sprint.wrong}
+          numPercent = {sprint.correctPercent}
           textPercent = 'Верных ответов'
-          numSeries = {games.sprint.bestStreak}
+          numSeries = {sprint.bestStreak}
           textSeries = 'Самая длинная серия правильных ответов'
         />
       </div>)}
