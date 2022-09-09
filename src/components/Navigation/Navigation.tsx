@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -51,6 +50,7 @@ export function Navigation (): JSX.Element {
             onClick={() => setIsNavOpen((prev => !prev))}
             onKeyPress={() => setIsNavOpen((prev => !prev))}
             role='menu'
+            tabIndex={0}
           >
             {!isNavOpen && <span className="line" />}
             {!isNavOpen && <span className="line" />}
@@ -64,6 +64,7 @@ export function Navigation (): JSX.Element {
               onClick={() => setIsNavOpen(false)}
               onKeyPress={() => setIsNavOpen(false)}
               role='menu'
+              tabIndex={0}
             >
               <svg
                 className="h-8 w-8 text-sky-200"

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './CircularLoader.pcss';
 
 export function CircularLoader (): JSX.Element {

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import GitPNG from '../../assets/images/GitHub-Mark-Light-64px.png';
 
 import RSSvg from '@/assets/icons/rs_school_js.svg';

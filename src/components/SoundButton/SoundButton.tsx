@@ -28,10 +28,6 @@ export function SoundButton (props: SoundButtonProps) {
   const vidRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying]=useState(true);
 
-  // TODO:возможно получится переделать на useState, пока не работает корректно
-  // const [currentlyPlayingSong, setCurrentlyPlayingSong] = useState(allSoundsLinks[0]);
-  // const [playNum, setPlayNum] = useState(0);
-
   const playAudio = async () => {
     const audio = (vidRef as MutableRefObject<HTMLAudioElement>).current;
     audio.volume = 0.7;
@@ -43,7 +39,6 @@ export function SoundButton (props: SoundButtonProps) {
       });
     }else{
       audio.pause();
-      // playingRef.current=true;
       setPlaying(true);
     }
 
@@ -52,18 +47,10 @@ export function SoundButton (props: SoundButtonProps) {
     if(playNumRef.current < allSoundsLinks.length - 1 && !playFirstOnly){
       playingRef.current=true;
       playNumRef.current += 1;
-      // TODO: для useState
-      // setPlaying(true);
-      // setPlayNum(p=>p+1);
     } else {
       playNumRef.current = 0;
       playingRef.current=false;
-      // TODO: для useState
-      // setPlayNum(p=>p*0);
-      // setPlaying(false);
     }
-
-    // setCurrentlyPlayingSong(allSoundsLinks[playNum]);
 
     playAudio().catch(() => {
       throw new Error('problem playing audio');

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import GitPNG from '../../assets/images/GitHub-Mark-32px.png';
 
 import TelegramSvg from '@/assets/icons/telegram-logo.svg';
