@@ -3,7 +3,7 @@
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './CardWord.pcss';
 

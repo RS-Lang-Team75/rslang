@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AboutTeam } from '@/components/AboutTeam/AboutTeam';
 import { Footer } from '@/components/Footer/Footer';
 
