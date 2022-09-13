@@ -11,18 +11,18 @@
 
 Used NPM libraries:
 * react-router-dom
-* react-redux
+* redux-toolkit
 * axios
 * chart.js
-* react-chartjs-2
 
 Tools:
 * Webpack
 * Typescript
 * ESlint
+* SVGo
+* NVM
 
 Framework:
 * React
-* tailwindcss
-
+* Tailwindcss (+ postcss)
 
